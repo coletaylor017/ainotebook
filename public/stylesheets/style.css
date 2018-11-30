@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+
+html {
+    font-size: 20px;
+}
+
+* {
+    /*layout*/
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    padding: 0;
+    border: 0;
+    margin: 0;
+    /*text*/
+    font-family: "Lato", sans-serif;
+    text-decoration: none;
+    line-height: 2;
+}
+
+.site-title {
+    text-align: center;
+    font-weight: 100;
+}
+
+.page-title {
+    margin: 2rem 0;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.current-entry-container, .content-container {
+    width: 100%;
+    padding: 0 5%;
+}
+
+.current-entry-container form {
+    height: 85vh;
+}
+
+.current-entry {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid black;
+    height: 82%;
+    resize: none;
+    font-size: 1rem;
+}
+
+.current-entry:focus {
+    outline: 0;
+}
+
+.submit-button {
+    display: block;
+    margin: .5rem 0;
+    float: right;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.past-entry-container {
+    width: 90%;
+    margin: .8rem auto;
+    overflow: hidden;
+}
+
+.footer {
+    width: 90%;
+    border: 1px solid;
+    margin: 1rem auto;
+}
+
+.footer-list-container {
+    margin: 1rem auto;
+    text-align: center;
+    font-size: .8rem;
+}
+
+.footer-list li {
+    display: inline;
+    padding: .5rem;
+}
+
+*, .current-entry, .footer {
+    background-color: white;
+    color: black;
+    border-color: white;
+}

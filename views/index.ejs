@@ -1,0 +1,42 @@
+<% include partials/header %>
+
+<div class="ui text container segment goskraa" id="noborder">
+    <div class="ui left dividing rail">
+        <div class="ui right aligned container sticky theting">
+            <h1 class="ui header">All Blocks</h1>
+                <form action="/entries/search" method="POST">
+                    <div class="ui left labeled button">
+                        <input class="ui basic label input" type="text" name="searchterm" placeholder="Search">
+                        <button class="ui icon button" action="submit"><i class="search icon"></i></button>
+                    </div>
+                </form>
+                <% if (keyword !== "") { %>
+                    <p>Keyword: <%= keyword %></p>
+                    <a href="/entries">clear all search terms</a>
+                <% } %>
+            <a href="/entries/new" class="ui green button" id="action-btn">New Block</a>
+        </div>
+    </div>
+    
+    <div class="main" id="context">
+        <% if (entries.length === 0) { %>
+            <p>No results were found.</p>
+        <% } else { %>
+            <% entries.forEach(function(entry) { %>
+                <a href="/entries/<%= entry._id %>">
+                    <div class="ui horizontal list">
+                        <h4 class="ui item header"><%= moment(entry.date).format("D MMM YYYY, h:mm a") %></h4>
+                        <h4 class="ui item label" id="tags"><%= entry.tags %></h4>
+                    </div>
+                    <p class="ui inverted entry-preview"><%= entry.body.substring(0,500) %></p>
+                </a>
+                <a href="/entries/<%= entry._id %>" class="ui basic icon button" title="View"><i class="ui eye icon"></i></a>
+                <form action="/entries/<%= entry._id %>?_method=DELETE" method="POST" class="inline">
+                    <button action="submit" class="ui basic icon button trash" title="Delete"><i class="ui trash icon"></i></button>
+                </form>
+                 <div class="ui hidden divider"></div>
+            <% }); %>
+        <% } %>
+    </div>
+</div>
+

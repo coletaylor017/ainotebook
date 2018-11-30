@@ -1,0 +1,24 @@
+<% include partials/header %>
+
+<div class="ui text container center aligned main">
+    
+    <h2 class="ui header"></h2>
+    
+    <div class="ui left aligned segment">
+        <!--<h3 class="entry-title"><%= entry.title %></h3>-->
+        <div class="ui horizontal list">
+            <h4 class="ui item header"><%= moment(entry.date).format("D MMM YYYY, h:mm a") %></h4>
+            <h4 class="ui item label"><%= entry.tags %></h4>
+            <!--<h4 class="ui item label" id="tags"><%= entry.metadata %></h4>-->
+        </div>
+        <p class="entrybody"><%= entry.body %></p>
+        <a href="/entries" class="ui basic icon button" title="Back"><i class="ui arrow left icon"></i></a>
+        <a href="/entries/<%= entry._id %>/edit" class="ui basic icon button" title="Edit"><i class="ui edit icon"></i></a>
+        <form action="/entries/<%= entry._id %>?_method=DELETE" method="POST" class="inline">
+            <button action="submit" class="ui basic icon button trash" title="Delete"><i class="ui trash icon"></i></button>
+        </form>
+        <!--<a href="/entries/<%= entry._id %>/edit">Edit</a>-->
+    </div>
+</div>
+
+<% include partials/footer %>

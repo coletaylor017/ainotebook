@@ -1,0 +1,21 @@
+<% include partials/header %>
+
+<div class="ui container center aligned main">
+    <h2 class="ui header">Just write.</h2>
+    
+    <form action="/entries" method="POST" class="ui form">
+        <div class="ui field">
+            <input type="text" name="entry[tags]" placeholder="#tags #moretags" id="transparent">
+        </div>
+        <!--<div class="field">-->
+        <!--    <input type="text" name="entry[metadata]" placeholder="Metadata">-->
+        <!--</div>-->
+        <div class="field">
+            <textarea rows="40" name="entry[body]" class="current-entry" placeholder="Start writing" id="transparent"></textarea>
+        </div>
+        <a href="/entries" class="ui icon button" title="Back"><i class="ui left arrow icon"></i></a>
+        <button class="ui green icon button" type="submit" title="Save!"><i class="ui check icon"></i></button>
+    </form>
+</div>
+
+<% include partials/footer %>

@@ -1,0 +1,84 @@
+html {
+    font-size: 16px;
+}
+
+.inline {
+    display: inline;
+}
+
+#action-btn {
+    margin: 1em 0 2em 0;
+}
+
+#noborder {
+        border: none;
+    box-shadow: none;
+}
+
+.main {
+    margin-top: 5em;
+    margin-bottom: 5em;
+}
+
+.theting {
+    margin-top: 7em;
+}
+
+textarea {
+    font-family: monospace;
+    line-height: 150%;
+}
+
+#tags {
+    padding: .25em;
+}
+
+.index-left {
+    display: block;
+    float: left;
+}
+
+#splash {
+    padding: 15rem;
+}
+
+#splash-content {
+    margin-top: 20%;
+}
+
+#site-title {
+    font-family: 'Cutive Mono', monospace;
+    font-weight: 700;
+}
+
+h1#site-title {
+    font-family: 'Cutive Mono', monospace;
+    font-weight: 100;
+}
+
+.ui.stripe {
+    padding: 8em 0;
+}
+
+#stripe {
+    border: none;
+}
+
+#spacer {
+    margin-bottom: 5em;
+}
+
+.goskraa {
+    height: 100%;
+}
+
+.entry-preview {
+    font-family: monospace;
+    font-size: .8em;
+    color: black;
+    padding-bottom: 1rem;
+}
+
+.entrybody {
+    font-family: monospace;
+}

@@ -1,0 +1,25 @@
+<% include partials/header %>
+
+<div class="ui container center aligned main">
+
+    <h2 class="ui header"></h2>
+    
+    <div class="current-entry-container">
+        <form action="/entries/<%= entry._id %>?_method=PUT" method="POST" class="ui form">
+            <h4 class="ui left aligned header"><%= moment(entry.date).format("D MMM YYYY, h:mm a") %></h4>
+            <div class="field">
+                <input type="text" name="entry[tags]" placeholder="#tags #moretags" value="<%= entry.tags %>" id="transparent">
+            </div>
+            <!--<div class="field">-->
+            <!--    <input type="text" name="entry[metadata]" placeholder="Metadata" value="<%= entry.metadata %>">-->
+            <!--</div>-->
+            <div class="field">
+                <textarea rows="20" name="entry[body]" class="current-entry" placeholder="Start writing"><%= entry.body %></textarea>
+            </div>
+            <a href="/entries/<%= entry._id %>" class="ui basic icon button" title="Back"><i class="ui arrow left icon"></i></a>
+            <button type="submit" class="ui green icon button" title="Save!"><i class="ui check icon"></i></button>
+        </form>
+    </div>
+</div>
+
+<% include partials/footer %>
