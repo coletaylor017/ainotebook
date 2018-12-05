@@ -221,6 +221,6 @@ function isLoggedIn(req, res, next) {
     res.redirect("/login");
 }
 
-app.listen(8080, function() {
+app.listen(process.env.PORT, function() {
     console.log("Server is now running");
 });
