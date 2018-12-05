@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "author": "Cole Taylor",
   "license": "ISC",
@@ -16,6 +17,7 @@
     "jquery": "^3.3.1",
     "method-override": "^3.0.0",
     "moment": "^2.22.2",
+    "mongoose": "^5.3.14",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^5.0.1",
