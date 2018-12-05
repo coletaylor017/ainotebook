@@ -42,8 +42,7 @@ var methodOverride        = require("method-override"),
     LocalStrategy         = require("passport-local"),
     passportLocalMongoose = require('passport-local-mongoose');
             
-// mongoose.connect("mongodb://localhost:27017/writing_blocks", {useNewUrlParser: true});
-mongoose.connect("mongodb://coletaylor:Mlab017@ds125684.mlab.com:25684/writingblocks", {useNewUrlParser: true});
+mongoose.connect(process.env.DATABASEURL, {useNewUrlParser: true});
 
 var app = express();
 app.set("view engine", "ejs");
