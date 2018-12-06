@@ -42,7 +42,8 @@ var methodOverride        = require("method-override"),
     LocalStrategy         = require("passport-local"),
     passportLocalMongoose = require('passport-local-mongoose');
 
-mongoose.connect(process.env.DATABASEURL, {useNewUrlParser: true});
+var url = process.env.DATABASEURL || "mongodb://localhost:27017/writing_blocks";
+mongoose.connect(url, {useNewUrlParser: true});
 
 var app = express();
 app.set("view engine", "ejs");
