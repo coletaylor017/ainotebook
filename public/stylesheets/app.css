@@ -91,3 +91,7 @@ h1#site-title {
 p {
     line-height: 175%;
 }
+
+.timer-close:hover {
+    cursor: pointer;
+}

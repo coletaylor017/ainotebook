@@ -1,7 +1,30 @@
 <% include partials/header %>
 
+<script>
+    var timerOn = 0;
+    function toggleTimer() {
+        var timer = document.querySelector(".timer");
+         if (timer.style.display !== "none") {
+            timer.style.display = "none";
+            document.querySelector(".timerOn").style.display = "inline";
+         } else {
+            timer.style.display = "block";
+            document.querySelector(".timerOn").style.display = "none";
+         }
+    }
+</script>
 <div class="ui container center aligned main">
-    <h2 class="ui header">Just write.</h2>
+    <h2 class="ui header">Write!</h2>
+    
+    <div class="ui bulleted list">
+        <div class="item">Try not to pause</div>
+        <div class="item">Write whatever comes to mind</div>
+        <div class="item timerOn" style="display:none">Click <a onclick='toggleTimer()'>here</a> for a handy timer</div>
+    </div>
+    <div class="timer">
+        hi this is a timer
+        <div><a class="timer-close" onclick='toggleTimer()'>Click to close</a></div>
+    </div>
     
     <form action="/entries" method="POST" class="ui form">
         <div class="ui field">
