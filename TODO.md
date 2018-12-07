@@ -2,6 +2,7 @@ TODO!
 
 General
     -User intro prompts (priority)
+    -Error messages for login and more
     -Tags side bar, like a blog. Make a "tags" collection with each document being a particular tag with an array of the entries that reference it. Every time an entry is created or updated, the tag line is parsed and the entry is added to the appropriate tag objects in the "tags" collection is it's not already there.
         -Or just have a collection with each tag a single word with no references. Add a new tag upon entry creation or update if it's not already there. Display the tags in the sidebar and when one is clicked, search the "entries" collection for that tag in the tag bar. 
         -The first method may be faster and easier. Slightly slower on entry create/update, but probably much faster on tag click.

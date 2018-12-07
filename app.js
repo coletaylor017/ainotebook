@@ -125,6 +125,7 @@ app.get("/entries/:id/edit", isLoggedIn, function(req, res) {
 
 //update
 app.put("/entries/:id", isLoggedIn, function(req, res) {
+    //add middleware to check that user === entry.author
     Entry.findByIdAndUpdate(req.params.id, req.body.entry, function(err, user) {
         if (err) {
             console.log(err);
