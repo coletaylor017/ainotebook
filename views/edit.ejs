@@ -14,7 +14,7 @@
             <!--    <input type="text" name="entry[metadata]" placeholder="Metadata" value="<%= entry.metadata %>">-->
             <!--</div>-->
             <div class="field">
-                <textarea rows="20" name="entry[body]" class="current-entry" placeholder="Start writing"><%= entry.body %></textarea>
+                <textarea id="entrybox" rows="20" name="entry[body]" class="current-entry" placeholder="Start writing"><%= entry.body %></textarea>
             </div>
             <a href="/entries/<%= entry._id %>" class="ui basic icon button" title="Back"><i class="ui arrow left icon"></i></a>
             <button type="submit" class="ui green icon button" title="Save!"><i class="ui check icon"></i></button>

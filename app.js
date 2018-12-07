@@ -1,34 +1,4 @@
-//Remember to save v 1.0.0 for sentimental value and to show how far it progresses
-/*TODO/IDEAS
-
-By Thanksgiving: 
--User intro blurbs
-
-Features:
-    -User intro prompts (priority)
-    -Tags side box
-    -Metadata
-    -Daily quotes, for more deets on this see /models/quotes.js
-    -Search
-    -Make middleware to check entry owner before updating
-    -Flash error messages for invalid login, etc.
-
-UI:
-    -Acutally install Semantic, then do these:
-        -Make trash hover red
-        -Light/dark themes
-        -Make "New Block" button stay put while entries scroll
-        -"..." and "read more"(?) at end of truncated entries
-        -show line breaks on entry view page
-
-Database/security:
-    -Issue: users still reference post IDs after the posts are deleted
-    
-Done!
-    -Associate users and entries, restrict acces to the owner
-    -Show tooltip hints when user hovers on icons
-    -Search
-*/
+//Hi there please contact before copying
 
 var methodOverride        = require("method-override"),
     bodyParser            = require("body-parser"),
