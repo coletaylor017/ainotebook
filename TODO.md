@@ -1,6 +1,7 @@
 TODO!
 
 General
+    -Should be easy: Upon loading log in page, if user is logged in, redirect to /entries
     -User account management- change password, delete account
     -User intro prompts (priority)
     -Error messages for login and more
