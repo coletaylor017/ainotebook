@@ -1,9 +1,12 @@
 TODO!
 
 General
-    -Should be easy: Upon loading log in page, if user is logged in, redirect to /entries
-    -User account management- change password, delete account
-    -User intro prompts (priority)
+    -Account page
+        -password recovery
+        -double check that they want to delete before deleting
+    -Double password field on account create
+    -New user tour
+    -Flash error messages for invalid login, etc.
     -Error messages for login and more
     -Tags side bar, like a blog. Make a "tags" collection with each document being a particular tag with a reference to the user it belongs to and an array of the entries that reference it. Every time an entry is created or updated, the tag line is parsed and the entry is added to the appropriate tag objects in the "tags" collection is it's not already there.
         -Or just have a collection with each tag a single word with no references. Add a new tag upon entry creation or update if it's not already there. Display the tags in the sidebar and when one is clicked, search the "entries" collection for that tag in the tag bar. 
@@ -13,7 +16,6 @@ General
     -Daily quotes, for more deets on this see /models/quotes.js. Maybe in the future we could have a way for users to submit quotes and have them added to the quote DB following admin approval.
     -More powerful search- pick between tag and body search or both, filter by date range or metadata
     -Make middleware to check entry owner before updating
-    -Flash error messages for invalid login, etc.
 
 UI:
     -Actually install Semantic, then do these:
@@ -30,3 +32,4 @@ Done!
     -Associate users and entries
     -Show tooltip hints when user hovers on icons
     -Search
+    -Should be easy: Upon loading log in page, if user is logged in, redirect to /entries

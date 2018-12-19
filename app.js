@@ -179,6 +179,26 @@ app.post("/login", passport.authenticate("local", {
 }), function(req, res) {
 });
 
+app.get("/account", isLoggedIn, function(req, res) {
+    Entry.find({"author.id": req.user._id}, function(err, entries) {
+        if (err) {
+            console.log(err);
+        }
+        var entryCount = entries.length;
+        res.render("account", {entryCount: entryCount});
+    });
+});
+
+app.delete("/account", isLoggedIn, function(req, res) {
+    User.findByIdAndRemove(req.user._id, function(err) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.redirect("/");
+        }
+    });
+});
+
 //logout
 app.get("/logout", function(req, res) {
     req.logout();
