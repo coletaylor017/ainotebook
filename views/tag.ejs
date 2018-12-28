@@ -1,0 +1,33 @@
+<% include partials/header %>
+
+<div class="ui center aligned container main">
+    <div>
+        <h1 class="ui header">Blocks tagged "<%= tag.name %>"</h1>
+        <a class="big-anchor" href="/entries">Back to all blocks</a>
+        <a class="ui basic red button">Delete tag</a>
+    </div>
+    <div class="ui divider"></div>
+</div>
+    
+<div class="ui text container">
+    <% if (tag.entries.length === 0) { %>
+        <p>No results were found.</p>
+    <% } else { %>
+        <% tag.entries.forEach(function(entry) { %>
+            <a href="/entries/<%= entry._id %>">
+                <div class="ui horizontal list">
+                    <h4 class="ui item header"><%= moment(entry.date).format("D MMM YYYY, h:mm a") %></h4>
+                    <h4 class="ui item label" id="tags"><%= entry.tags %></h4>
+                </div>
+                <p class="ui inverted entry-preview"><%= entry.body.substring(0,500) %></p>
+            </a>
+            <a href="/entries/<%= entry._id %>" class="ui basic icon button" title="View"><i class="ui eye icon"></i></a>
+            <form action="/entries/<%= entry._id %>?_method=DELETE" method="POST" class="inline">
+                <button action="submit" class="ui basic icon button trash" title="Delete"><i class="ui trash icon"></i></button>
+            </form>
+             <div class="ui hidden divider"></div>
+        <% }); %>
+    <% } %>
+</div>
+
+

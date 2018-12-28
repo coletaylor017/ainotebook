@@ -1,14 +1,14 @@
 <% include partials/header %>
 
 <script>
-
-document.querySelector(".form").onsubmit = function() {
-   if (confirm("Are you sure you want to submit?")) {
-      return true;
-   } else {
-     return false;
-   }
-
+function confirmForm(form) {
+    if (confirm("Are you sure you want to submit the form?")) {
+        form.submit();
+    }
+    else {
+        alert("You decided to not submit the form!");
+    }
+};
 </script>
 
 <div class="spacer"></div><div class="spacer"></div>
@@ -18,7 +18,7 @@ document.querySelector(".form").onsubmit = function() {
     <h2 class="ui header">Sign Up</h2>
     
     <div class="ui left aligned container">
-        <form class="ui form" action="/register" method="POST">
+        <form class="ui form" action="/register" onsubmit="return confirmForm(this.form)" method="POST">
             <div class="field">
                 <input type="text" placeholder="username" name="username" autofocus>
             </div>

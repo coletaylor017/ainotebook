@@ -1,6 +1,6 @@
 <% include partials/header %>
 
-<div class="ui text container segment goskraa" id="noborder">
+<div class="ui text container segment" id="noborder">
     <div class="ui left dividing rail">
         <div class="ui right aligned container sticky theting">
             <h1 class="ui header">All Blocks</h1>
@@ -15,6 +15,14 @@
                     <a href="/entries">clear search terms</a><br>
                 <% } %>
             <a href="/entries/new" class="ui green button" id="action-btn">New Block</a>
+            <h2>Tags</h2>
+            <div class="ui list">
+                <% tags.forEach(function(tag) { %>
+                    <a class="item">
+                        <a href="/tag/<%= tag._id %>"><%= tag.name %> (<%= tag.entries.length %>)</a>
+                    </a>
+                <% }) %>
+            </div>
         </div>
     </div>
     

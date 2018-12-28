@@ -16,13 +16,13 @@ html {
 }
 
 .main {
-    margin-top: 5em;
+    margin-top: 6em;
     margin-bottom: 5em;
     line-height: 1.5em;
 }
 
 .theting {
-    margin-top: 7em;
+    margin-top: 8em;
 }
 
 #entrybox {
@@ -95,4 +95,18 @@ p {
 
 .timer-close:hover {
     cursor: pointer;
+}
+
+.lander-text {
+    font-size: 1.3em;
+}
+
+.message.lander-padded, .lander-padded {
+    padding-top: 4em;
+    padding-bottom: 4em;
+}
+
+.big-anchor {
+    display: block;
+    padding: 1em;
 }

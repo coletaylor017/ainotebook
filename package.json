@@ -21,6 +21,7 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^5.0.1",
-    "request": "^2.87.0"
+    "request": "^2.87.0",
+    "ridict": "0.0.1"
   }
 }
