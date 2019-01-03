@@ -10,7 +10,7 @@
         <form action="/entries/<%= entry._id %>?_method=PUT" method="POST" class="ui form">
             <h4 class="ui left aligned header"><%= moment(entry.date).format("D MMM YYYY, h:mm a") %></h4>
             <div class="field">
-                <input type="text" name="tags" placeholder="#tags #moretags" value="<%= tags %>" id="transparent">
+                <input type="text" name="tags" placeholder="Write some tags. '#' is not necessary" value="<%= tags %>" id="transparent">
             </div>
             <!--<div class="field">-->
             <!--    <input type="text" name="entry[metadata]" placeholder="Metadata" value="<%= entry.metadata %>">-->
