@@ -18,4 +18,10 @@ var tagSchema = new mongoose.Schema({
     ]
 });
 
+// tagSchema.pre('findOneAndDelete', function(next) {
+//     // Remove all the assignment docs that reference the removed person.
+//     console.log("some pre-delete code is running!");
+//     next();
+// });
+
 module.exports = mongoose.model("Tag", tagSchema);

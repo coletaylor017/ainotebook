@@ -1,5 +1,7 @@
 <% include partials/header %>
 
+<script src="/tagify.min.js"></script>
+<link rel="stylesheet" href="/stylesheets/tagify.css">
 <script>
     var timerOn = 0;
     function toggleTimer() {
@@ -29,17 +31,33 @@
     
     <form action="/entries" method="POST" class="ui form">
         <div class="ui field">
-            <input type="text" name="tags" placeholder="tag, anothertag, athirdtag" id="transparent">
+            <input class="tag-box" type="text" name="tags" placeholder="Write some tags. '#' is not necessary" id="transparent", autofocus>
         </div>
         <!--<div class="field">-->
         <!--    <input type="text" name="entry[metadata]" placeholder="Metadata">-->
         <!--</div>-->
         <div class="field">
-            <textarea id="entrybox" rows="40" name="entry[body]" class="current-entry" placeholder="Start writing" id="transparent"></textarea>
+            <textarea id="entrybox" rows="10" name="entry[body]" class="current-entry" placeholder="Start writing" id="transparent"></textarea>
+<!--rows 40-->
         </div>
         <a href="/entries" class="ui icon button" title="Back"><i class="ui left arrow icon"></i></a>
         <button class="ui green icon button" type="submit" title="Save!"><i class="ui check icon"></i></button>
     </form>
 </div>
+
+<script>
+    var tagArr = <%- JSON.stringify(tags) %>;
+    var input = document.querySelector(".tag-box");
+    // init Tagify script on the above inputs
+    tagify = new Tagify(input, {
+        delimiters          : ",| ",  // add new tags when a comma or a space character
+        keepInvalidTags     : false,  // do not remove invalid tags (but keep them marked as invalid)
+        whitelist: tagArr,
+        dropdown : {
+            enabled: 3,
+            maxItems: 5
+        }
+    });
+</script>
 
 <% include partials/footer %>

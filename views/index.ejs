@@ -19,7 +19,7 @@
             <div class="ui list">
                 <% tags.forEach(function(tag) { %>
                     <a class="item">
-                        <a href="/tag/<%= tag._id %>"><%= tag.name %> (<%= tag.entries.length %>)</a>
+                        <a href="/tags/<%= tag._id %>"><%= tag.name %> (<%= tag.entries.length %>)</a>
                     </a>
                 <% }) %>
             </div>
@@ -34,7 +34,11 @@
                 <a href="/entries/<%= entry._id %>">
                     <div class="ui horizontal list">
                         <h4 class="ui item header"><%= moment(entry.date).format("D MMM YYYY, h:mm a") %></h4>
-                        <h4 class="ui item label" id="tags"><%= entry.tags %></h4>
+                        <% entry.tags.forEach(function(tag) { %>
+                        <h4 class="ui item label" id="tags">
+                            <%= tag.name %>
+                        </h4>
+                        <% }); %>
                     </div>
                     <p class="ui inverted entry-preview"><%= entry.body.substring(0,500) %></p>
                 </a>

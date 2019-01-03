@@ -4,7 +4,9 @@
     <div>
         <h1 class="ui header">Blocks tagged "<%= tag.name %>"</h1>
         <a class="big-anchor" href="/entries">Back to all blocks</a>
-        <a class="ui basic red button">Delete tag</a>
+        <form action="/tags/<%= tag._id %>?_method=DELETE" method="POST" class="inline">
+            <button action="submit" class="ui basic red button" title="Delete">Delete tag</button>
+        </form>
     </div>
     <div class="ui divider"></div>
 </div>
@@ -13,7 +15,7 @@
     <% if (tag.entries.length === 0) { %>
         <p>No results were found.</p>
     <% } else { %>
-        <% tag.entries.forEach(function(entry) { %>
+        <% tag.entries.reverse().forEach(function(entry) { %>
             <a href="/entries/<%= entry._id %>">
                 <div class="ui horizontal list">
                     <h4 class="ui item header"><%= moment(entry.date).format("D MMM YYYY, h:mm a") %></h4>

@@ -35,6 +35,8 @@ app.use(require("express-session")({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use('/scripts', express.static(__dirname + '/node_modules/@yaireo/tagify/'));
+
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser()); 
@@ -55,7 +57,7 @@ app.get("/entries", isLoggedIn, function(req, res) {
             console.log(err);
         } else {
             if (Object.keys(req.query).length === 0) { //if no search query
-                Entry.find({"author.id": req.user._id}, function(err, entries) {
+                Entry.find({"author.id": req.user._id}).populate("tags").exec(function(err, entries) {
                     if (err) {
                         console.log(err);
                     } else {
@@ -63,7 +65,7 @@ app.get("/entries", isLoggedIn, function(req, res) {
                     }
                 });
             } else {
-                Entry.find({"author.id": req.user._id, $text: { $search: req.query.keyword }}, function(err, entries) {
+                Entry.find({"author.id": req.user._id, $text: { $search: req.query.keyword }}).populate("tags").exec(function(err, entries) {
                     if (err) {
                         console.log(err);
                     } else {
@@ -81,7 +83,19 @@ app.post("/entries/search", function(req, res) {
 
 //new
 app.get("/entries/new", isLoggedIn, function(req, res) {
-    res.render("new");
+    Tag.find({"user.id": req.user._id}, {name: 1, _id: 0}, function(err, tags) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(tags);
+            var tagArr = [];
+            tags.forEach(function(tag) {
+                tagArr.push(tag.name);
+            });
+            console.log(tagArr);
+            res.render("new", {tags: tagArr});
+        }
+    });
 });
 
 //create
@@ -94,46 +108,105 @@ app.post("/entries", isLoggedIn, function(req, res) {
                 if (err) {
                     console.log(err);
                 } else {
-                    var tags = parseText(req.body.tags);
-                    entry.tags = tags;
+                    console.log("req.body.tags: ", req.body.tags);
+                    var tags = JSON.parse(req.body.tags);
+                    console.log("tags: ", tags);
+                    var tags2= [];
+                    console.log("tags length: ", tags.length);
+                    for (var i = 0; i < tags.length; i++) {
+                        tags2.push(tags[i].value);
+                        console.log("value of item ", i, "of tags: ", tags[i].value);
+                    }
+                    console.log("tags2: ", tags2);
+                    
                     entry.metadata = "";
                     entry.author.id = req.user._id;
                     entry.author.username = req.user.username;
                     entry.save();
                     
-                    console.log(ridict.matches(entry.body));
+                    console.log("ridict analysis: ", ridict.matches(entry.body));
                     
                     user.entries.push(entry);
                     user.save();
                     
-                    var i =0;
-                    Tag.findOne({"name": tags[i], "user.id": req.user._id}, function(err, tag) {
+                    
+                    // tags = [tag1,tag2,tagN];
+                    // find all the tags that already exist as documents and push the new entry to their entries arrays
+                    
+                    console.log("tags: ", tags);
+                    Tag.find({ "name": { $in: tags2 }, "user.id": req.user._id }, function(err, oldTags) {
                         if (err) {
                             console.log(err);
                         } else {
-                            if (!tag) {
-                                var newTag = {
-                                    name: tags[i],
+                            console.log("oldTags: ", oldTags);
+                            var oldTags2 = [];
+                            for (var i = 0; i < oldTags.length; i++) {
+                                oldTags2.push(oldTags[i].name);
+                                console.log("value of item ", i, "of oldTags: ", oldTags[i].name);
+                            }
+                            console.log("oldTags2: ", oldTags2);
+                            // https://stackoverflow.com/questions/1187518/how-to-get-the-difference-between-two-arrays-in-javascript
+                            Array.prototype.diff = function(a) {
+                                return this.filter(function(i) {return a.indexOf(i) < 0;});
+                            };
+                            var filtered = tags2.diff(oldTags2); 
+                            console.log("tags2, filtered (filtered): ", filtered);
+                            var newTagArr = [];
+                            filtered.forEach(function(tagVal) {
+                                var oid = mongoose.Types.ObjectId();
+                                newTagArr.push({
+                                    _id: oid,
+                                    name: tagVal,
                                     user: {
                                         id: req.user._id,
                                         username: req.user.username
                                     },
-                                    entries: [entry]
-                                };
-                                
-                                Tag.create(newTag, function(err, tagGuy) {
+                                    entries: []
+                                });
+                            });
+                            Tag.insertMany(newTagArr, function() {
+                                // entry.tags.push(newTagArr);
+                                // entry.tags.push(oldTags);
+                                var tagsToPush = oldTags.concat(newTagArr);
+                                console.log("tagsToPush: ", tagsToPush);
+                                var idsToPush = tagsToPush[0];
+                                // tagsToPush.forEach(function(tagToPush) {
+                                //     idsToPush.push(tagToPush._id);
+                                // });
+                                console.log("idsToPush: ", idsToPush);
+                                console.log("entry id: ", entry._id);
+                                Entry.findById(entry._id, function(err, foundEntry) {
                                     if (err) {
                                         console.log(err);
+                                    } else {
+                                        console.log("foundEntry: ", foundEntry);
+                                        Entry.findByIdAndUpdate(
+                                            entry._id,
+                                            { $push: { tags: { $each: tagsToPush } } },
+                                            function(err, results) {
+                                                if (err) {
+                                                    console.log(err);
+                                                } else {
+                                                    console.log("results of updateOne(): ", results);
+                                                    Tag.updateMany(
+                                                        { "name": { $in: tags2 }, "user.id": req.user._id }, 
+                                                        { $push: { entries: entry } }, 
+                                                        function(err, results2) {
+                                                            if (err) {
+                                                                console.log(err);
+                                                            } else {
+                                                                console.log("results of updateMany(): ", results2);
+                                                            }
+                                                        }
+                                                    );
+                                                }
+                                            }
+                                        );
                                     }
-                                    // tagGuy.entries.push(entry)
-                                });
-                            } else {
-                                tag.entries.push(entry);
-                                tag.save();
-                            }
+                                })
+                            });
                         }
                     });
-                    
                     res.redirect("/entries");
                 }
             });
@@ -177,7 +250,7 @@ app.put("/entries/:id", isLoggedIn, function(req, res) {
 
 //destroy
 app.delete("/entries/:id", isLoggedIn, function(req, res) {
-    Entry.findByIdAndRemove(req.params.id, function(err) {
+    Entry.findByIdAndDelete(req.params.id, function(err) {
         if (err) {
             console.log(err);
         } else {
@@ -187,7 +260,7 @@ app.delete("/entries/:id", isLoggedIn, function(req, res) {
     //Here, we should remove the entry from the user's entry references list
 });
 
-app.get("/tag/:id", isLoggedIn, function(req, res) {
+app.get("/tags/:id", isLoggedIn, function(req, res) {
     Tag.findById(req.params.id).populate("entries").exec(function(err, tag) {
         if (err) {
             console.log(err);
@@ -199,6 +272,23 @@ app.get("/tag/:id", isLoggedIn, function(req, res) {
                     res.render("tag", {tag: tag, tags: tags, keyword: ""});
                 }
             });
+        }
+    });
+});
+
+app.delete("/tags/:id", isLoggedIn, function(req, res) {
+    Entry.findOneUpdate({ "tags": req.params.id }, {$pull:{children:{_id: mainid}}}, function(err, entry) {
+        if (err) {
+            console.log(err);
+        } else {
+            User.update( { _id: userId }, { $pull: { followers: "foo_bar" } } );
+        }
+    });
+    Tag.findByIdAndDelete(req.params.id, function(err) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.redirect("/entries");
         }
     });
 });
