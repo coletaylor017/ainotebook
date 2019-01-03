@@ -57,7 +57,7 @@ app.get("/entries", isLoggedIn, function(req, res) {
             console.log(err);
         } else {
             if (Object.keys(req.query).length === 0) { //if no search query
-                Entry.find({"author.id": req.user._id}).populate("tags").exec(function(err, entries) {
+                Entry.find({"author.id": req.user._id}).populate("tags", "name").exec(function(err, entries) {
                     if (err) {
                         console.log(err);
                     } else {
@@ -65,7 +65,7 @@ app.get("/entries", isLoggedIn, function(req, res) {
                     }
                 });
             } else {
-                Entry.find({"author.id": req.user._id, $text: { $search: req.query.keyword }}).populate("tags").exec(function(err, entries) {
+                Entry.find({"author.id": req.user._id, $text: { $search: req.query.keyword }}).populate("tags", "name").exec(function(err, entries) {
                     if (err) {
                         console.log(err);
                     } else {
@@ -129,10 +129,6 @@ app.post("/entries", isLoggedIn, function(req, res) {
                     user.entries.push(entry);
                     user.save();
                     
-                    
-                    // tags = [tag1,tag2,tagN];
-                    // find all the tags that already exist as documents and push the new entry to their entries arrays
-                    
                     console.log("tags: ", tags);
                     Tag.find({ "name": { $in: tags2 }, "user.id": req.user._id }, function(err, oldTags) {
                         if (err) {
@@ -165,15 +161,8 @@ app.post("/entries", isLoggedIn, function(req, res) {
                                 });
                             });
                             Tag.insertMany(newTagArr, function() {
-                                // entry.tags.push(newTagArr);
-                                // entry.tags.push(oldTags);
                                 var tagsToPush = oldTags.concat(newTagArr);
                                 console.log("tagsToPush: ", tagsToPush);
-                                var idsToPush = tagsToPush[0];
-                                // tagsToPush.forEach(function(tagToPush) {
-                                //     idsToPush.push(tagToPush._id);
-                                // });
-                                console.log("idsToPush: ", idsToPush);
                                 console.log("entry id: ", entry._id);
                                 Entry.findById(entry._id, function(err, foundEntry) {
                                     if (err) {
@@ -182,20 +171,22 @@ app.post("/entries", isLoggedIn, function(req, res) {
                                         console.log("foundEntry: ", foundEntry);
                                         Entry.findByIdAndUpdate(
                                             entry._id,
-                                            { $push: { tags: { $each: tagsToPush } } },
+                                            { $addToSet: { tags: { $each: tagsToPush } } },
                                             function(err, results) {
                                                 if (err) {
                                                     console.log(err);
                                                 } else {
                                                     console.log("results of updateOne(): ", results);
+// Welcome.... TO CALLBACK HELL!!!
                                                     Tag.updateMany(
                                                         { "name": { $in: tags2 }, "user.id": req.user._id }, 
-                                                        { $push: { entries: entry } }, 
+                                                        { $addToSet: { entries: entry } }, 
                                                         function(err, results2) {
                                                             if (err) {
                                                                 console.log(err);
                                                             } else {
                                                                 console.log("results of updateMany(): ", results2);
+                                                                res.redirect("/entries");
                                                             }
                                                         }
                                                     );
@@ -203,11 +194,10 @@ app.post("/entries", isLoggedIn, function(req, res) {
                                             }
                                         );
                                     }
-                                })
+                                });
                             });
                         }
                     });
-                    res.redirect("/entries");
                 }
             });
         }
@@ -216,7 +206,7 @@ app.post("/entries", isLoggedIn, function(req, res) {
 
 //show
 app.get("/entries/:id", isLoggedIn, function(req, res) {
-    Entry.findById(req.params.id, function(err, entry) {
+    Entry.findById(req.params.id).populate("tags", "name").exec(function(err, entry) {
         if (err) {
             console.log(err);
         } else {
@@ -227,11 +217,17 @@ app.get("/entries/:id", isLoggedIn, function(req, res) {
 
 //edit
 app.get("/entries/:id/edit", isLoggedIn, function(req, res) {
-    Entry.findById(req.params.id, function(err, entry) {
+    Entry.findById(req.params.id).populate("tags", "name").exec(function(err, entry) {
         if (err) {
             console.log(err);
         } else {
-            res.render("edit", {entry: entry});
+            var tagNames = [];
+            console.log(entry.tags);
+            entry.tags.forEach(function(tag) {
+                tagNames.push(tag.name);
+            });
+            console.log(tagNames);
+            res.render("edit", {entry: entry, tags: tagNames});
         }
     });
 });
@@ -239,56 +235,144 @@ app.get("/entries/:id/edit", isLoggedIn, function(req, res) {
 //update
 app.put("/entries/:id", isLoggedIn, function(req, res) {
     //add middleware to check that user === entry.author
-    Entry.findByIdAndUpdate(req.params.id, req.body.entry, function(err, user) {
+    Entry.findByIdAndUpdate(req.params.id, req.body.entry, function(err, entry) {
         if (err) {
             console.log(err);
         } else {
-            res.redirect("/entries/" + req.params.id);
-        }
-    });
-});
-
-//destroy
-app.delete("/entries/:id", isLoggedIn, function(req, res) {
-    Entry.findByIdAndDelete(req.params.id, function(err) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.redirect("/entries");
-        }
-    });
-    //Here, we should remove the entry from the user's entry references list
-});
-
-app.get("/tags/:id", isLoggedIn, function(req, res) {
-    Tag.findById(req.params.id).populate("entries").exec(function(err, tag) {
-        if (err) {
-            console.log(err);
-        } else {
-            Tag.find({"user.id": req.user._id}, function(err, tags) {
+            console.log("req.body.tags: ", req.body.tags);
+            var tags = JSON.parse(req.body.tags);
+            console.log("tags: ", tags);
+            var tags2= [];
+            console.log("tags length: ", tags.length);
+            for (var i = 0; i < tags.length; i++) {
+                tags2.push(tags[i].value);
+                console.log("value of item ", i, "of tags: ", tags[i].value);
+            }
+            console.log("tags2: ", tags2);
+            
+            console.log("ridict analysis: ", ridict.matches(entry.body));
+            
+            console.log("tags: ", tags);
+            Tag.find({ "name": { $in: tags2 }, "user.id": req.user._id }, function(err, oldTags) {
                 if (err) {
                     console.log(err);
                 } else {
-                    res.render("tag", {tag: tag, tags: tags, keyword: ""});
+                    console.log("oldTags: ", oldTags);
+                    var oldTags2 = [];
+                    for (var i = 0; i < oldTags.length; i++) {
+                        oldTags2.push(oldTags[i].name);
+                        console.log("value of item ", i, "of oldTags: ", oldTags[i].name);
+                    }
+                    console.log("oldTags2: ", oldTags2);
+                    // https://stackoverflow.com/questions/1187518/how-to-get-the-difference-between-two-arrays-in-javascript
+                    Array.prototype.diff = function(a) {
+                        return this.filter(function(i) {return a.indexOf(i) < 0;});
+                    };
+                    var filtered = tags2.diff(oldTags2); 
+                    console.log("tags2, filtered (filtered): ", filtered);
+                    var newTagArr = [];
+                    filtered.forEach(function(tagVal) {
+                        var oid = mongoose.Types.ObjectId();
+                        newTagArr.push({
+                            _id: oid,
+                            name: tagVal,
+                            user: {
+                                id: req.user._id,
+                                username: req.user.username
+                            },
+                            entries: []
+                        });
+                    });
+                    Tag.insertMany(newTagArr, function() {
+                        var tagsToPush = oldTags.concat(newTagArr);
+                        console.log("tagsToPush: ", tagsToPush);
+                        console.log("entry id: ", entry._id);
+                        Entry.findById(entry._id, function(err, foundEntry) {
+                            if (err) {
+                                console.log(err);
+                            } else {
+                                console.log("foundEntry: ", foundEntry);
+                                Entry.findByIdAndUpdate(
+                                    entry._id,
+                                    { $addToSet: { tags: { $each: tagsToPush } } },
+                                    function(err, results) {
+                                        if (err) {
+                                            console.log(err);
+                                        } else {
+                                            console.log("results of updateOne(): ", results);
+// Welcome.... TO CALLBACK HELL!!!
+                                            Tag.updateMany(
+                                                { "name": { $in: tags2 }, "user.id": req.user._id }, 
+                                                { $addToSet: { entries: entry } }, 
+                                                function(err, results2) {
+                                                    if (err) {
+                                                        console.log(err);
+                                                    } else {
+                                                        console.log("results of updateMany(): ", results2);
+                                                        res.redirect("/entries");
+                                                    }
+                                                }
+                                            );
+                                        }
+                                    }
+                                );
+                            }
+                        });
+                    });
                 }
             });
         }
     });
 });
 
-app.delete("/tags/:id", isLoggedIn, function(req, res) {
-    Entry.findOneUpdate({ "tags": req.params.id }, {$pull:{children:{_id: mainid}}}, function(err, entry) {
+//destroy
+app.delete("/entries/:id", isLoggedIn, function(req, res) {
+    User.findOneAndUpdate({ "_id": req.user._id }, { $pull: { entries: req.params.id } }, function(err) {
         if (err) {
             console.log(err);
         } else {
-            User.update( { _id: userId }, { $pull: { followers: "foo_bar" } } );
+            // I would select only tags that reference the entry being deleted, but I'm lazy.
+            // Maybe later if I'm looking for performance gains.
+            Tag.updateMany({ "user.id": req.user._id }, { $pull: { entries: req.params.id } }, function(err) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    Entry.findByIdAndDelete(req.params.id, function(err) {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            res.redirect("/entries");
+                        }
+                    });
+                }
+            });
         }
     });
-    Tag.findByIdAndDelete(req.params.id, function(err) {
+});
+
+app.get("/tags/:id", isLoggedIn, function(req, res) {
+    Tag.findById(req.params.id).populate({ path: 'entries', populate: { path: 'tags', select: 'name' } }).exec(function(err, tag) {
         if (err) {
             console.log(err);
         } else {
-            res.redirect("/entries");
+            res.render("tag", {tag: tag, keyword: ""});
+        }
+    });
+});
+
+app.delete("/tags/:id", isLoggedIn, function(req, res) {
+    Entry.findOneAndUpdate({ "tags": req.params.id }, { $pull: { tags: req.params.id } }, function(err) {
+        if (err) {
+            console.log(err);
+        } else {
+            // User.update( { _id: userId }, { $pull: { followers: "foo_bar" } } );
+            Tag.findByIdAndDelete(req.params.id, function(err) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.redirect("/entries");
+                }
+            });
         }
     });
 });

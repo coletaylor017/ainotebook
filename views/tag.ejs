@@ -18,8 +18,12 @@
         <% tag.entries.reverse().forEach(function(entry) { %>
             <a href="/entries/<%= entry._id %>">
                 <div class="ui horizontal list">
-                    <h4 class="ui item header"><%= moment(entry.date).format("D MMM YYYY, h:mm a") %></h4>
-                    <h4 class="ui item label" id="tags"><%= entry.tags %></h4>
+                <h4 class="ui item header"><%= moment(entry.date).format("D MMM YYYY, h:mm a") %></h4>
+                <% entry.tags.forEach(function(entryTag) { %>
+                    <h4 class="ui item label" id="tags">
+                        <%= entryTag.name %>
+                    </h4>
+                <% }); %>
                 </div>
                 <p class="ui inverted entry-preview"><%= entry.body.substring(0,500) %></p>
             </a>

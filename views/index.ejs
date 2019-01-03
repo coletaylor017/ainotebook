@@ -35,9 +35,9 @@
                     <div class="ui horizontal list">
                         <h4 class="ui item header"><%= moment(entry.date).format("D MMM YYYY, h:mm a") %></h4>
                         <% entry.tags.forEach(function(tag) { %>
-                        <h4 class="ui item label" id="tags">
-                            <%= tag.name %>
-                        </h4>
+                            <h4 class="ui item label" id="tags">
+                                <%= tag.name %>
+                            </h4>
                         <% }); %>
                     </div>
                     <p class="ui inverted entry-preview"><%= entry.body.substring(0,500) %></p>

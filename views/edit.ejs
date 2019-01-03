@@ -1,5 +1,7 @@
 <% include partials/header %>
 
+<script src="/tagify.min.js"></script>
+<link rel="stylesheet" href="/stylesheets/tagify.css">
 <div class="ui container center aligned main">
 
     <h2 class="ui header"></h2>
@@ -8,7 +10,7 @@
         <form action="/entries/<%= entry._id %>?_method=PUT" method="POST" class="ui form">
             <h4 class="ui left aligned header"><%= moment(entry.date).format("D MMM YYYY, h:mm a") %></h4>
             <div class="field">
-                <input type="text" name="entry[tags]" placeholder="#tags #moretags" value="<%= entry.tags %>" id="transparent">
+                <input type="text" name="tags" placeholder="#tags #moretags" value="<%= tags %>" id="transparent">
             </div>
             <!--<div class="field">-->
             <!--    <input type="text" name="entry[metadata]" placeholder="Metadata" value="<%= entry.metadata %>">-->
@@ -21,5 +23,20 @@
         </form>
     </div>
 </div>
+
+<script>
+    var tagArr = <%- JSON.stringify(tags) %>;
+    var input = document.querySelector("input[name=tags]");
+    // init Tagify script on the above inputs
+    tagify = new Tagify(input, {
+        delimiters          : ",| ",  // add new tags when a comma or a space character
+        keepInvalidTags     : false,  // do not remove invalid tags (but keep them marked as invalid)
+        whitelist: tagArr,
+        dropdown : {
+            enabled: 3,
+            maxItems: 5
+        }
+    });
+</script>
 
 <% include partials/footer %>

@@ -31,7 +31,7 @@
     
     <form action="/entries" method="POST" class="ui form">
         <div class="ui field">
-            <input class="tag-box" type="text" name="tags" placeholder="Write some tags. '#' is not necessary" id="transparent", autofocus>
+            <input type="text" name="tags" placeholder="Write some tags. '#' is not necessary" id="transparent", autofocus>
         </div>
         <!--<div class="field">-->
         <!--    <input type="text" name="entry[metadata]" placeholder="Metadata">-->
@@ -47,7 +47,7 @@
 
 <script>
     var tagArr = <%- JSON.stringify(tags) %>;
-    var input = document.querySelector(".tag-box");
+    var input = document.querySelector("input[name=tags]");
     // init Tagify script on the above inputs
     tagify = new Tagify(input, {
         delimiters          : ",| ",  // add new tags when a comma or a space character
