@@ -7,7 +7,7 @@
     <h2 class="ui header">Sign Up</h2>
     
     <div class="ui left aligned container">
-        <form class="ui form" action="/register" method="POST">
+        <form name="myForm" class="ui form" action="/register" onsubmit="return validateForm()" method="POST">
             <div class="field">
                 <input type="text" placeholder="username" name="username" autofocus>
             </div>
@@ -23,3 +23,13 @@
         <br>Please do not submit any senstitive or important information while the app is in beta.</p>
     </div>
 </div>
+
+<script>
+function validateForm() {
+  var x = document.forms["myForm"]["username"].value;
+  if (x == "") {
+    alert("Name must be filled out");
+    return false;
+  }
+}
+</script>

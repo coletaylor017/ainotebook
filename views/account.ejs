@@ -10,13 +10,19 @@
         <div class="ui hidden divider"></div>
         <h2 class="ui header"><%= currentUser.username %></h2>
         <div class="ui divider"></div>
-        <div class="ui statistic">
-            <div class="value"><%= entryCount %></div>
-            <div class="label">Blocks</div>
-        </div>
-        <div class="ui statistic">
-            <div class="value"><%= moment().diff(moment(currentUser.dateCreated), 'days') %></div>
-            <div class="label">Days since creation</div>
+        <div class="ui three statistics">
+            <div class="ui statistic">
+                <div class="value"><%= moment().diff(moment(currentUser.dateCreated), 'days') %></div>
+                <div class="label">Days since creation</div>
+            </div>
+            <div class="ui statistic">
+                <div class="value"><%= entryCount %></div>
+                <div class="label">Blocks</div>
+            </div>
+            <div class="ui statistic">
+                <div class="value"><%= wordCount %></div>
+                <div class="label">Words</div>
+            </div>
         </div>
     </div>
     

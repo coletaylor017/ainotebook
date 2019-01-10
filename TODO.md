@@ -6,7 +6,6 @@ General
         -double check that they want to delete before deleting
     -Sign up validation
     -Flash error messages for invalid login, etc.
-    -User page word count
     -Tour for new users
     -Metadata. Create a new collection called "metadata" and have each document be an object with a data name, value, date created, owner (referencing "users"), and entry id (referencing "entries"). When metadata is analyzed, find() bits of data based on their date, name, and/or entry and ALWAYS their user. Then the returned array of data can have its information pulled out and displayed. 
         -Consider displaying metadata semi-graphically on the entry "show" page.
@@ -29,3 +28,4 @@ Done!
     -Should be easy: Upon loading log in page, if user is logged in, redirect to /entries
     -Tags side bar, like a blog. Make a "tags" collection with each document being a particular tag with a reference to the user it belongs to and an array of the entries that reference it. Every time an entry is created or updated, the tag line is parsed and the entry is added to the appropriate tag objects in the "tags" collection is it's not already there.
     -Issue: users still reference post IDs after the posts are deleted
+    -User page word count
