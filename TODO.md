@@ -21,6 +21,7 @@ UI:
         -show line breaks on entry view page
 
 Database/security:
+    -Check ownership before ediing or deleting
     
 Done!
     -Associate users and entries

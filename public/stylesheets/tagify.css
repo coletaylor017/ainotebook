@@ -12,7 +12,8 @@
     position: relative;
     -webkit-transition: .1s;
     -o-transition: .1s;
-    transition: .1s
+    transition: .1s;
+    width: 100%;
 }
 
 @-webkit-keyframes tags--bump {

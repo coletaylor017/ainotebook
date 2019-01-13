@@ -31,15 +31,18 @@
     
     <form action="/entries" method="POST" class="ui form">
         <div class="ui field">
-            <input type="text" name="tags" placeholder="Write some tags. '#' is not necessary" id="transparent", autofocus>
+            <div class="ui fluid icon input">
+                <input class type="text" name="tags" placeholder="Write some tags. '#' is not necessary" id="transparent", autofocus>
+                <div class="ui basic white icon button" id="noborder" data-tooltip="Use tags to organize and group entries. For example, you could tag every entry that talks about rainbows with 'rainbows', then go back and see all your rainbow entries later.">
+                    <i class="ui question circle outline link icon"></i>
+                </div>
+            </div>
         </div>
         <!--<div class="field">-->
         <!--    <input type="text" name="entry[metadata]" placeholder="Metadata">-->
         <!--</div>-->
-        <div class="field">
-            <textarea id="entrybox" rows="10" name="entry[body]" class="current-entry" placeholder="Start writing" id="transparent"></textarea>
+        <textarea id="entrybox" rows="10" name="entry[body]" class="current-entry" placeholder="Start writing" id="transparent"></textarea>
 <!--rows 40-->
-        </div>
         <a href="/entries" class="ui icon button" title="Back"><i class="ui left arrow icon"></i></a>
         <button class="ui green icon button" type="submit" title="Save!"><i class="ui check icon"></i></button>
     </form>
