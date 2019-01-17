@@ -2,6 +2,10 @@ html {
     font-size: 14px;
 }
 
+body {
+    height: 100%;
+}
+
 .inline {
     display: inline;
 }
@@ -22,7 +26,7 @@ html {
 }
 
 .theting {
-    margin-top: 8em;
+    padding-top: 8em;
 }
 
 #entrybox {

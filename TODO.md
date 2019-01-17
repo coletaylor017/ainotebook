@@ -16,7 +16,6 @@ UI:
     -Actually install Semantic, then do these:
         -Make trash hover red
         -Light/dark themes
-        -Make "New Block" button stay put while entries scroll
         -"..." and "read more"(?) at end of truncated entries
         -show line breaks on entry view page
 
@@ -31,3 +30,4 @@ Done!
     -Tags side bar, like a blog. Make a "tags" collection with each document being a particular tag with a reference to the user it belongs to and an array of the entries that reference it. Every time an entry is created or updated, the tag line is parsed and the entry is added to the appropriate tag objects in the "tags" collection is it's not already there.
     -Issue: users still reference post IDs after the posts are deleted
     -User page word count
+    -Make "New Block" button stay put while entries scroll

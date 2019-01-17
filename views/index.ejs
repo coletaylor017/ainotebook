@@ -1,6 +1,6 @@
 <% include partials/header %>
 
-<div class="ui text container segment" id="noborder">
+<div class="ui text container segment context" id="noborder">
     <div class="ui left dividing rail">
         <div class="ui right aligned container sticky theting">
             <h1 class="ui header">All Blocks</h1>
@@ -26,7 +26,7 @@
         </div>
     </div>
     
-    <div class="main" id="context">
+    <div class="main">
         <% if (entries.length === 0) { %>
             <p>No results were found.</p>
         <% } else { %>
@@ -52,3 +52,9 @@
     </div>
 </div>
 
+<script>
+    $('.ui.sticky')
+      .sticky({
+        context: '.context',
+      });
+</script>
