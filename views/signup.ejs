@@ -7,7 +7,8 @@
     <h2 class="ui header">Sign Up</h2>
     
     <div class="ui left aligned container">
-        <form name="myForm" class="ui form" action="/register" onsubmit="return validateForm()" method="POST">
+        <form name="myForm" class="ui form" action="/register" method="POST">
+            <!--above: onsubmit="return validateForm()"-->
             <div class="field">
                 <input type="text" placeholder="username" name="username" autofocus>
             </div>
@@ -20,16 +21,16 @@
         <div class="ui hidden divider"></div>
         <p style="color: red; font-size: .8em; text-align: center">Writing Blocks is currently in beta. Some features may be broken or missing. 
         <br>Anonymous data may be collected but will never be sold or shared. We do not collect personally identifiable data.
-        <br>Please do not submit any senstitive or important information while the app is in beta.</p>
+        <br>Still, please avoid submiting any senstitive or important information while the app is in beta.</p>
     </div>
 </div>
 
 <script>
-function validateForm() {
-  var x = document.forms["myForm"]["username"].value;
-  if (x == "") {
-    alert("Name must be filled out");
-    return false;
-  }
-}
+// function validateForm() {
+//   var x = document.forms["myForm"]["username"].value;
+//   if (x == "") {
+//     alert("Name must be filled out");
+//     return false;
+//   }
+// }
 </script>

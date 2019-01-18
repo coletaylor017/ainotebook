@@ -5,7 +5,7 @@ var middlewareObj = {
         if(req.isAuthenticated()) {
             return next();
         }
-        req.flash("success", "Please log in first");
+        req.flash("error", "Please log in first");
         res.redirect("/login");
     }
 };

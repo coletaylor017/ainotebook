@@ -21,3 +21,35 @@
             <% } %>
         </div>
     </div>
+    
+    <div class="ui container">
+        <% if (success && success.length > 0) { %>
+        <div class="ui positive message" style="margin-top: 5em">
+            <i class="close icon"></i>
+            <div class="header">
+                Success
+            </div>
+            <p><%= success %></p>
+        </div>
+        <% } %>
+        <% if (error && error.length > 0) { %>
+        <div class="ui negative message" style="margin-top: 5em">
+            <i class="close icon"></i>
+            <div class="header">
+                Error
+            </div>
+            <p><%= error %></p>
+        </div>
+        <% } %>
+    </div>
+
+<script>
+    $('.message .close')
+      .on('click', function() {
+        $(this)
+          .closest('.message')
+          .transition('fade')
+        ;
+      })
+    ;
+</script>
