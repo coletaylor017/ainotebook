@@ -1,9 +1,11 @@
 TODO!
 
 General
+    -Refactor routes
     -Flash error messages for invalid login, etc.
-    -Question marks
     -Sign up validation
+    -Timer
+    -Home page redesign: more images, showcase the product's features
     -Account page
         -password recovery
         -double check that they want to delete before deleting
@@ -31,3 +33,4 @@ Done!
     -Issue: users still reference post IDs after the posts are deleted
     -User page word count
     -Make "New Block" button stay put while entries scroll
+    -Question marks

@@ -43,6 +43,7 @@
                     <p class="ui inverted entry-preview"><%= entry.body.substring(0,500) %></p>
                 </a>
                 <a href="/entries/<%= entry._id %>" class="ui basic icon button" title="View"><i class="ui eye icon"></i></a>
+                <a href="/entries/<%= entry._id %>/edit" class="ui basic icon button" title="Edit"><i class="ui edit icon"></i></a>
                 <form action="/entries/<%= entry._id %>?_method=DELETE" method="POST" class="inline">
                     <button action="submit" class="ui basic icon button trash" title="Delete"><i class="ui trash icon"></i></button>
                 </form>
