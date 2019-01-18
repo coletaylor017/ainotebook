@@ -1,7 +1,6 @@
 TODO!
 
 General
-    -Sign up validation
     -Timer
     -Home page redesign: more images, showcase the product's features
     -Account page
@@ -34,3 +33,4 @@ Done!
     -Question marks
     -Refactor routes
     -Flash error messages for invalid login, etc.
+    -Sign up validation
