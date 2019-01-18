@@ -3,7 +3,7 @@
 <div class="ui text container segment context" id="noborder">
     <div class="ui left dividing rail">
         <div class="ui right aligned container sticky theting">
-            <h1 class="ui header">Timeline</h1>
+            <h1 class="ui header">All Entries</h1>
                 <form action="/entries/search" method="POST">
                     <div class="ui left labeled button">
                         <input class="ui basic label input" type="text" name="searchterm" placeholder="Search">
@@ -14,7 +14,7 @@
                     <p>Keyword: <%= keyword %></p>
                     <a href="/entries">clear search term</a><br>
                 <% } %>
-            <a href="/entries/new" class="ui green button" id="action-btn">New Block</a>
+            <!--<a href="/entries/new" class="ui green button" id="action-btn">New Block</a>-->
             <h2>Tags</h2>
             <div class="ui list">
                 <% tags.forEach(function(tag) { %>

@@ -5,6 +5,7 @@ New name ideas: Freely
 General
     -Timer
     -Home page redesign: more images, showcase the product's features
+    -Slider
     -Account page
         -password recovery
         -double check that they want to delete before deleting

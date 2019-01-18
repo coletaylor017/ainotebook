@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Writing Blocks</title>
+    <title>Freely</title>
     <link rel="stylesheet" type ="text/css" href="/semantic/dist/semantic.min.css">
     <link rel="stylesheet" type="text/css" href="/stylesheets/app.css">
     <link href="https://fonts.googleapis.com/css?family=Cutive+Mono" rel="stylesheet">
@@ -10,12 +10,15 @@
 </head>
 <body>
     <div class="ui top fixed borderless menu">
-        <a href="/"><h3 class="ui header item" id="site-title">writing blocks</h3></a>
+        <a href="/"><h3 class="ui header item" id="site-title">Freely</h3></a>
         <div class="right menu">
             <% if (!currentUser) { %>
                 <a href="/about" class="item">About</a>
             <% } else { %>
-                <a href="/entries" class="item">Timeline</a>
+                <div class="item">
+                    <a href="/entries/new" class="ui green button">New Entry</a>
+                </div>
+                <a href="/entries" class="item">Past Entries</a>
                 <a href="/account" class="item">Account</a>
                 <a href="/logout" class="item">Logout</a>
             <% } %>
