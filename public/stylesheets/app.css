@@ -32,6 +32,7 @@ body {
 #entrybox {
     font-family: monospace;
     line-height: 175%;
+    height: 35em;
 }
 
 #tags {
@@ -76,6 +77,8 @@ h1#site-title {
 .goskraa {
     height: 100%;
 }
+
+
 
 .entry-preview {
     font-family: monospace;
