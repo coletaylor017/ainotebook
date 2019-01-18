@@ -17,9 +17,9 @@
         </div>
         <p class="entrybody"><%= entry.body %></p>
         <a href="/entries" class="ui basic icon button" title="Back"><i class="ui arrow left icon"></i></a>
-        <a href="/entries/<%= entry._id %>/edit" class="ui basic icon button" title="Edit"><i class="ui edit icon"></i></a>
+        <a href="/entries/<%= entry._id %>/edit" class="ui basic button" title="Edit"><i class="ui edit icon"></i>edit</a>
         <form action="/entries/<%= entry._id %>?_method=DELETE" method="POST" class="inline">
-            <button action="submit" class="ui basic icon button trash" title="Delete"><i class="ui trash icon"></i></button>
+            <button action="submit" class="ui basic button trash" title="Delete"><i class="ui trash icon"></i>delete</button>
         </form>
         <!--<a href="/entries/<%= entry._id %>/edit">Edit</a>-->
     </div>
