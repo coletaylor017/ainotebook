@@ -1,7 +1,6 @@
 TODO!
 
 General
-    -Flash error messages for invalid login, etc.
     -Sign up validation
     -Timer
     -Home page redesign: more images, showcase the product's features
@@ -34,3 +33,4 @@ Done!
     -Make "New Block" button stay put while entries scroll
     -Question marks
     -Refactor routes
+    -Flash error messages for invalid login, etc.

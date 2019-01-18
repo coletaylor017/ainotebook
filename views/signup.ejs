@@ -15,8 +15,12 @@
             <div class="field">
                 <input type="password" placeholder="password" name="password">
             </div>
+            <div class="field">
+                <input type="password" placeholder="repeat password" name="password2">
+            </div>
             <button class="ui basic green button">Sign Up</button>
             <a href="/login">Or log in instead</a>
+            <div class="ui error message"></div>
         </form>
         <div class="ui hidden divider"></div>
         <p style="color: red; font-size: .8em; text-align: center">Writing Blocks is currently in beta. Some features may be broken or missing. 
@@ -33,4 +37,33 @@
 //     return false;
 //   }
 // }
+$('.ui.form')
+    .form({
+        fields: {
+            username: {
+                identifier: 'username',
+                rules: [
+                    {
+                        type   : 'empty',
+                        prompt : 'Please enter a username'
+                    }
+                ]
+            },
+            password: {
+                identifier: 'password',
+                rules: [
+                    {
+                        type   : 'empty',
+                        prompt : 'Please enter a password'
+                    },
+                    {
+                        type: 'match[password2]',
+                        prompt: "Passwords must match"
+                    }
+                ]
+            }
+        }
+    })
+;
+
 </script>
