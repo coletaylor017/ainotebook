@@ -30,16 +30,18 @@
     <!--</div>-->
     
     <form action="/entries" method="POST" class="ui form">
-        <div class="ui field">
-            <div class="ui fluid icon input">
-                <input type="text" name="tags" placeholder="Write some tags. '#' is not necessary" id="transparent", autofocus>
-                <i class="ui question circle outline link icon modal-btn"></i>
-            </div>
-        </div>
         <!--<div class="field">-->
         <!--    <input type="text" name="entry[metadata]" placeholder="Metadata">-->
         <!--</div>-->
-        <textarea id="entrybox" rows="10" name="entry[body]" class="current-entry" placeholder="Start writing" id="transparent"></textarea>
+        <div class="ui field">
+            <textarea id="entrybox" rows="10" name="entry[body]" class="current-entry" placeholder="Start writing" id="transparent"></textarea>
+        </div>
+        <div class="ui field">
+            <div class="ui labeled input">
+                <label class="ui basic label"><i class="ui question circle outline link icon modal-btn"></i>Optional: Add tags</label>
+                <input type="text" name="tags" placeholder="Write some tags. '#' is not necessary" id="transparent", autofocus>
+            </div>
+        </div>
         <a href="/entries" class="ui icon button" title="Back"><i class="ui left arrow icon"></i></a>
         <button class="ui green button" type="submit" title="Save!"><i class="ui check icon"></i>Done</button>
     </form>
