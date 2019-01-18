@@ -1,5 +1,7 @@
 TODO!
 
+New name ideas: Freely
+
 General
     -Timer
     -Home page redesign: more images, showcase the product's features
