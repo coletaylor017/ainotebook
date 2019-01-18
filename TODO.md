@@ -1,7 +1,6 @@
 TODO!
 
 General
-    -Refactor routes
     -Flash error messages for invalid login, etc.
     -Sign up validation
     -Timer
@@ -34,3 +33,4 @@ Done!
     -User page word count
     -Make "New Block" button stay put while entries scroll
     -Question marks
+    -Refactor routes

@@ -1,14 +1,15 @@
-var express = require("express"),
-    Entry = require("../models/entry"),
-    Tag = require("../models/tag"),
-    User = require("../models/user"),
-    ridict = require("ridict"),
-    mongoose = require("mongoose");
+var express    = require("express"),
+    Entry      = require("../models/entry"),
+    Tag        = require("../models/tag"),
+    User       = require("../models/user"),
+    middleware = require("../middleware"),
+    ridict     = require("ridict"),
+    mongoose   = require("mongoose");
 
 var router = express.Router();
 
 //index
-router.get("/", isLoggedIn, function(req, res) {
+router.get("/", middleware.isLoggedIn, function(req, res) {
     Tag.find({"user.id": req.user._id}, function(err, tags) {
         if (err) {
             console.log(err);
@@ -39,7 +40,7 @@ router.post("/search", function(req, res) {
 });
 
 //new
-router.get("/new", isLoggedIn, function(req, res) {
+router.get("/new", middleware.isLoggedIn, function(req, res) {
     Tag.find({"user.id": req.user._id}, {name: 1, _id: 0}, function(err, tags) {
         if (err) {
             console.log(err);
@@ -56,7 +57,7 @@ router.get("/new", isLoggedIn, function(req, res) {
 });
 
 //create
-router.post("/", isLoggedIn, function(req, res) {
+router.post("/", middleware.isLoggedIn, function(req, res) {
     User.findOne({username: req.user.username}, function(err, user) {
         if (err) {
             console.log(err);
@@ -164,7 +165,7 @@ router.post("/", isLoggedIn, function(req, res) {
 });
 
 //show
-router.get("/:id", isLoggedIn, function(req, res) {
+router.get("/:id", middleware.isLoggedIn, function(req, res) {
     Entry.findById(req.params.id).populate("tags", "name").exec(function(err, entry) {
         if (err) {
             console.log(err);
@@ -175,7 +176,7 @@ router.get("/:id", isLoggedIn, function(req, res) {
 });
 
 //edit
-router.get("/:id/edit", isLoggedIn, function(req, res) {
+router.get("/:id/edit", middleware.isLoggedIn, function(req, res) {
     Entry.findById(req.params.id).populate("tags", "name").exec(function(err, entry) {
         if (err) {
             console.log(err);
@@ -192,7 +193,7 @@ router.get("/:id/edit", isLoggedIn, function(req, res) {
 });
 
 //update
-router.put("/:id", isLoggedIn, function(req, res) {
+router.put("/:id", middleware.isLoggedIn, function(req, res) {
     Entry.findByIdAndUpdate(req.params.id, req.body.entry, function(err, entry) {
         if (err) {
             console.log(err);
@@ -288,7 +289,7 @@ router.put("/:id", isLoggedIn, function(req, res) {
 });
 
 //destroy
-router.delete("/:id", isLoggedIn, function(req, res) {
+router.delete("/:id", middleware.isLoggedIn, function(req, res) {
     User.findOneAndUpdate({ "_id": req.user._id }, { $pull: { entries: req.params.id } }, function(err) {
         if (err) {
             console.log(err);
@@ -311,12 +312,5 @@ router.delete("/:id", isLoggedIn, function(req, res) {
         }
     });
 });
-
-function isLoggedIn(req, res, next) {
-    if(req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect("/login");
-}
 
 module.exports = router;

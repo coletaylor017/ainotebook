@@ -1,7 +1,8 @@
-var express = require("express"),
-    Entry = require("../models/entry"),
-    User = require("../models/user"),
-    passport = require("passport");
+var express    = require("express"),
+    Entry      = require("../models/entry"),
+    User       = require("../models/user"),
+    middleware = require("../middleware"),
+    passport   = require("passport");
 
 var router = express.Router();
 
@@ -41,7 +42,7 @@ router.post("/login", passport.authenticate("local", {
 }), function(req, res) {
 });
 
-router.get("/account", isLoggedIn, function(req, res) {
+router.get("/account", middleware.isLoggedIn, function(req, res) {
     Entry.find({"author.id": req.user._id}, {body: 1, _id: 0}, function(err, entries) {
         if (err) {
             console.log(err);
@@ -57,7 +58,7 @@ router.get("/account", isLoggedIn, function(req, res) {
     });
 });
 
-router.delete("/account", isLoggedIn, function(req, res) {
+router.delete("/account", middleware.isLoggedIn, function(req, res) {
     User.findByIdAndRemove(req.user._id, function(err) {
         if (err) {
             console.log(err);
@@ -72,12 +73,5 @@ router.get("/logout", function(req, res) {
     req.logout();
     res.redirect("/");
 });
-
-function isLoggedIn(req, res, next) {
-    if(req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect("/login");
-}
 
 module.exports = router;

@@ -1,11 +1,12 @@
-var express = require("express"),
-    Entry   = require("../models/entry"),
-    Tag     = require("../models/tag");
+var express    = require("express"),
+    Entry      = require("../models/entry"),
+    Tag        = require("../models/tag"),
+    middleware = require("../middleware");
 
 var router = express.Router();
 
 // show
-router.get("/:id", isLoggedIn, function(req, res) {
+router.get("/:id", middleware.isLoggedIn, function(req, res) {
     Tag.findById(req.params.id).populate({ path: 'entries', populate: { path: 'tags', select: 'name' } }).exec(function(err, tag) {
         if (err) {
             console.log(err);
@@ -16,7 +17,7 @@ router.get("/:id", isLoggedIn, function(req, res) {
 });
 
 // destroy
-router.delete("/:id", isLoggedIn, function(req, res) {
+router.delete("/:id", middleware.isLoggedIn, function(req, res) {
     Entry.findOneAndUpdate({ "tags": req.params.id }, { $pull: { tags: req.params.id } }, function(err) {
         if (err) {
             console.log(err);
@@ -32,12 +33,5 @@ router.delete("/:id", isLoggedIn, function(req, res) {
         }
     });
 });
-
-function isLoggedIn(req, res, next) {
-    if(req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect("/login");
-}
 
 module.exports = router;

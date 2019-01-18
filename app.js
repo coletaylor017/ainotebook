@@ -7,6 +7,7 @@ var methodOverride        = require("method-override"),
     request               = require("request"),
     moment                = require("moment"),
     ridict                = require("ridict"),
+    flash                 = require("connect-flash"),
     Entry                 = require("./models/entry"),
     User                  = require("./models/user"),
     Tag                   = require("./models/tag"),
@@ -30,6 +31,8 @@ app.locals.moment = require('moment');
 app.use(methodOverride("_method"));
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(flash());
+
 app.use(require("express-session")({
     secret: "I sawed this boat in half!",
     resave: false,
