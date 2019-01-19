@@ -2,7 +2,7 @@
 
 <div class="ui center aligned container main">
     <div>
-        <h1 class="ui header">Blocks tagged "<%= tag.name %>"</h1>
+        <h1 class="ui header">Entries tagged "<%= tag.name %>"</h1>
         <a class="big-anchor" href="/entries">Back to all entries</a>
         <form action="/tags/<%= tag._id %>?_method=DELETE" method="POST" class="inline">
             <button action="submit" class="ui basic red button" title="Delete">Delete tag</button>

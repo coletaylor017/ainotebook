@@ -1,6 +1,7 @@
 TODO!
 
 New name ideas: Freely
+-Come up with a better name
 
 General
     -Timer
