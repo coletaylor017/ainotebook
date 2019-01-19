@@ -73,8 +73,18 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
                     entry.author.username = req.user.username;
                     entry.save();
                     
-                    console.log("ridict analysis: ", ridict.matches(entry.body));
-                    
+                    // this code for streaking has practical problems and I need to figure out a better solution.
+                    // console.log(user.lastEntry);
+                    // var date = new Date();
+                    // console.log("date: ", date);
+                    // var diff = date - user.lastEntry;
+                    // console.log("diff: ", diff);
+                    // if (diff < 86400000) { // if the difference is less than 24 hours
+                    //     user.streak += 1;
+                    // } else {
+                    //     user.streak = 0;
+                    // }
+                    user.lastEntry = new Date();
                     user.entries.push(entry);
                     user.save();
                     console.log("req.body.tags: ", req.body.tags);
