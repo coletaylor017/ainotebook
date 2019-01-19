@@ -4,6 +4,7 @@ var express    = require("express"),
     User       = require("../models/user"),
     middleware = require("../middleware"),
     ridict     = require("ridict"),
+    moment     = require("moment"),
     mongoose   = require("mongoose");
 
 var router = express.Router();
@@ -66,6 +67,7 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
                 if (err) {
                     console.log(err);
                 } else {
+                    console.log(req.body.entry);
                     entry.metadata = "";
                     entry.author.id = req.user._id;
                     entry.author.username = req.user.username;
@@ -76,6 +78,9 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
                     user.entries.push(entry);
                     user.save();
                     console.log("req.body.tags: ", req.body.tags);
+                    
+                    req.flash("success", "Nice job! Come back tomorrow to build your streak!");
+                    
                     if (req.body.tags.length === 0) {
                         res.redirect("/entries");
                     } else {

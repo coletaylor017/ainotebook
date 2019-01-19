@@ -14,7 +14,6 @@
                     <p>Keyword: <%= keyword %></p>
                     <a href="/entries">clear search term</a><br>
                 <% } %>
-            <!--<a href="/entries/new" class="ui green button" id="action-btn">New Block</a>-->
             <h2>Tags</h2>
             <div class="ui list">
                 <% tags.forEach(function(tag) { %>
@@ -33,7 +32,8 @@
             <% entries.forEach(function(entry) { %>
                 <a href="/entries/<%= entry._id %>">
                     <div class="ui horizontal list">
-                        <h4 class="ui item header"><%= moment(entry.date).format("D MMM YYYY, h:mm a") %></h4>
+                        <h4 class="ui item header" class="date"><%= entry.date %></h4>
+                        <!--moment(entry.date).format("D MMM YYYY, h:mm a") -->
                         <% entry.tags.forEach(function(tag) { %>
                             <h4 class="ui item label" id="tags">
                                 <%= tag.name %>

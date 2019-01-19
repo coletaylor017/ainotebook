@@ -10,7 +10,7 @@ var entrySchema = new mongoose.Schema({
     ],
     metadata: String,
     body: String,
-    date: {type: Date, default: Date.now},
+    date: String,
     author: {
         id: {
             type: mongoose.Schema.Types.ObjectId,
