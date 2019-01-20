@@ -158,9 +158,9 @@
         document.querySelector("#date-input").value = e;
         var d = new Date();
         var dateArr = [];
-        dateArr.push(d.getDate());
-        dateArr.push(d.getMonth());
         dateArr.push(d.getFullYear());
+        dateArr.push(d.getMonth());
+        dateArr.push(d.getDate());
         console.log(dateArr);
         document.querySelector("#streak-date").value = dateArr;
     }

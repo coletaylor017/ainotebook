@@ -8,6 +8,7 @@ var express    = require("express"),
 
 var router = express.Router();
 
+
 //index
 router.get("/", middleware.isLoggedIn, function(req, res) {
     Tag.find({"user.id": req.user._id}, function(err, tags) {
@@ -81,15 +82,19 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
                     console.log("last streak date: ", user.lastEntry);
                     var streakDate = req.body.streakDate.split(",");
                     console.log("Current streak date", streakDate);
-                    if (user.streak === 0) {
-                        user.streak = 1;
-                    } else {
-                        if (streakDate[0] === (1 + user.lastEntry[0]) && (streakDate[2] === user.lastEntry[2] && streakDate[1] === user.lastEntry[1])) { // If it's the next day of the same month and year
-                            user.streak += 1;
-                        } else if (streakDate[0] !== user.lastEntry[0]) { // Don't want to reset it if it's the same day!
-                            user.streak = 0;
-                        }
+                    
+                    var d1 = new Date(user.lastEntry[0], user.lastEntry[1], user.lastEntry[2]);
+                    var d2 = new Date(streakDate[0], streakDate[1], streakDate[2]);
+                    console.log("ds: " + d1 + ", " + d2);
+                    var diff = d2 - d1;
+                    diff = diff/86400000;
+                    console.log(diff);
+                    if (diff === 1 || user.streak === 0) {
+                        user.streak++;
+                    } else if (diff > 1) {
+                        user.streak = 0;
                     }
+                        
                     user.lastEntry = streakDate;
                     user.entries.push(entry);
                     user.save();
