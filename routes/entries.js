@@ -16,7 +16,7 @@ router.get("/", middleware.isLoggedIn, function(req, res) {
             console.log(err);
         } else {
             if (Object.keys(req.query).length === 0) { //if no search query
-                Entry.find({"author.id": req.user._id}).populate("tags", "name").exec(function(err, entries) {
+                Entry.find({"author.id": req.user._id, "hidden": 0}).populate("tags", "name").exec(function(err, entries) {
                     if (err) {
                         console.log(err);
                     } else {
@@ -24,7 +24,7 @@ router.get("/", middleware.isLoggedIn, function(req, res) {
                     }
                 });
             } else {
-                Entry.find({"author.id": req.user._id, $text: { $search: req.query.keyword } }).populate("tags", "name").exec(function(err, entries) {
+                Entry.find({"author.id": req.user._id, "hidden": 0, $text: { $search: req.query.keyword } }).populate("tags", "name").exec(function(err, entries) {
                     if (err) {
                         console.log(err);
                     } else {

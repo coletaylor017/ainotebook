@@ -64,7 +64,14 @@ router.get("/account", middleware.isLoggedIn, function(req, res) {
                     wordCount += l.length;
                 });
                 var entryCount = entries.length;
-                res.render("account", {entryCount: entryCount, wordCount: wordCount});
+                Entry.find({"author.id": req.user._id, "hidden": 1}, {hidden: 1, _id: 0}, function(err, hiddenEntries) { // return as little as possible for speed
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        var hidden = hiddenEntries.length;
+                        res.render("account", {entryCount: entryCount, wordCount: wordCount, hidden: hidden});
+                    }
+                });
                 // Optimization uestion: Is it better to do calculation on the server side or pass the entire entry body to the client and do the calculation there?
             });
         }
