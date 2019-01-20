@@ -11,6 +11,7 @@ var entrySchema = new mongoose.Schema({
     metadata: String,
     body: String,
     date: String,
+    hidden: Boolean,
     author: {
         id: {
             type: mongoose.Schema.Types.ObjectId,

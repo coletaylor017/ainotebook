@@ -33,6 +33,12 @@
                 <input type="text" name="tags" placeholder="Write some tags. '#' is not necessary" id="transparent">
             </div>
         </div>
+        <div class="ui field">
+            <div class="ui toggle checkbox">
+                <input type="checkbox" name="hide">
+                <label>Hide entry</label>
+            </div>
+        </div>
         <a href="/entries" class="ui icon button" title="Back"><i class="ui left arrow icon"></i></a>
         <button class="ui green button" type="submit" title="Save!"><i class="ui check icon"></i>Done</button>
     </form>
@@ -110,6 +116,9 @@
     //workaround for a Semantic UI bug where modal buttons don't close the modal. Credit: GitHub user hammy2899, Source: https://github.com/Semantic-Org/Semantic-UI/issues/6540
     $('.ui.modal')
       .modal('attach events', '.close.button')
+    ;
+    $('.ui.checkbox')
+        .checkbox()
     ;
     
         var d = new Date();

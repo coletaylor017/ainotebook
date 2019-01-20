@@ -59,6 +59,7 @@ router.get("/new", middleware.isLoggedIn, function(req, res) {
 
 //create
 router.post("/", middleware.isLoggedIn, function(req, res) {
+    console.log(req.body);
     User.findOne({username: req.user.username}, function(err, user) {
         if (err) {
             console.log(err);
@@ -71,6 +72,11 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
                     entry.metadata = "";
                     entry.author.id = req.user._id;
                     entry.author.username = req.user.username;
+                    if (req.body.hide === "on") { // could probably just do if (req.body.hide)
+                        entry.hidden = 1;
+                    } else {
+                        entry.hidden = 0;
+                    }
                     entry.save();
                     
                     console.log("last streak date: ", user.lastEntry);
