@@ -6,7 +6,7 @@ var userSchema = new mongoose.Schema({
     password: String,
     dateCreated: {type: Date, default: Date.now},
     streak: {type: Number, default: 0},
-    lastEntry: {type: Date, default: Date.now},
+    lastEntry: [],
     badges: [],
     entries: [
         {

@@ -73,23 +73,28 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
                     entry.author.username = req.user.username;
                     entry.save();
                     
-                    // this code for streaking has practical problems and I need to figure out a better solution.
-                    // console.log(user.lastEntry);
-                    // var date = new Date();
-                    // console.log("date: ", date);
-                    // var diff = date - user.lastEntry;
-                    // console.log("diff: ", diff);
-                    // if (diff < 86400000) { // if the difference is less than 24 hours
-                    //     user.streak += 1;
-                    // } else {
-                    //     user.streak = 0;
-                    // }
-                    user.lastEntry = new Date();
+                    console.log("last streak date: ", user.lastEntry);
+                    var streakDate = req.body.streakDate.split(",");
+                    console.log("Current streak date", streakDate);
+                    if (user.streak === 0) {
+                        user.streak = 1;
+                    } else {
+                        if (streakDate[0] === (1 + user.lastEntry[0]) && (streakDate[2] === user.lastEntry[2] && streakDate[1] === user.lastEntry[1])) { // If it's the next day of the same month and year
+                            user.streak += 1;
+                        } else if (streakDate[0] !== user.lastEntry[0]) { // Don't want to reset it if it's the same day!
+                            user.streak = 0;
+                        }
+                    }
+                    user.lastEntry = streakDate;
                     user.entries.push(entry);
                     user.save();
                     console.log("req.body.tags: ", req.body.tags);
                     
-                    req.flash("success", "Nice job! Come back tomorrow to build your streak!");
+                    if (user.streak === 1) {
+                         req.flash("success", "Nice job! Come back tomorrow to start building a streak!");
+                    } else {
+                        req.flash("success", "Nice job! You've written for " + user.streak + " consecutive days. Come back tomorrow to keep the streak going!");
+                    }
                     
                     if (req.body.tags.length === 0) {
                         res.redirect("/entries");

@@ -18,7 +18,8 @@
     <!--    <div><a class="timer-close" onclick='toggleTimer()'>Click to close</a></div>-->
     <!--</div>-->
     
-    <form onsubmit="getClientDate()" action="/entries" method="POST" class="ui form">
+    <form onsubmit="finalizeDates()" action="/entries" method="POST" class="ui form">
+        <input id="streak-date" style="display: none" name="streakDate">
         <input id="date-input" style="display: none" name="entry[date]">
         <!--<div class="field">-->
         <!--    <input type="text" name="entry[metadata]" placeholder="Metadata">-->
@@ -111,12 +112,25 @@
       .modal('attach events', '.close.button')
     ;
     
+        var d = new Date();
+        var dateArr = [];
+        dateArr.push(d.getDate());
+        dateArr.push(d.getMonth());
+        dateArr.push(d.getFullYear());
+        console.log(dateArr);
     //display client date time at top of page
     document.querySelector("h2").innerHTML = moment().format("MMMM Do, YYYY");
     
-    var getClientDate = function() {
+    var finalizeDates = function() {
         var e = moment().format("D MMM YYYY, h:mm a");
         document.querySelector("#date-input").value = e;
+        var d = new Date();
+        var dateArr = [];
+        dateArr.push(d.getDate());
+        dateArr.push(d.getMonth());
+        dateArr.push(d.getFullYear());
+        console.log(dateArr);
+        document.querySelector("#streak-date").value = dateArr;
     }
     
 </script>
