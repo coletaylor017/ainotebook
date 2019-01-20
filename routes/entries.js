@@ -4,7 +4,6 @@ var express    = require("express"),
     User       = require("../models/user"),
     middleware = require("../middleware"),
     ridict     = require("ridict"),
-    moment     = require("moment"),
     mongoose   = require("mongoose");
 
 var router = express.Router();
@@ -102,7 +101,7 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
                         req.flash("success", "Nice job! You've written for " + user.streak + " consecutive days. Come back tomorrow to keep the streak going!");
                     }
                     
-                    if (req.body.tags.length === 0) {
+                    if (req.body.tags.length === 0 || req.body.hide === "on") {
                         res.redirect("/entries");
                     } else {
                         var tags = JSON.parse(req.body.tags);

@@ -1,7 +1,9 @@
 <% include partials/header %>
 
 <script src="https://cdn.jsdelivr.net/npm/moment@2.23.0/moment.min.js"></script>
+<script src="/flipclock/flipclock.min.js"></script>
 <script src="/tagify.min.js"></script>
+<link rel="stylesheet" href="/flipclock/flipclock.css">
 <link rel="stylesheet" href="/stylesheets/tagify.css">
 
 <div class="ui container center aligned main">
@@ -11,12 +13,12 @@
         <div class="item">Write whatever comes to mind</div>
         <div class="item">Pick a time, ideally 20-30 minutes, and don't stop or pause before the time is up</div>
         <div class="item">If you don't know what to write, write "I don't know what to write" until you do.</div>
-        <!--<div class="item timerOn" style="display:none">Click <a onclick='toggleTimer()'>here</a> for a handy timer</div>-->
+        <div class="item timerOn" style="display:none">Click <a onclick='toggleTimer()'>here</a> for a handy timer</div>
     </div>
-    <!--<div class="timer">-->
-    <!--    hi I'm a timer-->
-    <!--    <div><a class="timer-close" onclick='toggleTimer()'>Click to close</a></div>-->
-    <!--</div>-->
+    <div class="timer">
+        <div class="clock"></div>
+        <div><a class="timer-close" onclick='toggleTimer()'>Click to close</a></div>
+    </div>
     
     <form onsubmit="finalizeDates()" action="/entries" method="POST" class="ui form">
         <input id="streak-date" style="display: none" name="streakDate">
@@ -29,22 +31,23 @@
         </div>
         <div class="ui field">
             <div class="ui labeled input">
-                <label class="ui basic label"><i class="ui question circle outline link icon modal-btn"></i>Optional: Add tags</label>
+                <label class="ui basic label"><i class="ui blue question circle outline link icon modal-btn"></i>Optional: Add tags</label>
                 <input type="text" name="tags" placeholder="Write some tags. '#' is not necessary" id="transparent">
             </div>
         </div>
         <div class="ui field">
             <div class="ui toggle checkbox">
-                <input type="checkbox" name="hide">
                 <label>Hide entry</label>
+                <input type="checkbox" name="hide">
             </div>
+            <i class="ui blue question circle outline link icon modal-btn2"></i>
         </div>
         <a href="/entries" class="ui icon button" title="Back"><i class="ui left arrow icon"></i></a>
         <button class="ui green button" type="submit" title="Save!"><i class="ui check icon"></i>Done</button>
     </form>
 </div>
 
-<div class="ui large modal">
+<div class="ui large modal 1">
     <div class="header">Help: Tags</div>
     <div class="image content">
         <div class="ui large bordered image">
@@ -71,7 +74,18 @@
         </div>
     </div>
     <div class="actions">
-        <div class="ui close button">Got it</div>
+        <div class="ui close button 1">Got it</div>
+    </div>
+</div>
+
+<div class="ui large modal 2">
+    <div class="header">Help: Hiding Entries</div>
+    <div class="content">
+        <p>If you don't think this entry is one you'd like to look back on, consider hiding it. A hidden entry will disappear after you submit it, but it will still count for streaks and contibute to total word count.</p>
+        <p>Warning: Hidden entries will remain so forever and cannot be un-hidden or deleted.</p>
+    </div>
+    <div class="actions">
+        <div class="ui close button 2">Got it</div>
     </div>
 </div>
 
@@ -103,7 +117,7 @@
     
     var btn = document.querySelector(".modal-btn");
     btn.onclick = function() {
-        $('.ui.modal').modal({
+        $('.ui.modal.1').modal({
             onShow: function(){
                 console.log('shown');
             },
@@ -113,20 +127,29 @@
         }).modal('show');
     }
     
-    //workaround for a Semantic UI bug where modal buttons don't close the modal. Credit: GitHub user hammy2899, Source: https://github.com/Semantic-Org/Semantic-UI/issues/6540
-    $('.ui.modal')
-      .modal('attach events', '.close.button')
-    ;
+    var btn2 = document.querySelector(".modal-btn2");
+    btn2.onclick = function() {
+        $('.ui.modal.2').modal({
+            onShow: function(){
+                console.log('shown');
+            },
+            onHide: function(){
+                console.log('hidden');
+            }
+        }).modal('show');
+    }
+    
     $('.ui.checkbox')
         .checkbox()
     ;
+    //workaround for a Semantic UI bug where modal buttons don't close the modal. Credit: GitHub user hammy2899, Source: https://github.com/Semantic-Org/Semantic-UI/issues/6540
+    $('.ui.modal.1')
+      .modal('attach events', '.close.button.1')
+    ;  
+    $('.ui.modal.2')
+      .modal('attach events', '.close.button.2')
+    ;  
     
-        var d = new Date();
-        var dateArr = [];
-        dateArr.push(d.getDate());
-        dateArr.push(d.getMonth());
-        dateArr.push(d.getFullYear());
-        console.log(dateArr);
     //display client date time at top of page
     document.querySelector("h2").innerHTML = moment().format("MMMM Do, YYYY");
     
@@ -142,6 +165,16 @@
         document.querySelector("#streak-date").value = dateArr;
     }
     
+    //======================
+    // TIMER CODE
+    //======================
+    
+    var clock = $('.clock').FlipClock({
+        clockFace: 'MinuteCounter',
+        autoStart: false,
+        countdown: true
+    });
+
 </script>
 
 <% include partials/footer %>

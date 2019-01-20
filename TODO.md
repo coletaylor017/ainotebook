@@ -6,7 +6,6 @@ New name ideas: Freely
 General
     -Timer
     -Home page redesign: more images, showcase the product's features
-    -Slider question mark
     -Account page
         -password recovery
         -double check that they want to delete before deleting
@@ -39,3 +38,4 @@ Done!
     -Flash error messages for invalid login, etc.
     -Sign up validation
     -Slider
+    -Slider question mark
