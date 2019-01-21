@@ -11,11 +11,18 @@
         <div class="item">Write whatever comes to mind</div>
         <div class="item">Pick a time, ideally 20-30 minutes, and don't stop or pause before the time is up</div>
         <div class="item">If you don't know what to write, write "I don't know what to write" until you do.</div>
-        <div class="item timerOn" style="display:none">Click <a onclick='toggleTimer()'>here</a> for a handy timer</div>
     </div>
+    <div class="timer-on" style="display:none"><a onclick='toggleTimer()'>Show timer</a></div>
+
     <div class="timer">
-        <div class="clock"></div>
-        <div><a class="timer-close" onclick='toggleTimer()'>Click to close</a></div>
+        <div class="ui field">
+            <div class="ui input timer-container" style="width: 3.5em">
+                <input class="ui input" type="text" id="timer" value="20"><label id="timer-label">Minutes</label></input>
+            </div>
+        </div>
+        <button class="ui basic icon button" id="go"><i class="ui play icon"></i></button>
+        <button class="ui basic icon button" id="stop"><i class="ui pause icon"></i></button>
+        <div><a class="timer-close" onclick='toggleTimer()'>Hide timer</a></div>
     </div>
     
     <form onsubmit="finalizeDates()" action="/entries" method="POST" class="ui form">
@@ -88,17 +95,6 @@
 </div>
 
 <script>
-    var timerOn = 0;
-    function toggleTimer() {
-        var timer = document.querySelector(".timer");
-         if (timer.style.display !== "none") {
-            timer.style.display = "none";
-            document.querySelector(".timerOn").style.display = "inline";
-         } else {
-            timer.style.display = "block";
-            document.querySelector(".timerOn").style.display = "none";
-         }
-    }
     
     var tagArr = <%- JSON.stringify(tags) %>;
     var input = document.querySelector("input[name=tags]");
@@ -167,7 +163,49 @@
     // TIMER CODE
     //======================
     
-
+    var timerOn = 0;
+    function toggleTimer() {
+        var timer = document.querySelector(".timer");
+         if (timer.style.display !== "none") {
+            timer.style.display = "none";
+            document.querySelector(".timer-on").style.display = "inline";
+         } else {
+            timer.style.display = "block";
+            document.querySelector(".timer-on").style.display = "none";
+         }
+    }
+    
+    var timer;
+    var disp = document.getElementById("timer");
+    var label = document.getElementById("timer-label");
+    
+    function countDown(i, callback) {
+        disp.style.color = "black";
+        timer = setInterval(function() {
+            var mins = Math.floor(i / 60);
+            var secs /*lol*/ = i - mins * 60;
+            if (secs.toString().length === 1) {
+                secs = "0" + secs.toString();
+            }
+            if (mins.toString().length === 1) {
+                mins = "0" + mins.toString();
+            }
+            disp.value = mins + ":" + secs;
+            i-- || (clearInterval(timer), callback());
+        }, 1000);
+    }
+    
+    $("#go").on("click", function(){
+        document.querySelector(".timer-container").style.width = "5em";
+        label.style.display = "none";
+        countDown(disp.value * 60, function(){
+            disp.style.color = "red";
+        });
+    });
+    
+    $("#stop").click(function(){
+        clearInterval(timer);
+    });
 </script>
 
 <% include partials/footer %>

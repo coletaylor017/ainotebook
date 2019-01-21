@@ -4,7 +4,6 @@ New name ideas: Freely
 -Come up with a better name
 
 General
-    -Timer
     -Home page redesign: more images, showcase the product's features
     -Account page
         -password recovery
@@ -39,3 +38,4 @@ Done!
     -Sign up validation
     -Slider
     -Slider question mark
+    -Timer

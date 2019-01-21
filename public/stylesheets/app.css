@@ -98,7 +98,7 @@ p {
     line-height: 175%;
 }
 
-.timer-close:hover {
+.timer-close:hover, .timer-on:hover {
     cursor: pointer;
 }
 
