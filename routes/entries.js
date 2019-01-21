@@ -100,11 +100,16 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
                     user.save();
                     console.log("req.body.tags: ", req.body.tags);
                     
-                    if (user.streak === 1) {
-                         req.flash("success", "Nice job! Come back tomorrow to start building a streak!");
+                    if (diff === 0) { // if they've already submitted an entry today
+                        req.flash("success", "Entry submitted!");
                     } else {
-                        req.flash("success", "Nice job! You've written for " + user.streak + " consecutive days. Come back tomorrow to keep the streak going!");
+                        if (user.streak > 1) {
+                            req.flash("success", "Nice job! You've written for " + user.streak + " consecutive days. Come back tomorrow to keep the streak going!");
+                        } else {
+                            req.flash("success", "Nice job! Come back tomorrow to start building a streak!");
+                        }
                     }
+
                     
                     if (req.body.tags.length === 0 || req.body.hide === "on") {
                         res.redirect("/entries");
