@@ -115,3 +115,7 @@ p {
     display: block;
     padding: 1em;
 }
+
+#timer-label {
+    margin: .5em;
+}

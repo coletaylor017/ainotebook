@@ -15,13 +15,14 @@
     <div class="timer-on" style="display:none"><a onclick='toggleTimer()'>Show timer</a></div>
 
     <div class="timer">
-        <div class="ui field">
-            <div class="ui input timer-container" style="width: 3.5em">
-                <input class="ui input" type="text" id="timer" value="20"><label id="timer-label">Minutes</label></input>
-            </div>
+        <button id="play" class="ui basic icon button"><i class="ui play icon"></i></button>
+        <button id="pause" class="ui basic icon button" style="display: none"><i class="ui pause icon"></i></button>
+        <div class="ui input" style="width: 3.5em">
+            <input type="text" id="minutes" value="20" maxlength="2">
+        </div>:
+        <div class="ui input" style="width: 3.5em">
+            </input><input type="text" id="seconds" value="00" maxlength="2"></input>
         </div>
-        <button class="ui basic icon button" id="go"><i class="ui play icon"></i></button>
-        <button class="ui basic icon button" id="stop"><i class="ui pause icon"></i></button>
         <div><a class="timer-close" onclick='toggleTimer()'>Hide timer</a></div>
     </div>
     
@@ -54,28 +55,36 @@
 
 <div class="ui large modal 1">
     <div class="header">Help: Tags</div>
-    <div class="image content">
-        <div class="ui large bordered image">
-            <img src="/images/tagshelp1.png">
+    <div class="ui items">
+        <div class="item">
+            <div class="ui image">
+                <div class="ui large bordered image">
+                    <img src="/images/tagshelp1.png">
+                </div>
+            </div>
+            <div class="middle aligned content">
+                <p>Use tags to categorize entries. For example, you could tag every entry that talks about dogs with 'dogs'.</p>
+            </div>
         </div>
-        <div class="description">
-            <p>Use tags to categorize entries. For example, you could tag every entry that talks about dogs with 'dogs'.</p>
+        <div class="item">
+            <div class="ui image">
+                <div class="ui large bordered image">
+                    <img src="/images/tagshelp2.png">
+                </div>
+            </div>
+            <div class="middle aligned content">
+                <p>Your tags will show up on the entries page.</p>
+            </div>
         </div>
-    </div>
-    <div class="image content">
-        <div class="ui large bordered image">
-            <img src="/images/tagshelp2.png">
-        </div>
-        <div class="description">
-            <p>Your tags will show up on the entries page.</p>
-        </div>
-    </div>
-    <div class="image content">
-        <div class="ui large bordered image">
-            <img src="/images/tagshelp3.png">
-        </div>
-        <div class="description">
-            <p>Clicking on a tag will show you all the entries that reference that tag.</p>
+        <div class="item">
+            <div class="ui image">
+                <div class="ui large bordered image">
+                    <img src="/images/tagshelp3.png">
+                </div>
+            </div>
+            <div class="middle aligned content">
+                <p>Clicking on a tag will show you all the entries that reference that tag.</p>
+            </div>
         </div>
     </div>
     <div class="actions">
@@ -176,11 +185,13 @@
     }
     
     var timer;
-    var disp = document.getElementById("timer");
-    var label = document.getElementById("timer-label");
+    var disp1 = document.getElementById("minutes");
+    var disp2 = document.getElementById("seconds");
+    var pause = document.getElementById("pause");
+    var play = document.getElementById("play");
     
+    // THIS IS TERRIBLY COMPLICATED AND I DIDN'T WRITE ANY COMMENTS SORRY
     function countDown(i, callback) {
-        disp.style.color = "black";
         timer = setInterval(function() {
             var mins = Math.floor(i / 60);
             var secs /*lol*/ = i - mins * 60;
@@ -190,21 +201,26 @@
             if (mins.toString().length === 1) {
                 mins = "0" + mins.toString();
             }
-            disp.value = mins + ":" + secs;
+            disp1.value = mins;
+            disp2.value = secs;
             i-- || (clearInterval(timer), callback());
         }, 1000);
     }
     
-    $("#go").on("click", function(){
-        document.querySelector(".timer-container").style.width = "5em";
-        label.style.display = "none";
-        countDown(disp.value * 60, function(){
-            disp.style.color = "red";
+    $("#play").on("click", function(){
+        pause.style.display = "inline";
+        play.style.display = "none";
+        countDown(disp1.value * 60 + disp2.value * 1, function(){ // *1 is to convert data type from string to number
+            disp1.value = 20;
+            pause.style.display = "none";
+            play.style.display = "inline";
         });
     });
     
-    $("#stop").click(function(){
+    $("#pause").click(function(){
         clearInterval(timer);
+        pause.style.display = "none";
+        play.style.display = "inline";
     });
 </script>
 
