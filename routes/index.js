@@ -14,6 +14,10 @@ router.get("/about", function(req, res) {
     res.render("about");
 });
 
+router.get("/terms", function(req, res) {
+    res.render("terms");
+})
+
 //Register
 router.get("/register", function(req, res) {
     res.render("signup");
@@ -24,7 +28,7 @@ router.post("/register", function(req, res) {
         if (err) {
             console.log(err);
             req.flash("error", err.message);
-            return res.redirect("/register");
+            return res.redirect("back");
         }
         passport.authenticate("local")(req, res, function() {
             req.flash("success", "Welcome to Writing Blocks, " + user.username + "! Time to start your first freewriting session!");

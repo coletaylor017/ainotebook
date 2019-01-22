@@ -9,11 +9,11 @@
     <script src="/semantic/dist/semantic.min.js"></script>
 </head>
 <body>
-    <div class="ui basic center aligned inverted segment" id="splash">
+    <div class="ui basic center aligned inverted segment" id="jumbotron"> <!--Sometimes I question my choice of going with Semantic instead of Bootstrap...-->
         <h1 class="ui header" id="site-title">Freely</h1>
         <h3 class="ui header">Daily freewriting for a better life.</h3>
         <div class="ui hidden divider"></div>
-        <a href="/register" class="ui huge green inverted button">Sign Up</a><br>
+        <a href="/register" class="ui huge primary button">Sign up for free<i class="ui right arrow icon"></i></a><br>
         <% if (!currentUser) { %>
             <a href="/login" class="ui secondary button">Log In</a>
         <% } else { %>
@@ -37,11 +37,106 @@
             </ul>
         </div>
     </div>
-    <div class="ui center aligned container lander-padded">
-        <h2>With Freely, you can maintain a daily freewriting habit and analyze your writing, all in a beautifully simple, distraction-free interface.</h2>
-        <div class="ui hidden divider"></div>
-        <div class="ui basic center aligned segment">
-            <a href="/register" class="ui large inverted green button">Get Started</a>
+    <div class="ui center aligned inverted stackable middle aligned grid segment" id="ten-padded">
+        <div class="ten wide column">
+            <h2 class="ui inverted header">Start your freewriting journey now.</h2>
+            <p>Signing up while the app is in beta means your account is free, forever. No ads, no restrictions. Thank you for believing in Freely.</p>
+        </div>
+        <div class="ui six wide column inverted left aligned segment">
+            <div class="ui container">
+                <% if (success && success.length > 0) { %>
+                <div class="ui positive message thing" style="margin-top: 5em">
+                    <i class="close icon"></i>
+                    <div class="header">
+                        Success
+                    </div>
+                    <p><%= success %></p>
+                </div>
+                <% } %>
+                <% if (error && error.length > 0) { %>
+                <div class="ui negative message thing" style="margin-top: 5em">
+                    <i class="close icon"></i>
+                    <div class="header">
+                        Error
+                    </div>
+                    <p><%= error %></p>
+                </div>
+                <% } %>
+            </div>
+            
+            <form class="ui inverted form" id="main-form" action="/register" method="POST">
+                <div class="field">
+                    <input type="text" placeholder="username" name="username">
+                </div>
+                <div class="field">
+                    <input type="password" placeholder="password" name="password">
+                </div>
+                <div class="field">
+                    <input type="password" placeholder="repeat password" name="password2">
+                </div>
+                <div class="ui left floated field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="terms">
+                        <label>I agree to the <a href="/terms" target="_blank">terms and conditions</a></label>
+                    </div>
+                    <button class="ui right floated primary button">Sign Up</button>
+                </div>
+                <div class="ui error message"></div>
+                <div class="ui hidden divider"></div>
+            </form>
         </div>
     </div>
-    <div class="lander-padded"></div>
+
+<script>
+
+//If there's a login error message, scroll down to login form
+var elmnt = document.querySelector(".thing");
+elmnt.scrollIntoView();
+
+$('.ui.form')
+    .form({
+        fields: {
+            username: {
+                identifier: 'username',
+                rules: [
+                    {
+                        type   : 'empty',
+                        prompt : 'Please enter a username'
+                    }
+                ]
+            },
+            password: {
+                identifier: 'password',
+                rules: [
+                    {
+                        type   : 'empty',
+                        prompt : 'Please enter a password'
+                    },
+                    {
+                        type: 'match[password2]',
+                        prompt: "Passwords must match"
+                    }
+                ]
+            },
+            terms: {
+                identifier: 'terms',
+                rules: [
+                {
+                        type   : 'checked',
+                        prompt : 'You must agree to the terms and conditions'
+                    }
+                ]
+            }
+        }
+    })
+;
+
+$('.message .close')
+  .on('click', function() {
+    $(this)
+      .closest('.message')
+      .transition('fade')
+    ;
+  })
+;
+</script>

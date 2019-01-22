@@ -44,8 +44,21 @@ body {
     float: left;
 }
 
-#splash {
-    padding: 15rem;
+#jumbotron {
+    padding: 15em;
+    margin: 0;
+    border-radius: 0;
+    background: url(/images/stock-typing2.jpeg) no-repeat center center fixed;
+    background-size: cover;
+}
+
+#jumbotron .ui {
+    z-index: 5;
+}
+
+#ten-padded {
+    padding: 10rem;
+    margin: 0;
 }
 
 #splash-content {
@@ -54,12 +67,16 @@ body {
 
 #site-title {
     font-family: 'Cutive Mono', monospace;
-    font-weight: 700;
 }
 
-h1#site-title {
+#jumbotron #site-title {
+    font-weight: 500;
+    font-size: 3em;
+}
+
+#site-title {
     font-family: 'Cutive Mono', monospace;
-    font-weight: 100;
+    font-weight: 700;
 }
 
 .ui.stripe {
@@ -118,4 +135,8 @@ p {
 
 #timer-label {
     margin: .5em;
+}
+
+#main-form {
+    border-radius: .5em;
 }

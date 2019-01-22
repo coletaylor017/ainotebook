@@ -8,7 +8,6 @@
     
     <div class="ui left aligned container">
         <form name="myForm" class="ui form" action="/register" method="POST">
-            <!--above: onsubmit="return validateForm()"-->
             <div class="field">
                 <input type="text" placeholder="username" name="username" autofocus>
             </div>
@@ -18,25 +17,23 @@
             <div class="field">
                 <input type="password" placeholder="repeat password" name="password2">
             </div>
-            <button class="ui basic green button">Sign Up</button>
+            <div class="ui field">
+                <div class="ui checkbox">
+                    <input type="checkbox" name="terms">
+                    <label>I agree to the <a href="/terms" target="_blank">terms and conditions</a></label>
+                </div>
+            </div>
+            <button class="ui green button">Sign Up</button>
             <a href="/login">Or log in instead</a>
             <div class="ui error message"></div>
         </form>
         <div class="ui hidden divider"></div>
-        <p style="color: red; text-align: center">This site is currently in beta. Some features may be broken or missing. 
-        <br>Anonymous data may be collected but will never be sold or shared. We do not collect personally identifiable data.
-        <br>Still, since the app may be unstable or insecure, please avoid submiting any senstitive or important information while the app is in beta.</p>
+        <p style="color: red; text-align: center">This site is currently in beta. Some features may be broken or missing. Please avoid entering sensitive data since the app may not be secure.</p>
     </div>
 </div>
 
 <script>
-// function validateForm() {
-//   var x = document.forms["myForm"]["username"].value;
-//   if (x == "") {
-//     alert("Name must be filled out");
-//     return false;
-//   }
-// }
+
 $('.ui.form')
     .form({
         fields: {
@@ -59,6 +56,15 @@ $('.ui.form')
                     {
                         type: 'match[password2]',
                         prompt: "Passwords must match"
+                    }
+                ]
+            },
+            terms: {
+                identifier: 'terms',
+                rules: [
+                {
+                        type   : 'checked',
+                        prompt : 'You must agree to the terms and conditions'
                     }
                 ]
             }

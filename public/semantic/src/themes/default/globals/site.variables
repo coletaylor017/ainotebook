@@ -51,7 +51,7 @@
     Brand Colors
 --------------------*/
 
-@primaryColor        : @blue;
+@primaryColor        : @green;
 @secondaryColor      : @black;
 
 @lightPrimaryColor   : @lightBlue;
