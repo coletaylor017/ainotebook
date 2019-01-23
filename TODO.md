@@ -1,27 +1,35 @@
 TODO!
 
+-In general: Focus on DB optimization and CSS simplicity. Fewer IDs especially. Start messing around with Semantic setting more. 
+    
+*note: start using git branches
+*Text index has disappeared on dev DB (not deployed DB)
+
 New name ideas: Freely
 -Come up with a better name
 
+
 General
-    -Home page redesign: more images, showcase the product's features
     -Account page
         -password recovery
         -double check that they want to delete before deleting
+    -Forgot password link
+    -Update streak on sign-in
+    -Display re-dict analysis on entry view page.
     
     -Metadata. Create a new collection called "metadata" and have each document be an object with a data name, value, date created, owner (referencing "users"), and entry id (referencing "entries"). When metadata is analyzed, find() bits of data based on their date, name, and/or entry and ALWAYS their user. Then the returned array of data can have its information pulled out and displayed. 
         -Consider displaying metadata semi-graphically on the entry "show" page.
     -Daily quotes, for more deets on this see /models/quotes.js. Maybe in the future we could have a way for users to submit quotes and have them added to the quote DB following admin approval.
 
 UI:
-    -Actually install Semantic, then do these:
-        -Make trash hover red
-        -Light/dark themes
-        -"..." and "read more"(?) at end of truncated entries
-        -show line breaks on entry view page
+    -Make trash hover red
+    -Light/dark themes
+    -"..." and "read more"(?) at end of truncated entries
+    -show line breaks on entry view page
 
 Database/security:
     -Check ownership before ediing or deleting
+    -Investigate how to get https so Chrome will say the site is secure.
     
 Done!
     -Associate users and entries
@@ -39,3 +47,4 @@ Done!
     -Slider
     -Slider question mark
     -Timer
+    -Home page redesign: more images, showcase the product's features

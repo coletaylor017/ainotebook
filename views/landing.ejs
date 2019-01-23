@@ -20,27 +20,76 @@
             <a href="/entries/new" class="ui secondary button">Log In</a>
         <% } %>
     </div>
-    
-    <div class="ui center aligned container lander-padded">
-        <h1 class="ui header">
-            Freewriting is an informal style of writing where thoughts flow stright from your brain onto the page. 
-        </h1>
-    </div>
-    <div class="ui huge message lander-padded">
+    <div class="ui lander-padded container">
         <div class="ui hidden divider"></div>
-        <div class="ui center aligned container">
-            <p class="">Research shows that freewriting has several benefits:</p>
-            <ul class="ui list">
-                <li class="item">Produce new ideas</li>
-                <li class="item">Process emotions</li>
-                <li class="item">Clear the mind</li>
-            </ul>
+        <div class="ui center aligned very padded raised segment">
+            <h2 class="ui header"><em>Producing writing is not so much like filling a basin or pool once, but rather getting water to keep flowing through till finally it runs clear.</em></h2>
+            <p class="ui right floated small header">-Peter Elbow, <i>freewriting pioneer</i></p>
         </div>
     </div>
+
+    <div class="ui basic segment">
+        <div class="ui stackable grid container">
+          <div class="row">
+            <div class="six wide column">
+                <div class="ui very padded basic segment">
+                    <h2 class="ui header">Freely encourages you to freewrite every day.</h2>
+                    <p class="landing-p">Research shows that daily freewriting can help the mind calm down, process emotions and boost creativity. Writer Julia Cameron is known for her advocacy of doing three pages of stream-of-consciousness writing every morning. Freely is the perfect online platform for you to start and maintain a daily writing habit.</p>
+                </div>
+            </div>
+            <div class="ten wide column">
+              <!--<img alt="Cool video explaining the product will go here" class="ui large bordered rounded image" style="display: block; width: 100%; height: 15em">-->
+              <img src="/images/streak-showcase.png" alt="Streak notification showing the writer they've written for 23 consecutive days" class="ui massive bordered image" id="darkborder">
+              <h3 class="ui center aligned header">Write every day to build streaks and keep the momentum going.</h3>
+              <div class="ui stackable grid">
+                  <div class="eight wide column">
+                      <img src="/images/tagshelp1.png" class="ui large bordered image" id="darkborder">
+                  </div>
+                  <div class="eight wide column">
+                      <img src="/images/tagshelp2.png" class="ui large bordered image" id="darkborder">
+                  </div>
+              </div>
+              <h3 class="ui center aligned header">Organize past entries with tags.</h3>
+            </div>
+          </div>
+        </div>
+    </div>
+    <!--<div class="ui vertical stripe quote segment">-->
+    <!--    <div class="ui equal width stackable internally celled grid">-->
+    <!--      <div class="center aligned row">-->
+    <!--        <div class="ui very padded basic segment column">-->
+    <!--          <h3>"What a Company"</h3>-->
+    <!--          <p>That is what they all say about us</p>-->
+    <!--        </div>-->
+    <!--        <div class="ui very padded basic segment column">-->
+    <!--          <h3>"I shouldn't have gone with their competitor."</h3>-->
+    <!--          <p>-->
+    <!--            <img src="assets/images/avatar/nan.jpg" class="ui avatar image"> <b>Nan</b> Chief Fun Officer Acme Toys-->
+    <!--          </p>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
+    <!--  </div>-->
+    
+        <h4 class="ui horizontal header divider">
+            <a href="#">The Evidence</a>
+        </h4>
+        <div class="ui lander-padded text container">
+              <h2 class="ui header">Case study: expressing emotions leads to a calmer mind and healthier emotions</h2>
+              <p class="landing-p">A 2007 UCLA study focused on the reaction of the amygdala, the brain’s alarm system, when participants were shown pictures of angry or fearful faces. Participants described each face’s emotion as it appeared, and their brain activity was studied using fMRI. Matthew D. Lieberman, associate professor of psychology at UCLA: “When you attach the word 'angry,' you see a decreased response in the amygdala”.</p>
+              <p class="landing-p">Labelling emotions also activated a part of the brain associated with emotion processing and self-inhibition. These results have practical application when it comes to emotional health. Lieberman continues, <strong>"When you put feelings into words, you seem to be hitting the brakes on your emotional responses… Putting our feelings into words helps us heal.”</strong> (UCLA).</p>
+        </div>
+    
+    <!--<div class="ui huge message lander-padded">-->
+    <!--    <div class="ui hidden divider"></div>-->
+    <!--    <div class="ui center aligned container">-->
+    <!--        <p class="">Research shows that freewriting has several benefits:</p>-->
+    <!--    </div>-->
+    <!--</div>-->
     <div class="ui center aligned inverted stackable middle aligned grid segment" id="ten-padded">
         <div class="ten wide column">
             <h2 class="ui inverted header">Start your freewriting journey now.</h2>
-            <p>Signing up while the app is in beta means your account is free, forever. No ads, no restrictions. Thank you for believing in Freely.</p>
+            <p>Signing up while the app is in beta means your account is free, forever. No ads, no restrictions. <br>Thank you for believing in this project.</p>
         </div>
         <div class="ui six wide column inverted left aligned segment">
             <div class="ui container">
@@ -83,6 +132,7 @@
                 </div>
                 <div class="ui error message"></div>
                 <div class="ui hidden divider"></div>
+                <p style="color: red; text-align: center">This site is currently in beta. Please read the terms and conditions carefully before signing up.</p>
             </form>
         </div>
     </div>
@@ -90,8 +140,6 @@
 <script>
 
 //If there's a login error message, scroll down to login form
-var elmnt = document.querySelector(".thing");
-elmnt.scrollIntoView();
 
 $('.ui.form')
     .form({
@@ -130,7 +178,7 @@ $('.ui.form')
         }
     })
 ;
-
+        
 $('.message .close')
   .on('click', function() {
     $(this)
@@ -139,4 +187,7 @@ $('.message .close')
     ;
   })
 ;
+
+var elmnt = document.querySelector(".thing");
+elmnt.scrollIntoView();
 </script>

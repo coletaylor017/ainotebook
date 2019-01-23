@@ -8,7 +8,7 @@
     <h2 class="ui header"></h2>
     
     <div class="ui bulleted list">
-        <div class="item">Write whatever comes to mind</div>
+        <div class="item">Write whatever comes to mind. It doesn't have to make any sense!</div>
         <div class="item">Pick a time, ideally 20-30 minutes, and don't stop or pause before the time is up</div>
         <div class="item">If you don't know what to write, write "I don't know what to write" until you do.</div>
     </div>
@@ -154,7 +154,7 @@
     ;  
     
     //display client date time at top of page
-    document.querySelector("h2").innerHTML = moment().format("MMMM Do, YYYY");
+    document.querySelector("h2").innerHTML = "New Entry: " + moment().format("MMMM Do, YYYY");
     
     var finalizeDates = function() {
         var e = moment().format("D MMM YYYY, h:mm a");

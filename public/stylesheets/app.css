@@ -140,3 +140,12 @@ p {
 #main-form {
     border-radius: .5em;
 }
+
+.landing-p {
+    font-size: 1.2em;
+    line-height: 1.8;
+}
+
+#darkborder { /*do this in the semantic master styles later*/
+    border-color: #aaaaaa;
+}
