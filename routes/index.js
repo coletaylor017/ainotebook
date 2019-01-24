@@ -3,6 +3,17 @@ var express    = require("express"),
     User       = require("../models/user"),
     middleware = require("../middleware"),
     passport   = require("passport");
+    
+var sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+var msg = {
+  to: 'coletaylor017@gmail.com',
+  from: 'test@example.com',
+  subject: 'Sending with SendGrid is Fun',
+  text: 'and easy to do anywhere, even with Node.js',
+  html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+};
+sgMail.send(msg);
 
 var router = express.Router();
 
