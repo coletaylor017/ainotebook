@@ -149,3 +149,10 @@ p {
 #darkborder { /*do this in the semantic master styles later*/
     border-color: #aaaaaa;
 }
+
+.value i {
+    display: inline-block;
+    position: relative;
+    padding-left: .2em;
+    top: -.15em;
+}
