@@ -13,6 +13,7 @@
     "@sendgrid/mail": "^6.3.1",
     "@yaireo/tagify": "^2.9.7",
     "body-parser": "^1.18.3",
+    "chart.js": "^2.7.3",
     "connect-flash": "^0.1.1",
     "ejs": "^2.6.1",
     "express": "^4.16.3",

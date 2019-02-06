@@ -6,13 +6,9 @@ var methodOverride        = require("method-override"),
     express               = require("express"),
     request               = require("request"),
     moment                = require("moment"),
-    ridict                = require("ridict"),
     flash                 = require("connect-flash"),
-    Entry                 = require("./models/entry"),
     User                  = require("./models/user"),
-    Tag                   = require("./models/tag"),
     passport              = require("passport"),
-    parseText             = require("./public/parseText"),
     LocalStrategy         = require("passport-local"),
     passportLocalMongoose = require("passport-local-mongoose");
 
