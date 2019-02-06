@@ -1,6 +1,6 @@
 .ct-chart {
     width: 100%;
-    height: 100%;
+    height: 90%;
 }
 
 .ct-label {
@@ -8,77 +8,92 @@
     display: none;
 }
 
-#chart1 .ct-series-a .ct-slice-pie {
+.a1, #chart1 .ct-series-a .ct-slice-pie {
   /* fill of the pie slieces */
   fill: black;
+  color: black;
 }
 
-#chart1 .ct-series-b .ct-slice-pie {
+.a2, #chart1 .ct-series-b .ct-slice-pie {
   /* fill of the pie slieces */
   fill: lightblue;
+  color: lightblue;
 }
 
-#chart2 .ct-series-a .ct-slice-pie {
+.b1, #chart2 .ct-series-a .ct-slice-pie {
   /* fill of the pie slieces */
   fill: coral;
+  color: coral;
 }
 
-#chart2 .ct-series-b .ct-slice-pie {
+.b2, #chart2 .ct-series-b .ct-slice-pie {
   /* fill of the pie slieces */
   fill: indianRed;
+  color: indianRed;
 }
 
-#chart2 .ct-series-c .ct-slice-pie {
+.b3, #chart2 .ct-series-c .ct-slice-pie {
   /* fill of the pie slieces */
   fill: darkOliveGreen;
+  color: darkOliveGreen;
 }
 
-#chart2 .ct-series-d .ct-slice-pie {
+.b4, #chart2 .ct-series-d .ct-slice-pie {
   /* fill of the pie slieces */
   fill: teal;
+  color: teal;
 }
 
-#chart2 .ct-series-e .ct-slice-pie {
+.b5, #chart2 .ct-series-e .ct-slice-pie {
   /* fill of the pie slieces */
   fill: darkGoldenRod;
+  color: darkGoldenRod;
 }
 
-#chart3 .ct-series-a .ct-slice-pie {
+.c1, #chart3 .ct-series-a .ct-slice-pie {
   /* fill of the pie slieces */
   fill: purple;
+  color: purple;
 }
 
-#chart3 .ct-series-b .ct-slice-pie {
+.c2, #chart3 .ct-series-b .ct-slice-pie {
   /* fill of the pie slieces */
   fill: orange;
+  color: orange;
 }
 
-#chart3 .ct-series-c .ct-slice-pie {
+.c3, #chart3 .ct-series-c .ct-slice-pie {
   /* fill of the pie slieces */
   fill: mediumSeaGreen;
+  color: mediumSeaGreen;
 }
 
-#chart3 .ct-series-d .ct-slice-pie {
+.c4, #chart3 .ct-series-d .ct-slice-pie {
   /* fill of the pie slieces */
   fill: darkBlue;
+  color: darkBlue;
 }
 
-#chart3 .ct-series-e .ct-slice-pie {
+.c5, #chart3 .ct-series-e .ct-slice-pie {
   /* fill of the pie slieces */
   fill: paleVioletRed;
+  color: paleVioletRed;
 }
 
-#chart3 .ct-series-f .ct-slice-pie {
+.c6, #chart3 .ct-series-f .ct-slice-pie {
   /* fill of the pie slieces */
   fill: fireBrick;
+  color: fireBrick;
 }
 
-#chart4 .ct-series-a .ct-slice-pie {
+.d1, #chart4 .ct-series-a .ct-slice-pie {
   /* fill of the pie slieces */
   fill: tan;
+  color: tan;
 }
 
-#chart4 .ct-series-b .ct-slice-pie {
+.d2, #chart4 .ct-series-b .ct-slice-pie {
   /* fill of the pie slieces */
   fill: slateGrey;
+  color: slateGrey;
 }
