@@ -115,8 +115,13 @@ p {
     line-height: 175%;
 }
 
-.timer-close:hover, .timer-on:hover {
+a:hover {
     cursor: pointer;
+}
+
+.timer-on, .timer-close, .modal-btn {
+    display: block;
+    margin-bottom: .6em;
 }
 
 .lander-text {

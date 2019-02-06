@@ -7,12 +7,8 @@
 <div class="ui container center aligned main">
     <h2 class="ui header"></h2>
     
-    <div class="ui bulleted list">
-        <div class="item">After submitting, your entry will disappear. This is on purpose! Freewriting isn't something to treasure and look back on; rather, it's all about writing for the sake of writing.</div>
-        <div class="item">Write whatever comes to mind. It doesn't have to make any sense!</div>
-        <div class="item">Pick a time, ideally 20-30 minutes, and don't stop or pause before the time is up</div>
-        <div class="item">If you don't know what to write, write "I don't know what to write" until you do.</div>
-    </div>
+    <a class="modal-btn">Instructions</a>
+    
     <div class="timer-on" style="display:none"><a onclick='toggleTimer()'>Show timer</a></div>
 
     <div class="timer">
@@ -37,9 +33,41 @@
         <a href="/home" class="ui icon button" title="Cancel"><!--<i class="ui left arrow icon">-->Cancel</i></a>
         <button class="ui green button" type="submit" title="Save!"><i class="ui check icon"></i>Done for today</button>
     </form>
+    
+<div class="ui large modal 1">
+    <div class="header">Help</div>
+    <div class="ui content">
+        <div class="ui bulleted list">
+            <div class="item">After submitting, your entry will disappear. This is on purpose! Freewriting isn't something to treasure and look back on; rather, it's all about writing for the sake of writing.</div>
+            <div class="item">Write whatever comes to mind. It doesn't have to make any sense!</div>
+            <div class="item">Pick a time, ideally 20-30 minutes, and don't stop or pause before the time is up</div>
+            <div class="item">If you don't know what to write, write "I don't know what to write" until you do.</div>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui close button 1">Got it</div>
+    </div>
+</div>
 </div>
 
 <script>
+
+    var btn = document.querySelector(".modal-btn");
+    btn.onclick = function() {
+        $('.ui.modal.1').modal({
+            onShow: function(){
+                console.log('shown');
+            },
+            onHide: function(){
+                console.log('hidden');
+            }
+        }).modal('show');
+    }
+
+    //workaround for a Semantic UI bug where modal buttons don't close the modal. Credit: GitHub user hammy2899, Source: https://github.com/Semantic-Org/Semantic-UI/issues/6540
+    $('.ui.modal.1')
+      .modal('attach events', '.close.button.1')
+    ; 
     
     //display client date time at top of page
     document.querySelector("h2").innerHTML = moment().format("MMMM Do, YYYY");
