@@ -10,6 +10,7 @@ New name ideas: Freely
 
 
 General
+    -Find out what those strange qualities are that Ridict spits out
     -Account page
         -password recovery
         -double check that they want to delete before deleting
