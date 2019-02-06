@@ -205,7 +205,9 @@ router.get("/:id", middleware.isLoggedIn, function(req, res) {
         if (err) {
             console.log(err);
         } else {
-            res.render("show", {entry: entry});
+            var rid = ridict.matches(entry.body);
+            console.log("rid: ", rid);
+            res.render("show", {entry: entry, rid: rid});
         }
     });
 });

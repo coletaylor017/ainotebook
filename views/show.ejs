@@ -1,11 +1,12 @@
 <% include partials/header %>
 
+<div class="spacer"></div>
+
 <div class="ui text container center aligned main">
     
     <h2 class="ui header"></h2>
     
     <div class="ui left aligned container">
-        <!--<h3 class="entry-title"><%= entry.title %></h3>-->
         <div class="ui horizontal list">
             <h4 class="ui item header"><%= moment(entry.date).format("D MMM YYYY, h:mm a") %></h4>
             <% entry.tags.forEach(function(tag) { %>
@@ -13,16 +14,15 @@
                     <%= tag.name %>
                 </h4>
             <% }); %>
-            <!--<h4 class="ui item label" id="tags"><%= entry.metadata %></h4>-->
         </div>
         <p class="entrybody"><%= entry.body %></p>
-        <a href="/entries" class="ui basic icon button" title="Back"><i class="ui arrow left icon"></i></a>
-        <a href="/entries/<%= entry._id %>/edit" class="ui basic button" title="Edit"><i class="ui edit icon"></i>edit</a>
-        <form action="/entries/<%= entry._id %>?_method=DELETE" method="POST" class="inline">
-            <button action="submit" class="ui basic button trash" title="Delete"><i class="ui trash icon"></i>delete</button>
-        </form>
-        <!--<a href="/entries/<%= entry._id %>/edit">Edit</a>-->
     </div>
+    
+    <!--<p><%= JSON.stringify(rid) %></p>-->
+    
+    <div class="spacer"></div>
+    
+    <a href="/home" class="ui green button" title="Home"><i class="ui home icon"></i>Home</a>
 </div>
 
 <% include partials/footer %>
