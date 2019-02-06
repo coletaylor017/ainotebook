@@ -120,7 +120,7 @@ a:hover {
 }
 
 .timer-on, .timer-close, .modal-btn {
-    display: block;
+    display: inline-block;
     margin-bottom: .6em;
 }
 

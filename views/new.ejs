@@ -9,6 +9,8 @@
     
     <a class="modal-btn">Instructions</a>
     
+    <br>
+    
     <div class="timer-on" style="display:none"><a onclick='toggleTimer()'>Show timer</a></div>
 
     <div class="timer">
@@ -122,8 +124,8 @@
             i-- || (clearInterval(timer), callback());
         }, 1000);
     }
-    
-    $("#play").on("click", function(){
+
+    function startTimer() {
         pause.style.display = "inline";
         play.style.display = "none";
         countDown(disp1.value * 60 + disp2.value * 1, function(){ // *1 is to convert data type from string to number
@@ -131,6 +133,19 @@
             pause.style.display = "none";
             play.style.display = "inline";
         });
+    }
+    
+    $("#play").on("click", function(){
+        startTimer();
+    });
+    
+    var buh = 0;
+    
+    $("#entrybox").on("input", function() {
+        if (buh === 0) {
+            startTimer();
+            buh = 1;
+        }
     });
     
     $("#pause").click(function(){

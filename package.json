@@ -25,6 +25,7 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^5.0.1",
+    "regressive-dict": "^1.0.1",
     "request": "^2.87.0",
     "ridict": "0.0.1",
     "semantic-ui": "^2.4.2"
