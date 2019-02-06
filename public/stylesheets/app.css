@@ -161,3 +161,7 @@ a:hover {
     padding-left: .2em;
     top: -.15em;
 }
+
+.chart.column {
+    height: 12em;
+}

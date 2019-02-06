@@ -21,8 +21,21 @@
     <h2 class="ui header">Metadata</h2>
     <div class="ui divider"></div>
     <div class="ui doubling stackable grid">
-        <div class="four wide column">
-            <canvas id="chart1" width="150" height="150"></canvas>
+        <div class="two column row">
+            <div class="chart column" style="position: relative">
+                <canvas id="chart1"></canvas>
+            </div>
+            <div class="chart column" style="position: relative">
+                <canvas id="chart2"></canvas>
+            </div>
+        </div>
+        <div class="two column row">
+            <div class="chart column" style="position: relative">
+                <canvas id="chart3"></canvas>
+            </div>
+            <div class="chart column" style="position: relative">
+                <canvas id="chart4"></canvas>
+            </div>
         </div>
     </div>
     
@@ -52,11 +65,106 @@ var myPieChart = new Chart(document.getElementById("chart1"), {
                 data.ORDER
         ],
             backgroundColor: [
-                'green',
-                'blue'
-            ],
-            borderWidth: 1
+                'black',
+                'lightblue'
+            ]
         }]
+    },
+    options: {
+        responsive: true
+    }
+});
+
+var myPieChart = new Chart(document.getElementById("chart2"), {
+    type: 'pie',
+    data: {
+        labels: [
+            'sight',
+            'sound',
+            'smell',
+            'taste',
+            'touch'
+        ],
+        datasets: [{
+            data: [
+                data.VISION,
+                data.SOUND,
+                data.ODOR,
+                data.TASTE,
+                data.TOUCH
+        ],
+            backgroundColor: [
+                'green',
+                'blue',
+                'red',
+                'orange',
+                'yellow'
+            ]
+        }]
+    },
+    options: {
+        responsive: true
+    }
+});
+
+var myPieChart = new Chart(document.getElementById("chart3"), {
+    type: 'pie',
+    data: {
+        labels: [
+            'narcissism',
+            'positivity',
+            'anxiety',
+            'sadness',
+            'affection',
+            'agression'
+        ],
+        datasets: [{
+            data: [
+                data.NARCISSISM,
+                data.POSITIVE_AFFECT,
+                data.ANXIETY,
+                data.SADNESS,
+                data.AFFECTION,
+                data.AGRESSION
+            ],
+            backgroundColor: [
+                'green',
+                'blue',
+                'red',
+                'orange',
+                'yellow',
+                'pink'
+            ]
+        }]
+    },
+    options: {
+        responsive: true
+    }
+});
+
+var myPieChart = new Chart(document.getElementById("chart4"), {
+    type: 'pie',
+    data: {
+        labels: [
+            'concrete',
+            'abstract'
+        ],
+        datasets: [{
+            data: [
+                data.VISION,
+                data.SOUND,
+                data.ODOR,
+                data.TASTE,
+                data.TOUCH
+        ],
+            backgroundColor: [
+                'orange',
+                'red'
+            ]
+        }]
+    },
+    options: {
+        responsive: true
     }
 });
 </script>
