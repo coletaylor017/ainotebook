@@ -5,6 +5,7 @@
 
 .ct-label {
     fill: #333333;
+    display: none;
 }
 
 #chart1 .ct-series-a .ct-slice-pie {
