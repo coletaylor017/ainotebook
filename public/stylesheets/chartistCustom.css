@@ -1,0 +1,83 @@
+.ct-chart {
+    width: 100%;
+    height: 100%;
+}
+
+.ct-label {
+    fill: #333333;
+}
+
+#chart1 .ct-series-a .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: black;
+}
+
+#chart1 .ct-series-b .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: lightblue;
+}
+
+#chart2 .ct-series-a .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: coral;
+}
+
+#chart2 .ct-series-b .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: indianRed;
+}
+
+#chart2 .ct-series-c .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: darkOliveGreen;
+}
+
+#chart2 .ct-series-d .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: teal;
+}
+
+#chart2 .ct-series-e .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: darkGoldenRod;
+}
+
+#chart3 .ct-series-a .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: purple;
+}
+
+#chart3 .ct-series-b .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: orange;
+}
+
+#chart3 .ct-series-c .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: mediumSeaGreen;
+}
+
+#chart3 .ct-series-d .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: darkBlue;
+}
+
+#chart3 .ct-series-e .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: paleVioletRed;
+}
+
+#chart3 .ct-series-f .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: fireBrick;
+}
+
+#chart4 .ct-series-a .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: tan;
+}
+
+#chart4 .ct-series-b .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: slateGrey;
+}
