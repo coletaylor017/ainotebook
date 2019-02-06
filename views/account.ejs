@@ -4,39 +4,16 @@
 
 <div class="ui text container center aligned main">
     
-    <h2 class="ui header">Account</h2>
-    
-    <div class="ui text container left aligned">
+    <div class="ui text container center aligned">
         <div class="ui hidden divider"></div>
-        <h2 class="ui header"><%= currentUser.username %></h2>
-        <div class="ui divider"></div>
-        <div class="ui horizontal statistics">
-            <div class="ui statistic">
-                <div class="value"><%= moment().diff(moment(currentUser.dateCreated), 'days') %></div>
-                <div class="label">Days since creation</div>
-            </div>
-            <div class="ui statistic">
-                <div class="value"><%= entryCount %></div>
-                <div class="label">Entries (<%= hidden %> hidden)</div>
-            </div>
-            <div class="ui statistic">
-                <div class="value"><%= wordCount %></div>
-                <div class="label">Words (including hidden entries)</div>
-            </div>
-            <div class="ui statistic">
-                <div class="value"><%= currentUser.streak %></div>
-                <div class="label">Current streak</div>
-            </div>
-        </div>
-    </div>
+        <h2 class="ui header">Account Settings</h2>
     
-    <div class="ui hidden divider"></div>
-
-    <form action="/account?_method=DELETE" method="POST" class="ui left aligned container">
-        <button action="submit" class="ui red button">Delete Account (Very permanent!)</button>
-    </form>
+        <div class="ui divider"></div>
+    
+        <form action="/account?_method=DELETE" method="POST" class="ui center aligned container">
+            <button action="submit" class="ui red button">Delete Account (Very permanent!)</button>
+        </form>
+    </div>
 </div>
-
-
 
 <% include partials/footer %>

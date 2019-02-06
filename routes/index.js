@@ -32,7 +32,7 @@ router.post("/register", function(req, res) {
         }
         passport.authenticate("local")(req, res, function() {
             req.flash("success", "Welcome to Writing Blocks, " + user.username + "! Time to start your first freewriting session!");
-            res.redirect("/entries/new");
+            res.redirect("/home");
         });
     });
 });
@@ -43,13 +43,17 @@ router.get("/login", function(req, res) {
 });
 
 router.post("/login", passport.authenticate("local", {
-    successRedirect: "/entries/new",
+    successRedirect: "/home",
     failureRedirect: "/login",
     failureFlash: true
 }), function(req, res) {
 });
 
 router.get("/account", middleware.isLoggedIn, function(req, res) {
+    res.render("account");
+});
+
+router.get("/home", middleware.isLoggedIn, function(req, res) {
     User.findOne({username: req.user.username}, function(err, user) {
         if (err) {
             console.log(err);
@@ -73,7 +77,7 @@ router.get("/account", middleware.isLoggedIn, function(req, res) {
                         console.log(err);
                     } else {
                         var hidden = hiddenEntries.length;
-                        res.render("account", {entryCount: entryCount, wordCount: wordCount, hidden: hidden});
+                        res.render("home", {entryCount: entryCount, wordCount: wordCount, hidden: hidden});
                     }
                 });
                 // Optimization uestion: Is it better to do calculation on the server side or pass the entire entry body to the client and do the calculation there?

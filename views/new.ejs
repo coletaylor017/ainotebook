@@ -29,129 +29,19 @@
     <form onsubmit="finalizeDates()" action="/entries" method="POST" class="ui form">
         <input id="streak-date" style="display: none" name="streakDate">
         <input id="date-input" style="display: none" name="entry[date]">
+        <input style="display: none" type="text" name="tags" value="">
         <div class="ui field">
             <textarea id="entrybox" rows="10" name="entry[body]" class="current-entry" placeholder="Start writing" id="transparent" autofocus></textarea>
         </div>
-        <!--<div class="ui field">-->
-        <!--    <div class="ui labeled input">-->
-        <!--        <label class="ui basic label"><i class="ui blue question circle outline link icon modal-btn"></i>Optional: Add tags</label>-->
-        <!--        <input type="text" name="tags" placeholder="Write some tags. '#' is not necessary" id="transparent">-->
-        <!--    </div>-->
-        <!--</div>-->
-        <!--<div class="ui field">-->
-        <!--    <div class="ui toggle checkbox">-->
-        <!--        <label>Save entry</label>-->
-        <!--        <input type="checkbox" name="hide">-->
-        <!--    </div>-->
-        <!--    <i class="ui blue question circle outline link icon modal-btn2"></i>-->
-        <!--</div>-->
-        <a href="/entries" class="ui icon button" title="Back"><i class="ui left arrow icon"></i></a>
-        <button class="ui green button" type="submit" title="Save!"><i class="ui check icon"></i>Done</button>
+        <a href="/home" class="ui icon button" title="Back"><i class="ui left arrow icon"></i></a>
+        <button class="ui green button" type="submit" title="Save!"><i class="ui check icon"></i>Done for today</button>
     </form>
-</div>
-
-<div class="ui large modal 1">
-    <div class="header">Help: Tags</div>
-    <div class="ui items">
-        <div class="item">
-            <div class="ui image">
-                <div class="ui large bordered image">
-                    <img src="/images/tagshelp1.png">
-                </div>
-            </div>
-            <div class="middle aligned content">
-                <p>Use tags to categorize entries. For example, you could tag every entry that talks about dogs with 'dogs'.</p>
-            </div>
-        </div>
-        <div class="item">
-            <div class="ui image">
-                <div class="ui large bordered image">
-                    <img src="/images/tagshelp2.png">
-                </div>
-            </div>
-            <div class="middle aligned content">
-                <p>Your tags will show up on the entries page.</p>
-            </div>
-        </div>
-        <div class="item">
-            <div class="ui image">
-                <div class="ui large bordered image">
-                    <img src="/images/tagshelp3.png">
-                </div>
-            </div>
-            <div class="middle aligned content">
-                <p>Clicking on a tag will show you all the entries that reference that tag.</p>
-            </div>
-        </div>
-    </div>
-    <div class="actions">
-        <div class="ui close button 1">Got it</div>
-    </div>
-</div>
-
-<div class="ui large modal 2">
-    <div class="header">Help: Hiding Entries</div>
-    <div class="content">
-        <p>If you don't think this entry is one you'd like to look back on, consider hiding it. Hiding isn't the same as deleting- the entry wll continue to exist, but you won't see it or be able to edit it. Hidden entries still count for streaks and contibute to total word count.</p>
-        <p>Warning: Hidden entries will remain so forever and cannot be un-hidden or deleted.</p>
-    </div>
-    <div class="actions">
-        <div class="ui close button 2">Got it</div>
-    </div>
 </div>
 
 <script>
     
-    var tagArr = <%- JSON.stringify(tags) %>;
-    var input = document.querySelector("input[name=tags]");
-    // init Tagify script on the above inputs
-    tagify = new Tagify(input, {
-        delimiters          : ",| ",  // add new tags when a comma or a space character
-        keepInvalidTags     : false,  // do not remove invalid tags (but keep them marked as invalid)
-        whitelist: tagArr,
-        dropdown : {
-            enabled: 3,
-            maxItems: 5
-        }
-    });
-    
-    var btn = document.querySelector(".modal-btn");
-    btn.onclick = function() {
-        $('.ui.modal.1').modal({
-            onShow: function(){
-                console.log('shown');
-            },
-            onHide: function(){
-                console.log('hidden');
-            }
-        }).modal('show');
-    }
-    
-    var btn2 = document.querySelector(".modal-btn2");
-    btn2.onclick = function() {
-        $('.ui.modal.2').modal({
-            onShow: function(){
-                console.log('shown');
-            },
-            onHide: function(){
-                console.log('hidden');
-            }
-        }).modal('show');
-    }
-    
-    $('.ui.checkbox')
-        .checkbox()
-    ;
-    //workaround for a Semantic UI bug where modal buttons don't close the modal. Credit: GitHub user hammy2899, Source: https://github.com/Semantic-Org/Semantic-UI/issues/6540
-    $('.ui.modal.1')
-      .modal('attach events', '.close.button.1')
-    ;  
-    $('.ui.modal.2')
-      .modal('attach events', '.close.button.2')
-    ;  
-    
     //display client date time at top of page
-    document.querySelector("h2").innerHTML = "New Entry: " + moment().format("MMMM Do, YYYY");
+    document.querySelector("h2").innerHTML = moment().format("MMMM Do, YYYY");
     
     var finalizeDates = function() {
         var e = moment().format("D MMM YYYY, h:mm a");

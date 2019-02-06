@@ -112,7 +112,7 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
 
                     
                     if (req.body.tags.length === 0 || req.body.hide === "on") {
-                        res.redirect("/entries");
+                        res.redirect("/entries/" + entry._id);
                     } else {
                         var tags = JSON.parse(req.body.tags);
                         console.log("tags: ", tags);
@@ -180,7 +180,7 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
                                                                     console.log(err);
                                                                 } else {
                                                                     console.log("results of updateMany(): ", results2);
-                                                                    res.redirect("/entries");
+                                                                    res.redirect("/entries/" + entry._id);
                                                                 }
                                                             }
                                                         );
