@@ -1,5 +1,8 @@
 <% include partials/header %>
 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+<script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+
 <div class="spacer"></div>
 
 <div class="ui text container center aligned main">
@@ -23,18 +26,18 @@
     <div class="ui doubling stackable grid">
         <div class="two column row">
             <div class="chart column" style="position: relative">
-                <canvas id="chart1"></canvas>
+                <div class="ct-chart ct-square" id="chart1"></div>
             </div>
             <div class="chart column" style="position: relative">
-                <canvas id="chart2"></canvas>
+                <div class="ct-chart ct-square" id="chart2"></div>
             </div>
         </div>
         <div class="two column row">
             <div class="chart column" style="position: relative">
-                <canvas id="chart3"></canvas>
+                <div class="ct-chart ct-square" id="chart3"></div>
             </div>
             <div class="chart column" style="position: relative">
-                <canvas id="chart4"></canvas>
+                <div class="ct-chart ct-square" id="chart4"></div>
             </div>
         </div>
     </div>
@@ -44,129 +47,76 @@
     <a href="/home" class="ui green button" title="Home"><i class="ui home icon"></i>Home</a>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.js"></script>
-
 <script>
 
 var data = <%-JSON.stringify(rid)%>;
 
 // https://stackoverflow.com/questions/684672/how-do-i-loop-through-or-enumerate-a-javascript-object
 
-var myPieChart = new Chart(document.getElementById("chart1"), {
-    type: 'pie',
-    data: {
-        labels: [
-            'chaos',
-            'order'
-        ],
-        datasets: [{
-            data: [
-                data.CHAOS,
-                data.ORDER
-        ],
-            backgroundColor: [
-                'black',
-                'lightblue'
-            ]
-        }]
-    },
-    options: {
-        responsive: true
-    }
-});
+var options = {
+    labelOffset: 50,
+    labelDirection: 'explode',
+    chartPadding: 20
+}
 
-var myPieChart = new Chart(document.getElementById("chart2"), {
-    type: 'pie',
-    data: {
-        labels: [
-            'sight',
-            'sound',
-            'smell',
-            'taste',
-            'touch'
-        ],
-        datasets: [{
-            data: [
-                data.VISION,
-                data.SOUND,
-                data.ODOR,
-                data.TASTE,
-                data.TOUCH
-        ],
-            backgroundColor: [
-                'green',
-                'blue',
-                'red',
-                'orange',
-                'yellow'
-            ]
-        }]
-    },
-    options: {
-        responsive: true
-    }
-});
+new Chartist.Pie('#chart1', {
+    labels: [
+        'chaos',
+        'order'
+    ],
+    series: [
+        data.CHAOS,
+        data.ORDER
+    ]
+}, options);
 
-var myPieChart = new Chart(document.getElementById("chart3"), {
-    type: 'pie',
-    data: {
-        labels: [
-            'narcissism',
-            'positivity',
-            'anxiety',
-            'sadness',
-            'affection',
-            'agression'
-        ],
-        datasets: [{
-            data: [
-                data.NARCISSISM,
-                data.POSITIVE_AFFECT,
-                data.ANXIETY,
-                data.SADNESS,
-                data.AFFECTION,
-                data.AGRESSION
-            ],
-            backgroundColor: [
-                'green',
-                'blue',
-                'red',
-                'orange',
-                'yellow',
-                'pink'
-            ]
-        }]
-    },
-    options: {
-        responsive: true
-    }
-});
+new Chartist.Pie('#chart2', {
+    labels: [
+        'sight',
+        'sound',
+        'smell',
+        'taste',
+        'touch'
+    ],
+    series: [
+        data.VISION,
+        data.SOUND,
+        data.ODOR,
+        data.TASTE,
+        data.TOUCH
+    ]
+}, options);
 
-var myPieChart = new Chart(document.getElementById("chart4"), {
-    type: 'pie',
-    data: {
-        labels: [
-            'concrete',
-            'abstract'
-        ],
-        datasets: [{
-            data: [
-                data.VISION,
-                data.SOUND,
-                data.ODOR,
-                data.TASTE,
-                data.TOUCH
-        ],
-            backgroundColor: [
-                'orange',
-                'red'
-            ]
-        }]
-    },
-    options: {
-        responsive: true
-    }
-});
+new Chartist.Pie('#chart3', {
+    labels: [
+        'narcissism',
+        'positivity',
+        'anxiety',
+        'sadness',
+        'affection',
+        'aggression'
+    ],
+    series: [
+        data.NARCISSISM,
+        data.POSITIVE_AFFECT,
+        data.ANXIETY,
+        data.SADNESS,
+        data.AFFECTION,
+        data.AGGRESSION
+    ]
+}, options);
+
+new Chartist.Pie('#chart4', {
+    labels: [
+        'concrete',
+        'abstract'
+    ],
+    series: [
+        data.CONCRETENESS,
+        data.ABSTRACT_THOUGHT
+    ]
+}, options);
+
 </script>
 
 <% include partials/footer %>
