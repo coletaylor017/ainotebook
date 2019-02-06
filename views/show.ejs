@@ -18,11 +18,48 @@
         <p class="entrybody"><%= entry.body %></p>
     </div>
     
+    <h2 class="ui header">Metadata</h2>
+    <div class="ui divider"></div>
+    <div class="ui doubling stackable grid">
+        <div class="four wide column">
+            <canvas id="chart1" width="150" height="150"></canvas>
+        </div>
+    </div>
     <!--<p><%= JSON.stringify(rid) %></p>-->
     
     <div class="spacer"></div>
     
     <a href="/home" class="ui green button" title="Home"><i class="ui home icon"></i>Home</a>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.js"></script>
+
+<script>
+
+var data = <%-JSON.stringify(rid)%>;
+
+// https://stackoverflow.com/questions/684672/how-do-i-loop-through-or-enumerate-a-javascript-object
+
+var myPieChart = new Chart(document.getElementById("chart1"), {
+    type: 'pie',
+    data: {
+        labels: [
+            'chaos',
+            'order'
+        ],
+        datasets: [{
+            data: [
+                data.CHAOS,
+                data.ORDER
+        ],
+            backgroundColor: [
+                'green',
+                'blue'
+            ],
+            borderWidth: 1
+        }]
+    }
+});
+</script>
 
 <% include partials/footer %>

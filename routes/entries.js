@@ -4,7 +4,6 @@ var express    = require("express"),
     User       = require("../models/user"),
     middleware = require("../middleware"),
     ridict     = require("ridict"),
-    chart      = require("chart.js"),
     mongoose   = require("mongoose");
 
 var router = express.Router();
