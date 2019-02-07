@@ -161,3 +161,8 @@ a:hover {
     padding-left: .2em;
     top: -.15em;
 }
+
+#top-bar {
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
