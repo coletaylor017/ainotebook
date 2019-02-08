@@ -103,12 +103,4 @@ router.get("/logout", function(req, res) {
     res.redirect("/");
 });
 
-router.get("/quotes/new", middleware.isLoggedIn, function(req, res) {
-    if (req.user.username === "c") { // Only for me!!!
-        res.render("quote");
-    } else {
-        res.send("Nice try, you're not authorized! Nyah nyah :p");
-    }
-});
-
 module.exports = router;

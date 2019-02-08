@@ -14,6 +14,7 @@ var methodOverride        = require("method-override"),
 
 var entryRoutes  = require("./routes/entries"),
     tagRoutes    = require("./routes/tags"),
+    quoteRoutes  = require("./routes/quotes"),
     indexRoutes  = require("./routes/index");
 
 var url = process.env.DATABASEURL || "mongodb://localhost:27017/writing_blocks";
@@ -54,6 +55,7 @@ app.use(function(req, res, next) {
 app.use(indexRoutes);
 app.use("/entries", entryRoutes);
 app.use("/tags", tagRoutes);
+app.use("/quotes", quoteRoutes);
 
 app.listen(process.env.PORT, function() {
     console.log("Server is now running");
