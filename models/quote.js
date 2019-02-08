@@ -5,6 +5,7 @@ var quoteSchema = new mongoose.Schema({
     body: String,
     Author: String,
     Source: String,
+    Index: Number,
     uploader: {
         id: {
             type: mongoose.Schema.Types.ObjectId,
