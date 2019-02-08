@@ -44,4 +44,14 @@ router.delete("/:id", middleware.isLoggedIn, middleware.isAdmin, function(req, r
     });
 });
 
+router.post("/reset", function(req, res) {
+    Quote.updateMany({}, { $set: { index: 0 } }, function(err) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.redirect("/quotes");
+        }
+    })
+})
+
 module.exports = router;
