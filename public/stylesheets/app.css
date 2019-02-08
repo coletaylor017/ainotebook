@@ -166,3 +166,8 @@ a:hover {
     box-shadow: none;
     -webkit-box-shadow: none;
 }
+
+.no-darken:hover {
+    background-color: white;
+    cursor: default;
+}
