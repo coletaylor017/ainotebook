@@ -3,9 +3,9 @@ var mongoose = require("mongoose");
 //mongoose schema setup
 var quoteSchema = new mongoose.Schema({
     body: String,
-    Author: String,
-    Source: String,
-    Index: {
+    author: String,
+    source: String,
+    index: {
         type: Number,
         default: 0
     },
