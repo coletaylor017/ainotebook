@@ -37,54 +37,55 @@ var middlewareObj = {
         });
     },
     updateQuote: function(req, res, next) {
-        Global.find({}, function(err, globalBoi) {
+        Global.findOne({}, function(err, globalBoi) {
             if (err) {
                 console.log(err);
             } else {
-                console.log(globalBoi.lastUpdate);
-                console.log("here they come");
-                console.log(Date());
-                // console.log(globalBoi.lastUpdate.toDateString());
-                // if (Date.now() - globalBoi.lastUpdate <= )
-                Quote.find({}, {index: 1, _id: 0}, function(err, quotes) {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        var min = quotes[0].index;
-                        for (var i = 1; i < quotes.length; i++) {
-                            if (quotes[i].index < min) {
-                                min = quotes[i].index;
+                console.log("Time since last quote update:");
+                console.log(new Date() - globalBoi.lastUpdate);
+                if (Date.now() - globalBoi.lastUpdate >= 86400000) {
+                    Quote.find({}, {index: 1, _id: 0}, function(err, quotes) {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            var min = quotes[0].index;
+                            for (var i = 1; i < quotes.length; i++) {
+                                if (quotes[i].index < min) {
+                                    min = quotes[i].index;
+                                }
                             }
+                            console.log("Indicies: ", quotes);
+                            console.log("min: ", min)
+                            
+                            Quote.find({index: min}, function(err, candidates) {
+                                if (err) {
+                                    console.log(err);
+                                } else {
+                                    var luckyWinner = Math.floor(Math.random()*candidates.length);
+                                    var winnerId = candidates[luckyWinner]._id;
+                                    console.log(luckyWinner, winnerId);
+                                    Quote.findById(winnerId, function(err, quote) {
+                                        if (err) {
+                                            console.log(err);
+                                        } else {
+                                            quote.index++;
+                                            quote.save();
+                                            Global.update({}, { currentQuote: quote, lastUpdate: Date.now() }, function(err, global) { // There should only ever be one
+                                                if (err) {
+                                                    console.log(err);
+                                                } else {
+                                                    return next();
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            });
                         }
-                        console.log("Indicies: ", quotes);
-                        console.log("min: ", min)
-                        
-                        Quote.find({index: min}, function(err, candidates) {
-                            if (err) {
-                                console.log(err);
-                            } else {
-                                var luckyWinner = Math.floor(Math.random()*candidates.length);
-                                var winnerId = candidates[luckyWinner]._id;
-                                console.log(luckyWinner, winnerId);
-                                Quote.findById(winnerId, function(err, quote) {
-                                    if (err) {
-                                        console.log(err);
-                                    } else {
-                                        quote.index++;
-                                        quote.save();
-                                        Global.update({}, { currentQuote: quote, lastUpdate: Date.now() }, function(err, global) { // There should only ever be one
-                                            if (err) {
-                                                console.log(err);
-                                            } else {
-                                                return next();
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
+                    });
+                } else {
+                    return next();
+                }
             }
         });
     }
