@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
 
 var globalSchema = new mongoose.Schema({
-    lastNewQuote: {
+    lastUpdate: {
         type: Date,
         default: Date.now
     },
