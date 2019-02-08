@@ -6,7 +6,7 @@ var express    = require("express"),
 
 var router = express.Router();
 
-router.get("/", middleware.isLoggedIn, function(req, res) {
+router.get("/", middleware.isLoggedIn, middleware.isAdmin, function(req, res) {
     Quote.find(function(err, quotes) {
         if (err) {
             console.log(err);
@@ -16,33 +16,25 @@ router.get("/", middleware.isLoggedIn, function(req, res) {
     });
 });
 
-router.get("/new", middleware.isLoggedIn, function(req, res) {
-    if (req.user.username === "c") { // Only for me!!!
-        res.render("quote");
-    } else {
-        res.send("Nice try, you're not authorized! Nyah nyah :p");
-    }
+router.get("/new", middleware.isLoggedIn, middleware.isAdmin, function(req, res) {
+    res.render("quote");
 });
 
-router.post("/", middleware.isLoggedIn, function(req, res) {
-    if (req.user.username === "c") { //Double check in case someone somehow sent data without the form
-        Quote.create(req.body.quote, function(err, quote) {
-            if (err) {
-                console.log(err);
-            } else {
-                quote.uploader.id = req.user._id;
-                quote.uploader.username = req.body.username;
-                console.log("New qoute: ", quote);
-                quote.save();
-                res.redirect("/quotes");
-            }
-        });
-    } else {
-        console.log("User not authorized --Quote POST route");
-    }
+router.post("/", middleware.isLoggedIn, middleware.isAdmin, function(req, res) {
+    Quote.create(req.body.quote, function(err, quote) {
+        if (err) {
+            console.log(err);
+        } else {
+            quote.uploader.id = req.user._id;
+            quote.uploader.username = req.body.username;
+            console.log("New qoute: ", quote);
+            quote.save();
+            res.redirect("/quotes");
+        }
+    });
 });
 
-router.delete("/:id", middleware.isLoggedIn, function(req, res) {
+router.delete("/:id", middleware.isLoggedIn, middleware.isAdmin, function(req, res) {
     Quote.findByIdAndDelete(req.params.id, function(err) {
         if (err) {
             console.log(err);
