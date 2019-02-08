@@ -1,5 +1,7 @@
 TODO!
 
+GLOBALBOI.LASTUPDATE RETURNS UNDEFINED!!!
+
 -In general: Focus on DB optimization and CSS simplicity. Fewer IDs especially. Start messing around with Semantic setting more. 
     
 *note: start using git branches

@@ -19,7 +19,11 @@ var userSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "Entry"
         }
-    ]
+    ],
+    isAdmin: {
+        type: Boolean,
+        default: 0
+    }
 });
 
 userSchema.plugin(passportLocalMongoose);

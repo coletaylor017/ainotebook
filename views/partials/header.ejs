@@ -18,7 +18,7 @@
                 <!--<div class="item">-->
                 <!--    <a href="/entries/new" class="ui green button">Start Freewriting Session</a>-->
                 <!--</div>-->
-                <% if (process.env.ADMINS.includes(currentUser.username)) { %>
+                <% if (currentUser.isAdmin) { %>
                     <a id="no-darken" class="item">Welcome, admin user <%= currentUser.username %></a>
                     <a href="/quotes" class="item">Quotes</a>
                 <% } %>

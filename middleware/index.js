@@ -1,5 +1,6 @@
 var Global    = require("../models/global"),
     Quote     = require("../models/quote"),
+    User      = require("../models/user"),
     moment    = require("moment"),
     mongoose  = require("mongoose");
     
@@ -21,12 +22,19 @@ var middlewareObj = {
         res.redirect("/login");
     },
     isAdmin: function(req, res, next) {
-        if (process.env.ADMINS.includes(req.user.username)) {
-            return next();
-        }
-        console.log("User not authorized --isAdmin middleware");
-        req.flash("error","Nice try, but only administrators can do that!");
-        res.redirect("/home");
+        User.find({"username": req.user.username}, function(err, user) {
+            if (err) {
+                console.log(err);
+            } else {
+                if (req.user.isAdmin) {
+                    return next();
+                } else {
+                    console.log("User not authorized --isAdmin middleware");
+                    req.flash("error","Nice try, but only administrators can do that!");
+                    res.redirect("/home");
+                }
+            }
+        });
     },
     updateQuote: function(req, res, next) {
         Global.find({}, function(err, globalBoi) {
