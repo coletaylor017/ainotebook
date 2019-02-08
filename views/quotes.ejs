@@ -1,47 +1,36 @@
 <% include partials/header %>
 
-<style>
-form {
-    /*float: left;*/
-}
-
-.authorsource{
-    float: right;
-}
-
-p {
-    font-size: 1.5em;
-}
-
-.index {
-    font-size: .9em;
-    color: blue;
-    padding: 0 0.35em;
-    border: 1px solid blue;
-    border-radius: .3em;
-}
-</style>
-
 <div class="ui text container segment context" id="noborder">
-        <div class="main">
-        <a href="/quotes/new" class="ui blue button">New Quote</a><br>
-        <form action="/quotes/reset" method="POST" style="display: inline">
-            <button action="submit" class="ui basic blue button" title="Reset">Reset Indicies</button>
-        </form>
+    <div class="main">
+        <div class="ui horizontal list">
+            <div class="item">
+                <a href="/quotes/new" class="ui blue button">New Quote</a><br>
+            </div>
+            <div class="item">
+                <form action="/quotes/reset" method="POST" style="display: inline">
+                    <button action="submit" class="ui basic blue button item" title="Reset">Reset Indicies</button>
+                </form>
+            </div>
+        </div>
         <div class="ui divider"></div>
         <% if (quotes.length === 0) { %>
             <p>No quotes to show.</p>
         <% } else { %>
             <% quotes.forEach(function(quote) { %>
-                <div class="ui simple segment">
-                    <p class="ui"><em>"<%= quote.body %>"</em></p>
+                <div class="ui segment">
+                    <p class="quote"><em>"<%= quote.body %>"</em></p>
                     <div class="ui container">
                         <form action="/quotes/<%= quote._id %>?_method=DELETE" method="POST" style="display: inline">
                             <button action="submit" class="ui basic icon button" title="Delete"><i class="ui trash icon"></i></button>
                         </form>
                         <div class="authorsource">
-                            <strong>-<%= quote.author %></strong>, <%= quote.source %>
-                            <strong class="index"><%= quote.index %></strong>
+                        <% if (quote.author) { %>
+                            <strong>-<%= quote.author %></strong>
+                            <% if (quote.source) { %>
+                                , <%= quote.source %>
+                            <% } %>
+                        <% } %>
+                        <span class="index"><%= quote.index %></span>
                         </div>
                     </div>
                 </div>

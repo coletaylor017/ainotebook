@@ -4,8 +4,20 @@
 
 <div class="ui text container center aligned main">
     
-    <%= quote.body %>
-    
+    <div class="ui basic segment">
+        <p class="quote"><em>"<%= quote.body %>"</em></p>
+        <% if (quote.author) { %>
+            <div class="ui container" id="largelad">
+                <div class="authorsource">
+                    <strong>-<%= quote.author %></strong>
+                    <% if (quote.source) { %>
+                        , <%= quote.source %>
+                    <% } %>
+                </div>
+            </div>
+        <% } %>
+    </div>
+
     <div class="ui huge orange statistic">
         <div class="value"><%= currentUser.streak %><i class="ui small fire icon"></i></div>
         <div class="label">Current streak</div>

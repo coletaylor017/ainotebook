@@ -167,7 +167,32 @@ a:hover {
     -webkit-box-shadow: none;
 }
 
-.no-darken:hover {
+#no-darken:hover {
     background-color: white;
     cursor: default;
+}
+
+.authorsource{
+    float: right;
+    padding: .6em;
+}
+
+.index {
+    font-size: .9em;
+    color: blue;
+    padding: 0 0.35em;
+    border: 1px solid blue;
+    border-radius: .3em;
+}
+
+.quote {
+    font-size: 1.5em;
+}
+
+.huge.orange.statistic {
+    clear: both;
+}
+
+#largelad {
+    height: 2em;
 }
