@@ -6,6 +6,7 @@ var methodOverride        = require("method-override"),
     express               = require("express"),
     request               = require("request"),
     moment                = require("moment"),
+    Global                = require("./models/global"),
     flash                 = require("connect-flash"),
     User                  = require("./models/user"),
     passport              = require("passport"),
@@ -19,7 +20,7 @@ var entryRoutes  = require("./routes/entries"),
 
 var url = process.env.DATABASEURL || "mongodb://localhost:27017/writing_blocks";
 mongoose.connect(url, {useNewUrlParser: true});
-    
+
 var app = express();
 app.set("view engine", "ejs");
 

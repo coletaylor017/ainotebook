@@ -2,9 +2,10 @@ var express    = require("express"),
     Entry      = require("../models/entry"),
     User       = require("../models/user"),
     Quote      = require("../models/quote"),
+    Global     = require("../models/global"),
     middleware = require("../middleware"),
     passport   = require("passport");
-
+    
 var router = express.Router();
 
 router.get("/", function(req, res) {
@@ -54,7 +55,7 @@ router.get("/account", middleware.isLoggedIn, function(req, res) {
     res.render("account");
 });
 
-router.get("/home", middleware.isLoggedIn, function(req, res) {
+router.get("/home", middleware.isLoggedIn, middleware.updateQuote, function(req, res) {
     User.findOne({username: req.user.username}, function(err, user) {
         if (err) {
             console.log(err);

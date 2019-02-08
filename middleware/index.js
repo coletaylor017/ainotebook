@@ -1,4 +1,5 @@
-// Middleware!
+var Global    = require("../models/global"),
+    mongoose  = require("mongoose");
 
 var middlewareObj = {
     isLoggedIn: function(req, res, next) {
@@ -15,6 +16,16 @@ var middlewareObj = {
         console.log("User not authorized --isAdmin middleware");
         req.flash("error","Nice try, but only administrators can do that!");
         res.redirect("/home");
+    },
+    updateQuote: function(req, res, next) {
+        Global.find({}, function(err, global) { // There will only ever be one
+            if (err) {
+                console.log(err);
+            } else {
+                console.log("Global to be updated", global);
+                return next();
+            }
+        });
     }
 };
 
