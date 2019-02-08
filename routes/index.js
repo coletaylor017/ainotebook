@@ -1,6 +1,7 @@
 var express    = require("express"),
     Entry      = require("../models/entry"),
     User       = require("../models/user"),
+    Quote      = require("../models/quote"),
     middleware = require("../middleware"),
     passport   = require("passport");
 
