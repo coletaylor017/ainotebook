@@ -10,12 +10,12 @@ New name ideas: Freely
 
 
 General
+    -Compare metadata values to averages. Maybe bar graphs rather than pie charts would be more informative.
     -Account page
         -password recovery
         -double check that they want to delete before deleting
     -Forgot password link
     -Update streak on sign-in
-    -Display re-dict analysis on entry view page.
     
     -Metadata. Create a new collection called "metadata" and have each document be an object with a data name, value, date created, owner (referencing "users"), and entry id (referencing "entries"). When metadata is analyzed, find() bits of data based on their date, name, and/or entry and ALWAYS their user. Then the returned array of data can have its information pulled out and displayed. 
         -Consider displaying metadata semi-graphically on the entry "show" page.
@@ -48,3 +48,5 @@ Done!
     -Slider question mark
     -Timer
     -Home page redesign: more images, showcase the product's features
+    -Display re-dict analysis on entry view page.
+    -Find out what those strange qualities are that Ridict spits out

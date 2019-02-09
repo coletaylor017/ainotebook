@@ -196,3 +196,12 @@ a:hover {
 #largelad {
     height: 2em;
 }
+
+.chart.column {
+    height: 12em;
+}
+
+.chart-label {
+    display: inline-block;
+    padding: 0.2em;
+}
