@@ -34,8 +34,8 @@
 
 .b3, #chart2 .ct-series-c .ct-slice-pie {
   /* fill of the pie slieces */
-  fill: darkOliveGreen;
-  color: darkOliveGreen;
+  fill: oliveDrab;
+  color: oliveDrab;
 }
 
 .b4, #chart2 .ct-series-d .ct-slice-pie {
@@ -88,12 +88,21 @@
 
 .d1, #chart4 .ct-series-a .ct-slice-pie {
   /* fill of the pie slieces */
+  fill: slateGrey;
+  color: slateGrey;
+}
+
+.d2, #chart4 .ct-series-b .ct-slice-pie {
   fill: tan;
   color: tan;
 }
 
-.d2, #chart4 .ct-series-b .ct-slice-pie {
-  /* fill of the pie slieces */
-  fill: slateGrey;
-  color: slateGrey;
+.e1, #chart5 .ct-series-a .ct-slice-pie {
+  fill: mediumSeaGreen;
+  color: mediumSeaGreen;
+}
+
+.e2, #chart5 .ct-series-b .ct-slice-pie {
+  fill: darkSalmon;
+  color: darkSalmon;
 }

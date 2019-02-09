@@ -28,8 +28,8 @@
         <div class="two column row">
             <div class="chart column" style="position: relative">
                 <div class="ct-chart ct-square" id="chart1"></div>
-                <span class="chart-label"><i class="a1 ui square icon"></i>Chaos</span>
                 <span class="chart-label"><i class="a2 ui square icon"></i>Order</span>
+                <span class="chart-label"><i class="a1 ui square icon"></i>Chaos</span>
             </div>
             <div class="chart column" style="position: relative">
                 <div class="ct-chart ct-square" id="chart2"></div>
@@ -52,8 +52,15 @@
             </div>
             <div class="chart column" style="position: relative">
                 <div class="ct-chart ct-square" id="chart4"></div>
-                <span class="chart-label"><i class="d1 ui square icon"></i>Concrete</span>
                 <span class="chart-label"><i class="d2 ui square icon"></i>Abstract</span>
+                <span class="chart-label"><i class="d1 ui square icon"></i>Concrete</span>
+            </div>
+        </div>
+        <div class="one column row">
+            <div class="chart column" style="position: relative">
+                <div class="ct-chart ct-square" id="chart5"></div>
+                <span class="chart-label"><i class="e2 ui square icon"></i>Work</span>
+                <span class="chart-label"><i class="e1 ui square icon"></i>Social</span>
             </div>
         </div>
     </div>
@@ -130,6 +137,17 @@ new Chartist.Pie('#chart4', {
     series: [
         data.CONCRETENESS,
         data.ABSTRACT_THOUGHT
+    ]
+}, options);
+
+new Chartist.Pie('#chart5', {
+    labels: [
+        'social',
+        'work'
+    ],
+    series: [
+        data.SOCIAL_BEHAVIOR,
+        data.INSTRU_BEHAVIOR
     ]
 }, options);
 

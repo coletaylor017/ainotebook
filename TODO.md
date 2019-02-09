@@ -10,7 +10,7 @@ New name ideas: Freely
 
 
 General
-    -Find out what those strange qualities are that Ridict spits out
+    -Compare metadata values to averages. Maybe bar graphs rather than pie charts would be more informative.
     -Account page
         -password recovery
         -double check that they want to delete before deleting
@@ -49,3 +49,4 @@ Done!
     -Timer
     -Home page redesign: more images, showcase the product's features
     -Display re-dict analysis on entry view page.
+    -Find out what those strange qualities are that Ridict spits out
