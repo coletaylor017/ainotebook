@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="/stylesheets/tagify.css">
 
 <div class="ui container center aligned main">
-    <h2 class="ui header"></h2>
+    <h2 class="ui inverted header"></h2>
     
     <a class="modal-btn">Instructions</a>
     
@@ -14,8 +14,8 @@
     <div class="timer-on" style="display:none"><a onclick='toggleTimer()'>Show timer</a></div>
 
     <div class="timer">
-        <button id="play" class="ui basic icon button"><i class="ui play icon"></i></button>
-        <button id="pause" class="ui basic icon button" style="display: none"><i class="ui pause icon"></i></button>
+        <button id="play" class="ui basic inverted icon button"><i class="ui play icon"></i></button>
+        <button id="pause" class="ui basic inverted icon button" style="display: none"><i class="ui pause icon"></i></button>
         <div class="ui input" style="width: 3.5em">
             <input type="text" id="minutes" value="20" maxlength="2">
         </div>:
@@ -30,7 +30,7 @@
         <input id="date-input" style="display: none" name="entry[date]">
         <input style="display: none" type="text" name="tags" value="">
         <div class="ui field">
-            <textarea id="entrybox" rows="10" name="entry[body]" class="current-entry" placeholder="Start writing" id="transparent" autofocus></textarea>
+            <textarea id="entrybox" rows="10" name="entry[body]" placeholder="Start writing" id="transparent" autofocus></textarea>
         </div>
         <a href="/home" class="ui icon button" title="Cancel"><!--<i class="ui left arrow icon">-->Cancel</i></a>
         <button class="ui green button" type="submit" title="Save!"><i class="ui check icon"></i>Done for today</button>

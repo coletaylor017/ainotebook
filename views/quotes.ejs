@@ -1,6 +1,6 @@
 <% include partials/header %>
 
-<div class="ui text container segment context" id="noborder">
+<div class="ui basic text container segment context" id="noborder">
     <div class="main">
         <div class="ui horizontal list">
             <div class="item">
@@ -8,7 +8,7 @@
             </div>
             <div class="item">
                 <form action="/quotes/reset" method="POST" style="display: inline">
-                    <button action="submit" class="ui basic blue button item" title="Reset">Reset Indicies</button>
+                    <button action="submit" class="ui inverted basic blue button item" title="Reset">Reset Indicies</button>
                 </form>
             </div>
         </div>
@@ -17,11 +17,11 @@
             <p>No quotes to show.</p>
         <% } else { %>
             <% quotes.forEach(function(quote) { %>
-                <div class="ui segment">
+                <div class="ui inverted segment">
                     <p class="quote"><em>"<%= quote.body %>"</em></p>
                     <div class="ui container">
                         <form action="/quotes/<%= quote._id %>?_method=DELETE" method="POST" style="display: inline">
-                            <button action="submit" class="ui basic icon button" title="Delete"><i class="ui trash icon"></i></button>
+                            <button action="submit" class="ui basic inverted icon button" title="Delete"><i class="ui trash icon"></i></button>
                         </form>
                         <div class="authorsource">
                         <% if (quote.author) { %>

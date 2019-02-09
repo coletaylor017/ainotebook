@@ -8,11 +8,11 @@
 
 <div class="ui text container center aligned main">
     
-    <h2 class="ui header"></h2>
+    <!--<h2 class="ui inverted header"></h2>-->
     
-    <div class="ui left aligned container">
+    <div class="ui left aligned inverted container">
         <div class="ui horizontal list">
-            <h4 class="ui item header"><%= moment(entry.date).format("D MMM YYYY, h:mm a") %></h4>
+            <h4 class="ui inverted item header"><%= moment(entry.date).format("D MMM YYYY, h:mm a") %></h4>
             <% entry.tags.forEach(function(tag) { %>
                 <h4 class="ui item label" id="tags">
                     <%= tag.name %>
@@ -22,7 +22,7 @@
         <p class="entrybody"><%= entry.body %></p>
     </div>
     
-    <h2 class="ui header">Metadata</h2>
+    <h2 class="ui inverted header">Metadata</h2>
     <div class="ui divider"></div>
     <div class="ui doubling stackable grid">
         <div class="two column row">

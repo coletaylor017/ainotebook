@@ -33,6 +33,8 @@ body {
     font-family: monospace;
     line-height: 175%;
     height: 35em;
+    background-color: transparent;
+    color: white;
 }
 
 #tags {
@@ -105,6 +107,7 @@ body {
 .entrybody {
     font-family: monospace;
     font-size: 1rem;
+    color: white;
 }
 
 .spacer {
@@ -168,7 +171,7 @@ a:hover {
 }
 
 #no-darken:hover {
-    background-color: white;
+    background-color: transparent;
     cursor: default;
 }
 
@@ -179,9 +182,9 @@ a:hover {
 
 .index {
     font-size: .9em;
-    color: blue;
+    color: lightblue;
     padding: 0 0.35em;
-    border: 1px solid blue;
+    border: 1px solid lightblue;
     border-radius: .3em;
 }
 
@@ -204,4 +207,58 @@ a:hover {
 .chart-label {
     display: inline-block;
     padding: 0.2em;
+}
+
+body {
+    background: #333333 url(/images/mountains-bg-1.jpg) no-repeat center center fixed;
+    background-size: cover;
+}
+
+body:after {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.ui.basic.segment {
+    background-color: transparent;
+    /*rgba(0, 0, 0, .7)*/
+    border-radius: .4em;
+}
+
+#stats-container {
+    position: absolute;
+    bottom: 5%;
+    width: 100%
+}
+
+#home-center {
+    position: absolute;
+    top: 48%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#quote-container {
+    position: absolute;
+    top: 23%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#menu {
+    background-color: transparent;
+}
+
+a {
+    color: white;
+}
+
+a:hover {
+    color: white;
+}
+
+.typewriter {
+    font-family: 'Cutive Mono', monospace;
 }

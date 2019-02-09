@@ -2,9 +2,9 @@
 
 <div class="spacer"></div>
 
-<div class="ui text container center aligned main">
-    
-    <div class="ui basic segment">
+<div class="ui text container center aligned" id="quote-container">
+    <div class="ui basic inverted segment">
+        <p class="typewriter">Quote of the day:</p>
         <p class="quote"><em>"<%= quote.body %>"</em></p>
         <% if (quote.author) { %>
             <div class="ui container" id="largelad">
@@ -17,38 +17,38 @@
             </div>
         <% } %>
     </div>
+</div>
 
-    <div class="ui huge orange statistic">
+<div class="ui center aligned container" id="home-center">
+    <div class="ui huge inverted orange statistic">
         <div class="value"><%= currentUser.streak %><i class="ui small fire icon"></i></div>
         <div class="label">Current streak</div>
     </div>
     <br>
     <a href="/entries/new" class="ui huge green button">Start Freewriting Session</a>
-    
-    <div class="ui text container center aligned">
-        <div class="ui hidden divider"></div>
-        <h2 class="ui header">Your Stats</h2>
-        <div class="ui divider"></div>
-        <div class="ui three statistics">
-            <div class="ui statistic">
-                <div class="value"><%= moment().diff(moment(currentUser.dateCreated), 'days') %></div>
-                <div class="label">Days since creation</div>
-            </div>
-            <div class="ui blue statistic">
-                <div class="value"><%= entryCount %></div>
-                <div class="label">Sessions</div>
-            </div>
-            <div class="ui green statistic">
-                <div class="value"><%= wordCount %></div>
-                <div class="label">Total Words</div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="ui hidden divider"></div>
-
 </div>
 
 
+
+    <div id="stats-container">
+        <div class="ui text container center aligned">
+            <h2 class="ui inverted header">Your Stats</h2>
+            <div class="ui inverted divider"></div>
+            <div class="ui three small statistics">
+                <div class="ui inverted statistic">
+                    <div class="value"><%= moment().diff(moment(currentUser.dateCreated), 'days') %></div>
+                    <div class="label">Days since creation</div>
+                </div>
+                <div class="ui inverted blue statistic">
+                    <div class="value"><%= entryCount %></div>
+                    <div class="label">Sessions</div>
+                </div>
+                <div class="ui inverted green statistic">
+                    <div class="value"><%= wordCount %></div>
+                    <div class="label">Total Words</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <% include partials/footer %>
