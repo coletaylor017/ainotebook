@@ -165,11 +165,6 @@ a:hover {
     top: -.15em;
 }
 
-#top-bar {
-    box-shadow: none;
-    -webkit-box-shadow: none;
-}
-
 #no-darken:hover {
     background-color: transparent;
     cursor: default;
@@ -207,6 +202,7 @@ a:hover {
 .chart-label {
     display: inline-block;
     padding: 0.2em;
+    color: white;
 }
 
 body {
@@ -247,7 +243,7 @@ body:after {
     transform: translate(-50%, -50%);
 }
 
-#menu {
+#top-bar {
     background-color: transparent;
 }
 
