@@ -233,7 +233,7 @@ body:after {
 
 #quote-container {
     position: absolute;
-    top: 25%;
+    top: 23%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -248,4 +248,8 @@ a {
 
 a:hover {
     color: white;
+}
+
+.typewriter {
+    font-family: 'Cutive Mono', monospace;
 }
