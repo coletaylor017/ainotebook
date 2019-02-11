@@ -4,7 +4,10 @@ var express    = require("express"),
     Quote      = require("../models/quote"),
     Global     = require("../models/global"),
     middleware = require("../middleware"),
+    sgMail = require('@sendgrid/mail'),
     passport   = require("passport");
+    
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 var router = express.Router();
 
@@ -115,5 +118,17 @@ router.get("/logout", function(req, res) {
     req.logout();
     res.redirect("/");
 });
+
+var CronJob = require('cron').CronJob;
+new CronJob('0 * * * * *', function() {
+    const msg = {
+        to: 'coletaylor017@gmail.com',
+        from: 'donotreply@writing-blocks.herokuapp.com',
+        subject: 'Have you done your freewriting yet today?',
+        html: '<h1>Get on it!</h1><a>GO!</a>'
+    };
+    sgMail.send(msg);
+}, null, true, 'America/Los_Angeles');
+
 
 module.exports = router;

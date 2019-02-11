@@ -7,10 +7,45 @@
     <h2 class="ui inverted header">Account Settings</h2>
 
     <div class="ui divider"></div>
+    
+    
+        
+    <form action="/account" method="POST" class="ui inverted form">
+        <div class="ui center aligned container">
+        <div class="inline fields">
+            <div class="ui two wide field"></div>
+            <div class="ui six wide field">
+                <div class="ui toggle checkbox">
+                    <label>Daily reminder emails</label>
+                    <input type="checkbox" name="emails">
+                </div>
+            </div>
+            <div class="ui six wide field">
+                <input type="time" name="emailtime">
+                <label>Notification time</label>
+            </div>
+        </div>
+        <div class="ui hidden divider"></div>
+        <button class="ui primary button">Save settings</button>
+        </div>
+    </form>
+
+    
+    <div class="spacer"></div>
 
     <form action="/account?_method=DELETE" method="POST" class="ui center aligned container">
         <button action="submit" class="ui red button">Delete Account (Very permanent!)</button>
     </form>
 </div>
 
+<script>
+$('.ui.checkbox')
+    .checkbox({
+        onChange: function() {
+            this.style.color = "white";
+        }
+    })
+;
+
+</script>
 <% include partials/footer %>

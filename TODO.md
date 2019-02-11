@@ -8,6 +8,7 @@ TODO!
 New name ideas: Freely
 -Come up with a better name
 
+-change 'green button' to 'primary button'
 
 General
     -Compare metadata values to averages. Maybe bar graphs rather than pie charts would be more informative.
