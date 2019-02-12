@@ -10,23 +10,23 @@ var express    = require("express"),
 
 // }, 100);
 
-var CronJob = require('cron').CronJob;
-new CronJob('* * * * * *', function() {
-  console.log('You will see this message every second');
-}, null, true, 'America/Los_Angeles');
+// var CronJob = require('cron').CronJob;
+// new CronJob('* * * * * *', function() {
+//   console.log('You will see this message every second');
+// }, null, true, 'America/Los_Angeles');
 
     
-// using SendGrid's v3 Node.js Library
-// https://github.com/sendgrid/sendgrid-nodejs
-const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-const msg = {
-  to: 'coletaylor017@gmail.com',
-  from: 'cnovac01@gmail.com',
-  subject: 'Buh.',
-  html: '<h1>B U H</h1>'
-};
-sgMail.send(msg);
+// // using SendGrid's v3 Node.js Library
+// // https://github.com/sendgrid/sendgrid-nodejs
+// const sgMail = require('@sendgrid/mail');
+// sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+// const msg = {
+//   to: 'coletaylor017@gmail.com',
+//   from: 'cnovac01@gmail.com',
+//   subject: 'Buh.',
+//   html: '<h1>B U H</h1>'
+// };
+// sgMail.send(msg);
 
 var router = express.Router();
 
