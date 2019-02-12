@@ -1,3 +1,5 @@
+**ADD TIMEZONE ON USER DOCUMENT AND MAKE DROPDOWN ON SETTINGS PAGE**
+
 TODO!
 
 -In general: Focus on DB optimization and CSS simplicity. Fewer IDs especially. Start messing around with Semantic setting more. 

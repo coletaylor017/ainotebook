@@ -10,6 +10,17 @@ var express    = require("express"),
     
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+// const msg = {
+//     to: ['coletaylor017@gmail.com', 'cnovac01@gmail.com'],
+//     from: 'donotreply@writing-blocks.herokuapp.com',
+//     subject: 'Yay!',
+//     html: '<h1>This is a scheduled message sent using SendGrid. It should arrive at 1549985880, or UTC 15:38 on February 12th, 2019.</h1>',
+//     send_each_at: [1549985880, 1549985880]
+// };
+// sgMail.send(msg);
+
+
+    
 var router = express.Router();
 
 router.get("/", function(req, res) {
