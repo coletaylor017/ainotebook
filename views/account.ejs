@@ -11,23 +11,22 @@
     
         
     <form action="/account" method="POST" class="ui inverted form">
-        <div class="ui center aligned container">
         <div class="inline fields">
-            <div class="ui two wide field"></div>
-            <div class="ui six wide field">
-                <div class="ui toggle checkbox">
-                    <label>Daily reminder emails</label>
-                    <input type="checkbox" name="emails">
-                </div>
-            </div>
-            <div class="ui six wide field">
-                <input type="time" name="emailtime">
-                <label>Notification time</label>
+            <div class="ui center aligned container">
+                <span class="field">
+                    <div class="ui toggle email checkbox">
+                        <label>Daily reminder emails</label>
+                        <input type="checkbox" name="emails">
+                    </div>
+                </span>
+                <span class="ui field email">
+                    <input type="time" name="emailtime">
+                    <label>Notification time</label>
+                </span>
             </div>
         </div>
         <div class="ui hidden divider"></div>
         <button class="ui primary button">Save settings</button>
-        </div>
     </form>
 
     
@@ -39,10 +38,24 @@
 </div>
 
 <script>
+
+if (!document.querySelector(".toggle.email.checkbox").checked) {
+    document.querySelector(".field.email").classList.add("disabled");
+}
 $('.ui.checkbox')
     .checkbox({
         onChange: function() {
             this.style.color = "white";
+        },
+        onChecked: function() {
+            var d = document.querySelector(".field.email");
+            console.log(d);
+            d.classList.remove("disabled");
+        },
+        onUnchecked: function() {
+            var d = document.querySelector(".field.email")
+            console.log(d);
+            d.classList.add("disabled");
         }
     })
 ;
