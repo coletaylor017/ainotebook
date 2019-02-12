@@ -25,6 +25,7 @@
                 </span>
             </div>
         </div>
+        <input style="display: none" name="timezone">
         <div class="ui hidden divider"></div>
         <button class="ui primary button">Save settings</button>
     </form>
@@ -32,8 +33,8 @@
     
     <div class="spacer"></div>
 
-    <form action="/account?_method=DELETE" method="POST" class="ui center aligned container">
-        <button action="submit" class="ui red button">Delete Account (Very permanent!)</button>
+    <form action="/account?_method=DELETE" method="POST" class="ui center aligned container" onsubmit="return confirm('ARE YOU POSITIVE YOU WANT TO PERMANENTLY DELETE YOUR ACCOUNT??');">
+        <button class="ui red button">Delete Account (Very permanent!)</button>
     </form>
 </div>
 
@@ -42,20 +43,20 @@
 if (!document.querySelector(".toggle.email.checkbox").checked) {
     document.querySelector(".field.email").classList.add("disabled");
 }
+
+ var x = document.querySelector('input[name="timezone"]');
+ x.value = new Date().getTimezoneOffset();
+
 $('.ui.checkbox')
     .checkbox({
         onChange: function() {
             this.style.color = "white";
         },
         onChecked: function() {
-            var d = document.querySelector(".field.email");
-            console.log(d);
-            d.classList.remove("disabled");
+            var d = document.querySelector(".field.email").classList.remove("disabled");
         },
         onUnchecked: function() {
-            var d = document.querySelector(".field.email")
-            console.log(d);
-            d.classList.add("disabled");
+            var d = document.querySelector(".field.email").classList.add("disabled");
         }
     })
 ;

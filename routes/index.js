@@ -4,7 +4,8 @@ var express    = require("express"),
     Quote      = require("../models/quote"),
     Global     = require("../models/global"),
     middleware = require("../middleware"),
-    sgMail = require('@sendgrid/mail'),
+    sgMail     = require('@sendgrid/mail'),
+    CronJob    = require('cron').CronJob,
     passport   = require("passport");
     
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -119,16 +120,21 @@ router.get("/logout", function(req, res) {
     res.redirect("/");
 });
 
-// var CronJob = require('cron').CronJob;
-// new CronJob('0 * * * * *', function() {
-//     const msg = {
-//         to: 'coletaylor017@gmail.com',
-//         from: 'donotreply@writing-blocks.herokuapp.com',
-//         subject: 'Have you done your freewriting yet today?',
-//         html: '<h1>Get on it!</h1><a>GO!</a>'
-//     };
-//     sgMail.send(msg);
-// }, null, true, 'America/Los_Angeles');
+router.post("/account", function(req, res) {
+    console.log(req.body.emails);
+    // var job = new CronJob({cronTime: '* * 22 * * *', onTick: function() {
+    //     // const msg = {
+    //     //     to: 'coletaylor017@gmail.com',
+    //     //     from: 'donotreply@writing-blocks.herokuapp.com',
+    //     //     subject: 'Have you done your freewriting yet today?',
+    //     //     html: '<h1>Get on it!</h1><a>GO!</a>'
+    //     // };
+    //     // sgMail.send(msg);
+    //     console.log("sending a reminder email");
+    // }, utcOffset: -req.body.timezone});
+    // job.start();
 
+    res.redirect("/account");
+});
 
 module.exports = router;

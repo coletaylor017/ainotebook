@@ -31,6 +31,7 @@ UI:
 Database/security:
     -Check ownership before ediing or deleting
     -Investigate how to get https so Chrome will say the site is secure.
+    -ENCRYPT EMAILS
     
 Done!
     -Associate users and entries
