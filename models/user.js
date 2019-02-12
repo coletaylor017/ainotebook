@@ -31,7 +31,11 @@ var userSchema = new mongoose.Schema({
             default: 0
         },
         utcEmailHour: Number,
-        utcEmailMinute: Number
+        utcEmailMinute: Number,
+        theme: {
+            type: String,
+            default: "default"
+        }
     }
 });
 
