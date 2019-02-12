@@ -120,7 +120,7 @@ router.get("/logout", function(req, res) {
     res.redirect("/");
 });
 
-router.post("/account", function(req, res) {
+router.post("/account", middleware.isLoggedIn, function(req, res) {
     console.log(req.body.emails);
     // var job = new CronJob({cronTime: '* * 22 * * *', onTick: function() {
     //     // const msg = {
@@ -134,6 +134,24 @@ router.post("/account", function(req, res) {
     // }, utcOffset: -req.body.timezone});
     // job.start();
 
+    User.findById(req.user._id, function(err, user) {
+        if (err) {
+            console.log(err);
+        } else {
+            if (req.body.emails) {
+                user.settings.emails = 1;
+            } else {
+                user.settings.emails = 0;
+            }
+            var hour = req.body.emailTime.substring(0, 2);
+            var minute = req.body.emailTime.substring(3, 5);
+            console.log(hour+" : "+minute);
+            user.emails = req.body.emails;
+            user.settings.emailHour = hour;
+            user.settings.emailMinute = minute;
+            user.save();
+        }
+    });
     res.redirect("/account");
 });
 

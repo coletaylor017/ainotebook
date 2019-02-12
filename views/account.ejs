@@ -16,11 +16,15 @@
                 <span class="field">
                     <div class="ui toggle email checkbox">
                         <label>Daily reminder emails</label>
-                        <input type="checkbox" name="emails">
+                        <% if (currentUser.settings.emails) { %>
+                            <input type="checkbox" name="emails" checked="true" >
+                        <% } else { %>
+                            <input type="checkbox" name="emails">
+                        <% } %>
                     </div>
                 </span>
                 <span class="ui field email">
-                    <input type="time" name="emailtime">
+                    <input type="time" name="emailTime" value="<%= currentUser.settings.emailHour + ":" + currentUser.settings.emailMinute %>">
                     <label>Notification time</label>
                 </span>
             </div>
@@ -40,12 +44,9 @@
 
 <script>
 
-if (!document.querySelector(".toggle.email.checkbox").checked) {
+if (!document.querySelector(".toggle.email.checkbox input").checked) {
     document.querySelector(".field.email").classList.add("disabled");
 }
-
- var x = document.querySelector('input[name="timezone"]');
- x.value = new Date().getTimezoneOffset();
 
 $('.ui.checkbox')
     .checkbox({
@@ -62,4 +63,5 @@ $('.ui.checkbox')
 ;
 
 </script>
+
 <% include partials/footer %>

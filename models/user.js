@@ -30,8 +30,8 @@ var userSchema = new mongoose.Schema({
             type: Boolean,
             default: 0
         },
-        utcEmailHour: Number,
-        utcEmailMinute: Number,
+        emailHour: String,
+        emailMinute: String,
         theme: {
             type: String,
             default: "default"
