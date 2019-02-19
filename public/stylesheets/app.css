@@ -46,34 +46,12 @@ body {
     float: left;
 }
 
-#jumbotron {
-    padding: 15em;
-    margin: 0;
-    border-radius: 0;
-    background: url(/images/stock-typing2.jpeg) no-repeat center center fixed;
-    background-size: cover;
-}
-
-#jumbotron .ui {
-    z-index: 5;
-}
-
-#ten-padded {
-    padding: 10rem;
-    margin: 0;
-}
-
 #splash-content {
     margin-top: 20%;
 }
 
 #site-title {
     font-family: 'Cutive Mono', monospace;
-}
-
-#jumbotron #site-title {
-    font-weight: 500;
-    font-size: 3em;
 }
 
 #site-title {
@@ -125,15 +103,6 @@ a:hover {
 .timer-on, .timer-close, .modal-btn {
     display: inline-block;
     margin-bottom: .6em;
-}
-
-.lander-text {
-    font-size: 1.3em;
-}
-
-.message.lander-padded, .lander-padded {
-    padding-top: 4em;
-    padding-bottom: 4em;
 }
 
 .big-anchor {

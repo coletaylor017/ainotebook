@@ -1,13 +1,8 @@
 TODO!
 
--In general: Focus on DB optimization and CSS simplicity. Fewer IDs especially. Start messing around with Semantic setting more. 
-    
-*note: start using git branches
+-In general: Focus on DB optimization and CSS simplicity. Fewer IDs especially. Start messing around with Semantic settings more. 
+
 *Text index has disappeared on dev DB (not deployed DB)
-
-New name ideas: Freely
--Come up with a better name
-
 
 General
     -Compare metadata values to averages. Maybe bar graphs rather than pie charts would be more informative.
