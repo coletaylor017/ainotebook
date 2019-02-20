@@ -131,6 +131,28 @@ router.get("/home", middleware.isLoggedIn, middleware.updateQuote, function(req,
     });
 });
 
+router.get("/data", middleware.isLoggedIn, function(req, res) {
+    Entry.find({ "author.id": req.user._id }, { date: 1, metadata: 1, body: 1 }, function(err, entries) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.render("data", { entries: entries });
+        }
+    });
+});
+
+    // Entry.find({"author.id": req.user._id, "hidden": 0, $text: { $search: req.query.keyword } }).populate("tags", "name").exec(function(err, entries) {
+    //     if (err) {
+    //         console.log(err);
+    //     } else {
+    //         res.render("index", {tags: tags, entries: entries.reverse(), keyword: req.query.keyword});
+    //     }
+    // });
+                
+router.post("/data", middleware.isLoggedIn, function(req, res) {
+    res.redirect("/data/" + "?category=" + req.body.category);
+});
+
 router.delete("/account", middleware.isLoggedIn, function(req, res) {
     User.findByIdAndRemove(req.user._id, function(err) {
         if (err) {

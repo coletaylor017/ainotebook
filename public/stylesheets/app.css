@@ -227,3 +227,19 @@ a:hover {
 .typewriter {
     font-family: 'Cutive Mono', monospace;
 }
+
+#property1, #property2, #property3 {
+    background-color: black;
+}
+
+#property1 > * {
+    color: lightblue;
+}
+
+#property2 > * {
+    color: red;
+}
+
+#property3 > * {
+    color: white;
+}

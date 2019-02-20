@@ -43,7 +43,7 @@ var middlewareObj = {
             } else {
                 console.log("Time since last quote update:");
                 console.log(new Date() - globalBoi.lastUpdate);
-                if (Date.now() - globalBoi.lastUpdate >= 86400000) {
+                if (Date.now() - globalBoi.lastUpdate >= 1000 * 60 * 60 * 24) {
                     Quote.find({}, {index: 1, _id: 0}, function(err, quotes) {
                         if (err) {
                             console.log(err);

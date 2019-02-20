@@ -36,6 +36,10 @@ var userSchema = new mongoose.Schema({
             type: String,
             default: "default"
         }
+    },
+    timezone: {
+        type: Number,
+        default: 0
     }
 });
 

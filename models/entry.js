@@ -8,16 +8,23 @@ var entrySchema = new mongoose.Schema({
             ref: "Tag"
         }
     ],
-    metadata: String,
     body: String,
     date: String,
-    hidden: Boolean,
+    hidden: {
+        type: Boolean,
+        default: 0
+    },
     author: {
         id: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         },
         username: String
+    },
+    metadata: {
+        mood: String,
+        weather: String,
+        ri: {}
     }
 });
 
