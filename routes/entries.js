@@ -57,28 +57,6 @@ router.get("/new", middleware.isLoggedIn, function(req, res) {
     });
 });
 
-// Heeeeeyyyy guess who learned how to use callback functions to avoid dealing with callback hell
-var updateMetadata = function(user, entry, callback) {
-    // Datapoint.create({
-    //     owner: {
-    //         id: user._id,
-    //         username: user.username
-    //     },
-    //     entry: entry._id,
-    //     data: {
-    //         ri: ridict.matches(entry.body)
-    //     }
-    // }, function(err, datapoint) {
-    //     if (err) {
-    //         console.log(err);
-    //     } else {
-    //         console.log("new datapoint object: ", datapoint);
-            
-    //     }
-    // });
-    callback();
-};
-
 //create
 router.post("/", middleware.isLoggedIn, function(req, res) {
     console.log(req.body);
@@ -136,9 +114,7 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
 
                     
                     if (req.body.tags.length === 0 || req.body.hide === "on") {
-                        updateMetadata(req.user, entry, function() {
-                            res.redirect("/entries/" + entry._id)
-                        });
+                        res.redirect("/entries/" + entry._id)
                     } else {
                         var tags = JSON.parse(req.body.tags);
                         console.log("tags: ", tags);
