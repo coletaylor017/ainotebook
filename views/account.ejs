@@ -7,10 +7,61 @@
     <h2 class="ui inverted header">Account Settings</h2>
 
     <div class="ui divider"></div>
+    
+    
+        
+    <form action="/account" method="POST" class="ui inverted form">
+        <div class="inline fields">
+            <div class="ui center aligned container">
+                <span class="field">
+                    <div class="ui toggle email checkbox">
+                        <label>Daily reminder emails</label>
+                        <% if (currentUser.settings.emails) { %>
+                            <input type="checkbox" name="emails" checked="true" >
+                        <% } else { %>
+                            <input type="checkbox" name="emails">
+                        <% } %>
+                    </div>
+                </span>
+                <span class="ui field email">
+                    <input type="time" name="emailTime" value="<%= currentUser.settings.emailHour + ":" + currentUser.settings.emailMinute %>">
+                    <label>Notification time</label>
+                </span>
+            </div>
+        </div>
+        <input style="display: none" name="timezone">
+        <div class="ui hidden divider"></div>
+        <button class="ui primary button">Save settings</button>
+    </form>
 
-    <form action="/account?_method=DELETE" method="POST" class="ui center aligned container">
-        <button action="submit" class="ui red button">Delete Account (Very permanent!)</button>
+    
+    <div class="spacer"></div>
+
+    <form action="/account?_method=DELETE" method="POST" class="ui center aligned container" onsubmit="return confirm('ARE YOU POSITIVE YOU WANT TO PERMANENTLY DELETE YOUR ACCOUNT??');">
+        <button class="ui red button">Delete Account</button>
     </form>
 </div>
+
+<script>
+
+if (!document.querySelector(".toggle.email.checkbox input").checked) {
+    document.querySelector(".field.email").classList.add("disabled");
+}
+
+$('.ui.checkbox')
+    .checkbox({
+        onChange: function() {
+            this.style.color = "white";
+        },
+        onChecked: function() {
+            var d = document.querySelector(".field.email").classList.remove("disabled");
+        },
+        onUnchecked: function() {
+            var d = document.querySelector(".field.email").classList.add("disabled");
+        }
+    })
+;
+
+</script>
 
 <% include partials/footer %>

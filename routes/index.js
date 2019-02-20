@@ -4,11 +4,20 @@ var express    = require("express"),
     Quote      = require("../models/quote"),
     Global     = require("../models/global"),
     middleware = require("../middleware"),
+    sgMail     = require('@sendgrid/mail'),
+    CronJob    = require('cron').CronJob,
     passport   = require("passport");
     
-// setInterval(function(){ 
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-// }, 100);
+// const msg = {
+//     to: ['coletaylor017@gmail.com', 'cnovac01@gmail.com'],
+//     from: 'donotreply@writing-blocks.herokuapp.com',
+//     subject: 'Yay!',
+//     html: '<h1>This is a scheduled message sent using SendGrid. It should arrive at 1549985880, or UTC 15:38 on February 12th, 2019.</h1>',
+//     send_each_at: [1549985880, 1549985880]
+// };
+// sgMail.send(msg);
 
 // var CronJob = require('cron').CronJob;
 // new CronJob('* * * * * *', function() {
@@ -136,6 +145,41 @@ router.delete("/account", middleware.isLoggedIn, function(req, res) {
 router.get("/logout", function(req, res) {
     req.logout();
     res.redirect("/");
+});
+
+router.post("/account", middleware.isLoggedIn, function(req, res) {
+    console.log(req.body.emails);
+    // var job = new CronJob({cronTime: '* * 22 * * *', onTick: function() {
+    //     // const msg = {
+    //     //     to: 'coletaylor017@gmail.com',
+    //     //     from: 'donotreply@writing-blocks.herokuapp.com',
+    //     //     subject: 'Have you done your freewriting yet today?',
+    //     //     html: '<h1>Get on it!</h1><a>GO!</a>'
+    //     // };
+    //     // sgMail.send(msg);
+    //     console.log("sending a reminder email");
+    // }, utcOffset: -req.body.timezone});
+    // job.start();
+
+    User.findById(req.user._id, function(err, user) {
+        if (err) {
+            console.log(err);
+        } else {
+            if (req.body.emails) {
+                user.settings.emails = 1;
+            } else {
+                user.settings.emails = 0;
+            }
+            var hour = req.body.emailTime.substring(0, 2);
+            var minute = req.body.emailTime.substring(3, 5);
+            console.log(hour+" : "+minute);
+            user.emails = req.body.emails;
+            user.settings.emailHour = hour;
+            user.settings.emailMinute = minute;
+            user.save();
+        }
+    });
+    res.redirect("/account");
 });
 
 module.exports = router;

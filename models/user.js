@@ -4,6 +4,7 @@ var passportLocalMongoose = require("passport-local-mongoose");
 var userSchema = new mongoose.Schema({
     username: String,
     password: String,
+    email: String,
     dateCreated: {
         type: Date,
         default: Date.now
@@ -23,6 +24,18 @@ var userSchema = new mongoose.Schema({
     isAdmin: {
         type: Boolean,
         default: 0
+    },
+    settings: {
+        emails: {
+            type: Boolean,
+            default: 0
+        },
+        emailHour: String,
+        emailMinute: String,
+        theme: {
+            type: String,
+            default: "default"
+        }
     }
 });
 

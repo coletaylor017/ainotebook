@@ -9,10 +9,7 @@
         <% if (quote.author) { %>
             <div class="ui container" id="largelad">
                 <div class="authorsource">
-                    <strong>-<%= quote.author %></strong>
-                    <% if (quote.source) { %>
-                        , <%= quote.source %>
-                    <% } %>
+                    <strong>-<%= quote.author %></strong><% if (quote.source) { %>, <%= quote.source %><% } %>
                 </div>
             </div>
         <% } %>
@@ -25,7 +22,7 @@
         <div class="label">Current streak</div>
     </div>
     <br>
-    <a href="/entries/new" class="ui huge green button">Start Freewriting Session</a>
+    <a href="/entries/new" class="ui huge primary button">Start Freewriting Session</a>
 </div>
 
 
