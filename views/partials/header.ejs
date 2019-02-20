@@ -15,20 +15,13 @@
             <% if (!currentUser) { %>
                 <!--<a href="/about" class="item">About</a>-->
             <% } else { %>
-                <!--<div class="item">-->
-                <!--    <a href="/entries/new" class="ui green button">Start Freewriting Session</a>-->
-                <!--</div>-->
                 <% if (currentUser.isAdmin) { %>
                     <a id="no-darken" class="item">Welcome, admin user <%= currentUser.username %></a>
                     <a href="/quotes" class="item">Quotes</a>
                 <% } %>
                 <a href="/home" class="item">Home</a>
-<<<<<<< HEAD
-                <a href="/account" class="item">Settings</a>
-=======
                 <a href="/data" class="item">Metadata</a>
                 <a href="/account" class="item">Account</a>
->>>>>>> metadata-v2
                 <a href="/logout" class="item">Logout</a>
             <% } %>
         </div>
