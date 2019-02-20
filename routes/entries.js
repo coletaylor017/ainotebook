@@ -57,6 +57,28 @@ router.get("/new", middleware.isLoggedIn, function(req, res) {
     });
 });
 
+// Heeeeeyyyy guess who learned how to use callback functions to avoid dealing with callback hell
+var updateMetadata = function(user, entry, callback) {
+    // Datapoint.create({
+    //     owner: {
+    //         id: user._id,
+    //         username: user.username
+    //     },
+    //     entry: entry._id,
+    //     data: {
+    //         ri: ridict.matches(entry.body)
+    //     }
+    // }, function(err, datapoint) {
+    //     if (err) {
+    //         console.log(err);
+    //     } else {
+    //         console.log("new datapoint object: ", datapoint);
+            
+    //     }
+    // });
+    callback();
+};
+
 //create
 router.post("/", middleware.isLoggedIn, function(req, res) {
     console.log(req.body);
@@ -64,20 +86,22 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
         if (err) {
             console.log(err);
         } else {
-            Entry.create(req.body.entry, function(err, entry) {
+            Entry.create({
+                body: req.body.entry.body,
+                date: req.body.entry.date,
+                author: {
+                    id: req.user._id,
+                    username: req.user.username
+                },
+                metadata: {
+                    mood: "bad",
+                    ri: ridict.matches(req.body.entry.body)
+                }
+            }, function(err, entry) {
                 if (err) {
                     console.log(err);
                 } else {
-                    console.log(req.body.entry);
-                    entry.metadata = "";
-                    entry.author.id = req.user._id;
-                    entry.author.username = req.user.username;
-                    if (req.body.hide === "on") { // could probably just do if (req.body.hide)
-                        entry.hidden = 1;
-                    } else {
-                        entry.hidden = 0;
-                    }
-                    entry.save();
+                    console.log("new entry: ", entry);
                     
                     console.log("last streak date: ", user.lastEntry);
                     var streakDate = req.body.streakDate.split(",");
@@ -92,7 +116,7 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
                     if (diff === 1 || user.streak === 0) {
                         user.streak++;
                     } else if (diff > 1) {
-                        user.streak = 0;
+                        user.streak = 1;
                     }
                         
                     user.lastEntry = streakDate;
@@ -112,7 +136,9 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
 
                     
                     if (req.body.tags.length === 0 || req.body.hide === "on") {
-                        res.redirect("/entries/" + entry._id);
+                        updateMetadata(req.user, entry, function() {
+                            res.redirect("/entries/" + entry._id)
+                        });
                     } else {
                         var tags = JSON.parse(req.body.tags);
                         console.log("tags: ", tags);
@@ -206,7 +232,6 @@ router.get("/:id", middleware.isLoggedIn, function(req, res) {
             console.log(err);
         } else {
             var rid = ridict.matches(entry.body);
-            console.log("rid: ", rid);
             res.render("show", {entry: entry, rid: rid});
         }
     });

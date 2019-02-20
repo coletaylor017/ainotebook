@@ -23,6 +23,10 @@ var userSchema = new mongoose.Schema({
     isAdmin: {
         type: Boolean,
         default: 0
+    },
+    timezone: {
+        type: Number,
+        default: 0
     }
 });
 
