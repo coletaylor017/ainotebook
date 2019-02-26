@@ -56,31 +56,31 @@
   color: purple;
 }
 
-.c2, #chart3 .ct-series-b .ct-slice-pie {
+.c1, #chart3 .ct-series-a .ct-slice-pie {
   /* fill of the pie slieces */
   fill: orange;
   color: orange;
-}
+}  /* Kaput because narcissism is gone now */
 
-.c3, #chart3 .ct-series-c .ct-slice-pie {
+.c2, #chart3 .ct-series-b .ct-slice-pie {
   /* fill of the pie slieces */
   fill: mediumSeaGreen;
   color: mediumSeaGreen;
 }
 
-.c4, #chart3 .ct-series-d .ct-slice-pie {
+.c3, #chart3 .ct-series-c .ct-slice-pie {
   /* fill of the pie slieces */
   fill: darkBlue;
   color: darkBlue;
 }
 
-.c5, #chart3 .ct-series-e .ct-slice-pie {
+.c4, #chart3 .ct-series-d .ct-slice-pie {
   /* fill of the pie slieces */
   fill: paleVioletRed;
   color: paleVioletRed;
 }
 
-.c6, #chart3 .ct-series-f .ct-slice-pie {
+.c5, #chart3 .ct-series-e .ct-slice-pie {
   /* fill of the pie slieces */
   fill: fireBrick;
   color: fireBrick;

@@ -43,12 +43,11 @@
         <div class="two column row">
             <div class="chart column" style="position: relative">
                 <div class="ct-chart ct-square" id="chart3"></div>
-                <span class="chart-label"><i class="c1 ui square icon"></i>Narcissism</span>
-                <span class="chart-label"><i class="c2 ui square icon"></i>Positivity</span>
-                <span class="chart-label"><i class="c3 ui square icon"></i>Anxiety</span>
-                <span class="chart-label"><i class="c4 ui square icon"></i>Sadness</span>
-                <span class="chart-label"><i class="c5 ui square icon"></i>Affection</span>
-                <span class="chart-label"><i class="c6 ui square icon"></i>Aggression</span>
+                <span class="chart-label"><i class="c1 ui square icon"></i>Positivity</span>
+                <span class="chart-label"><i class="c2 ui square icon"></i>Anxiety</span>
+                <span class="chart-label"><i class="c3 ui square icon"></i>Sadness</span>
+                <span class="chart-label"><i class="c4 ui square icon"></i>Affection</span>
+                <span class="chart-label"><i class="c5 ui square icon"></i>Aggression</span>
             </div>
             <div class="chart column" style="position: relative">
                 <div class="ct-chart ct-square" id="chart4"></div>
@@ -110,7 +109,6 @@ new Chartist.Pie('#chart2', {
 
 new Chartist.Pie('#chart3', {
     labels: [
-        'narcissism',
         'positivity',
         'anxiety',
         'sadness',
@@ -118,7 +116,6 @@ new Chartist.Pie('#chart3', {
         'aggression'
     ],
     series: [
-        data.NARCISSISM,
         data.POSITIVE_AFFECT,
         data.ANXIETY,
         data.SADNESS,

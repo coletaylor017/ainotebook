@@ -18,7 +18,6 @@
             <div class="item" data-value="">-</div>
             <div class="item" data-value="ORDER">Order</div>
             <div class="item" data-value="CHAOS">Chaos</div>
-            <div class="item" data-value="NARCISSISM">Narcissism</div>
             <div class="item" data-value="POSITIVE_AFFECT">Positivity</div>
             <div class="item" data-value="ANXIETY">Anxiety</div>
             <div class="item" data-value="SADNESS">Sadness</div>
@@ -38,7 +37,6 @@
             <div class="item" data-value="">-</div>
             <div class="item" data-value="ORDER">Order</div>
             <div class="item" data-value="CHAOS">Chaos</div>
-            <div class="item" data-value="NARCISSISM">Narcissism</div>
             <div class="item" data-value="POSITIVE_AFFECT">Positivity</div>
             <div class="item" data-value="ANXIETY">Anxiety</div>
             <div class="item" data-value="SADNESS">Sadness</div>
@@ -51,7 +49,7 @@
         </div>
     </div>
     <div class="ui selection dropdown" id="property3">
-        <input type="hidden" name="category3" value="LENGTH (WORDS)">
+        <input type="hidden" name="category3">
         <i class="dropdown icon"></i>
         <div class="default text">Property 3</div>
         <div class="menu">
@@ -84,23 +82,33 @@ function refresh() {
         arr2 = [],
         arr3 = [],
         labelArr = [];
+        console.log(term3);
         
     entries.forEach(function(entry) {
         total1 += entry.metadata.ri[term1] / entry.body.length; // so that longer entries aren't weighted heavier
         total2 += entry.metadata.ri[term2] / entry.body.length;
-        total3 += entry.body.split(" ").length;
+        if (term3 === "LENGTH (WORDS)") {
+            total3 += entry.body.split(" ").length;
+        }
     });
     
     var avg1 = total1 / entries.length,
         avg2 = total2 / entries.length,
+        avg3;
+        
+    if (term3 === "LENGTH (WORDS)") {
         avg3 = total3 / entries.length;
+    }
 
     entries.forEach(function(entry, index) {
         arr1.push(entry.metadata.ri[term1] / entry.body.length - avg1);
         arr2.push(entry.metadata.ri[term2] / entry.body.length - avg2);
-        arr3.push(entry.body.split(" ").length);
+        if (term3 === "LENGTH (WORDS)") {
+            arr3.push(entry.body.split(" ").length);
+        }
         labelArr.push("entry " + (index + 1));
     });
+    console.log(term3, total3, avg3, arr3);
 
     var ctx = document.getElementById("myChart").getContext('2d');
     var myChart = new Chart(ctx, {
@@ -182,7 +190,8 @@ function refresh() {
                     id: 'y-axis-3',
                     scaleLabel: {
                         labelString: 'Words'
-                    }
+                    },
+                    display: false
                 }]
             },
             tooltips: {
