@@ -58,7 +58,7 @@
         </div>
     </div>
     <div class="ui hidden divider"></div>
-    <a onclick="refresh()" class="ui primary button">Submit</a>
+    <a onclick="refresh()" class="ui primary button">Update graph</a>
 </div>
 
 <div class="ui text container">
@@ -106,7 +106,7 @@ function refresh() {
         if (term3 === "LENGTH (WORDS)") {
             arr3.push(entry.body.split(" ").length);
         }
-        labelArr.push("entry " + (index + 1));
+        labelArr.push(entry.date);
     });
     console.log(term3, total3, avg3, arr3);
 
@@ -160,6 +160,9 @@ function refresh() {
         options: {
             responsive: true,
             scales: {
+                xAxes: [{
+                    display: false
+                }],
                 yAxes: [{
                     type: 'linear',
                     ticks: {
