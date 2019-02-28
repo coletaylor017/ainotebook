@@ -72,7 +72,6 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
                     username: req.user.username
                 },
                 metadata: {
-                    mood: "bad",
                     ri: ridict.matches(req.body.entry.body)
                 }
             }, function(err, entry) {
