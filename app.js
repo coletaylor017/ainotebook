@@ -6,23 +6,20 @@ var methodOverride        = require("method-override"),
     express               = require("express"),
     request               = require("request"),
     moment                = require("moment"),
-    ridict                = require("ridict"),
     flash                 = require("connect-flash"),
-    Entry                 = require("./models/entry"),
     User                  = require("./models/user"),
-    Tag                   = require("./models/tag"),
     passport              = require("passport"),
-    parseText             = require("./public/parseText"),
     LocalStrategy         = require("passport-local"),
     passportLocalMongoose = require("passport-local-mongoose");
 
 var entryRoutes  = require("./routes/entries"),
     tagRoutes    = require("./routes/tags"),
+    quoteRoutes  = require("./routes/quotes"),
     indexRoutes  = require("./routes/index");
 
 var url = process.env.DATABASEURL || "mongodb://localhost:27017/writing_blocks";
 mongoose.connect(url, {useNewUrlParser: true});
-    
+
 var app = express();
 app.set("view engine", "ejs");
 
@@ -58,6 +55,7 @@ app.use(function(req, res, next) {
 app.use(indexRoutes);
 app.use("/entries", entryRoutes);
 app.use("/tags", tagRoutes);
+app.use("/quotes", quoteRoutes);
 
 app.listen(process.env.PORT, function() {
     console.log("Server is now running");

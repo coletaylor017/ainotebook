@@ -1,0 +1,26 @@
+<% include partials/header %>
+
+<div class="spacer"></div><div class="spacer"></div>
+
+<div class="ui inverted text container center aligned main">
+    
+    <h2 class="ui inverted header">New Quote</h2>
+    
+    <div class="ui left aligned container">
+        <form class="ui inverted form" action="/quotes" method="POST">
+            <div class="field">
+                <textarea placeholder="Body" name="quote[body]" autofocus></textarea>
+            </div>
+            <div class="field">
+                <input type="text" placeholder="Author" name="quote[author]">
+            </div>
+            <div class="field">
+                <input type="text" placeholder="Source" name="quote[source]">
+            </div>
+            <div class="field">
+                <input type="text" placeholder="Index" name="quote[index]">
+            </div>
+            <button class="ui green button">Submit</button>
+        </form>
+    </div>
+</div>

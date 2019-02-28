@@ -1,0 +1,108 @@
+.ct-chart {
+    width: 100%;
+    height: 90%;
+}
+
+.ct-label {
+    fill: #333333;
+    display: none;
+}
+
+.a1, #chart1 .ct-series-a .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: black;
+  color: black;
+}
+
+.a2, #chart1 .ct-series-b .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: lightblue;
+  color: lightblue;
+}
+
+.b1, #chart2 .ct-series-a .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: coral;
+  color: coral;
+}
+
+.b2, #chart2 .ct-series-b .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: indianRed;
+  color: indianRed;
+}
+
+.b3, #chart2 .ct-series-c .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: oliveDrab;
+  color: oliveDrab;
+}
+
+.b4, #chart2 .ct-series-d .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: teal;
+  color: teal;
+}
+
+.b5, #chart2 .ct-series-e .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: darkGoldenRod;
+  color: darkGoldenRod;
+}
+
+.c1, #chart3 .ct-series-a .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: purple;
+  color: purple;
+}
+
+.c1, #chart3 .ct-series-a .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: orange;
+  color: orange;
+}  /* Kaput because narcissism is gone now */
+
+.c2, #chart3 .ct-series-b .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: mediumSeaGreen;
+  color: mediumSeaGreen;
+}
+
+.c3, #chart3 .ct-series-c .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: darkBlue;
+  color: darkBlue;
+}
+
+.c4, #chart3 .ct-series-d .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: paleVioletRed;
+  color: paleVioletRed;
+}
+
+.c5, #chart3 .ct-series-e .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: fireBrick;
+  color: fireBrick;
+}
+
+.d1, #chart4 .ct-series-a .ct-slice-pie {
+  /* fill of the pie slieces */
+  fill: slateGrey;
+  color: slateGrey;
+}
+
+.d2, #chart4 .ct-series-b .ct-slice-pie {
+  fill: tan;
+  color: tan;
+}
+
+.e1, #chart5 .ct-series-a .ct-slice-pie {
+  fill: mediumSeaGreen;
+  color: mediumSeaGreen;
+}
+
+.e2, #chart5 .ct-series-b .ct-slice-pie {
+  fill: darkSalmon;
+  color: darkSalmon;
+}
