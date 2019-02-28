@@ -63,3 +63,7 @@ body {
 #thiccy {
     font-size: 2.6em;
 }
+
+#summary {
+    line-height: 1.5;
+}
