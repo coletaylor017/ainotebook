@@ -64,138 +64,142 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
         if (err) {
             console.log(err);
         } else {
-            Entry.create({
-                body: req.body.entry.body,
-                date: req.body.entry.date,
-                author: {
-                    id: req.user._id,
-                    username: req.user.username
-                },
-                metadata: {
-                    ri: ridict.matches(req.body.entry.body)
-                }
-            }, function(err, entry) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.log("new entry: ", entry);
-                    
-                    console.log("last streak date: ", user.lastEntry);
-                    var streakDate = req.body.streakDate.split(",");
-                    console.log("Current streak date", streakDate);
-                    
-                    var d1 = new Date(user.lastEntry[0], user.lastEntry[1], user.lastEntry[2]);
-                    var d2 = new Date(streakDate[0], streakDate[1], streakDate[2]);
-                    console.log("ds: " + d1 + ", " + d2);
-                    var diff = d2 - d1;
-                    diff = diff/86400000;
-                    console.log(diff);
-                    if (diff === 1 || user.streak === 0) {
-                        user.streak++;
-                    } else if (diff > 1) {
-                        user.streak = 1;
+            if (req.body.entry.body.length === 0) {
+                res.redirect("/home");
+            } else {
+                Entry.create({
+                    body: req.body.entry.body,
+                    date: req.body.entry.date,
+                    author: {
+                        id: req.user._id,
+                        username: req.user.username
+                    },
+                    metadata: {
+                        ri: ridict.matches(req.body.entry.body)
                     }
+                }, function(err, entry) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log("new entry: ", entry);
                         
-                    user.lastEntry = streakDate;
-                    user.entries.push(entry);
-                    user.save();
-                    console.log("req.body.tags: ", req.body.tags);
-                    
-                    if (diff === 0) { // if they've already submitted an entry today
-                        req.flash("success", "Entry submitted!");
-                    } else {
-                        if (user.streak > 1) {
-                            req.flash("success", "Nice job! You've written for " + user.streak + " consecutive days. Come back tomorrow to keep the streak going!");
+                        console.log("last streak date: ", user.lastEntry);
+                        var streakDate = req.body.streakDate.split(",");
+                        console.log("Current streak date", streakDate);
+                        
+                        var d1 = new Date(user.lastEntry[0], user.lastEntry[1], user.lastEntry[2]);
+                        var d2 = new Date(streakDate[0], streakDate[1], streakDate[2]);
+                        console.log("ds: " + d1 + ", " + d2);
+                        var diff = d2 - d1;
+                        diff = diff/86400000;
+                        console.log(diff);
+                        if (diff === 1 || user.streak === 0) {
+                            user.streak++;
+                        } else if (diff > 1) {
+                            user.streak = 1;
+                        }
+                            
+                        user.lastEntry = streakDate;
+                        user.entries.push(entry);
+                        user.save();
+                        console.log("req.body.tags: ", req.body.tags);
+                        
+                        if (diff === 0) { // if they've already submitted an entry today
+                            req.flash("success", "Entry submitted!");
                         } else {
-                            req.flash("success", "Nice job! Come back tomorrow to start building a streak!");
-                        }
-                    }
-
-                    
-                    if (req.body.tags.length === 0 || req.body.hide === "on") {
-                        res.redirect("/entries/" + entry._id)
-                    } else {
-                        var tags = JSON.parse(req.body.tags);
-                        console.log("tags: ", tags);
-                        var tags2= [];
-                        console.log("tags length: ", tags.length);
-                        for (var i = 0; i < tags.length; i++) {
-                            tags2.push(tags[i].value);
-                            console.log("value of item ", i, "of tags: ", tags[i].value);
-                        }
-                        console.log("tags2: ", tags2);
-                        console.log("tags: ", tags);
-                        Tag.find({ "name": { $in: tags2 }, "user.id": req.user._id }, function(err, oldTags) {
-                            if (err) {
-                                console.log(err);
+                            if (user.streak > 1) {
+                                req.flash("success", "Nice job! You've written for " + user.streak + " consecutive days. Come back tomorrow to keep the streak going!");
                             } else {
-                                console.log("oldTags: ", oldTags);
-                                var oldTags2 = [];
-                                for (var i = 0; i < oldTags.length; i++) {
-                                    oldTags2.push(oldTags[i].name);
-                                    console.log("value of item ", i, "of oldTags: ", oldTags[i].name);
-                                }
-                                console.log("oldTags2: ", oldTags2);
-                                // https://stackoverflow.com/questions/1187518/how-to-get-the-difference-between-two-arrays-in-javascript
-                                Array.prototype.diff = function(a) {
-                                    return this.filter(function(i) {return a.indexOf(i) < 0;});
-                                };
-                                var filtered = tags2.diff(oldTags2); 
-                                console.log("tags2, filtered (filtered): ", filtered);
-                                var newTagArr = [];
-                                filtered.forEach(function(tagVal) {
-                                    var oid = mongoose.Types.ObjectId();
-                                    newTagArr.push({
-                                        _id: oid,
-                                        name: tagVal,
-                                        user: {
-                                            id: req.user._id,
-                                            username: req.user.username
-                                        },
-                                        entries: []
-                                    });
-                                });
-                                Tag.insertMany(newTagArr, function() {
-                                    var tagsToPush = oldTags.concat(newTagArr);
-                                    console.log("tagsToPush: ", tagsToPush);
-                                    console.log("entry id: ", entry._id);
-                                    Entry.findById(entry._id, function(err, foundEntry) {
-                                        if (err) {
-                                            console.log(err);
-                                        } else {
-                                            console.log("foundEntry: ", foundEntry);
-                                            Entry.findByIdAndUpdate(
-                                                entry._id,
-                                                { $addToSet: { tags: { $each: tagsToPush } } },
-                                                function(err, results) {
-                                                    if (err) {
-                                                        console.log(err);
-                                                    } else {
-                                                        console.log("results of updateOne(): ", results);
-    // Welcome.... TO CALLBACK HELL!!!
-                                                        Tag.updateMany(
-                                                            { "name": { $in: tags2 }, "user.id": req.user._id }, 
-                                                            { $addToSet: { entries: entry } }, 
-                                                            function(err, results2) {
-                                                                if (err) {
-                                                                    console.log(err);
-                                                                } else {
-                                                                    console.log("results of updateMany(): ", results2);
-                                                                    res.redirect("/entries/" + entry._id);
-                                                                }
-                                                            }
-                                                        );
-                                                    }
-                                                }
-                                            );
-                                        }
-                                    });
-                                });
+                                req.flash("success", "Nice job! Come back tomorrow to start building a streak!");
                             }
-                        });
+                        }
+    
+                        
+                        if (req.body.tags.length === 0 || req.body.hide === "on") {
+                            res.redirect("/entries/" + entry._id)
+                        } else {
+                            var tags = JSON.parse(req.body.tags);
+                            console.log("tags: ", tags);
+                            var tags2= [];
+                            console.log("tags length: ", tags.length);
+                            for (var i = 0; i < tags.length; i++) {
+                                tags2.push(tags[i].value);
+                                console.log("value of item ", i, "of tags: ", tags[i].value);
+                            }
+                            console.log("tags2: ", tags2);
+                            console.log("tags: ", tags);
+                            Tag.find({ "name": { $in: tags2 }, "user.id": req.user._id }, function(err, oldTags) {
+                                if (err) {
+                                    console.log(err);
+                                } else {
+                                    console.log("oldTags: ", oldTags);
+                                    var oldTags2 = [];
+                                    for (var i = 0; i < oldTags.length; i++) {
+                                        oldTags2.push(oldTags[i].name);
+                                        console.log("value of item ", i, "of oldTags: ", oldTags[i].name);
+                                    }
+                                    console.log("oldTags2: ", oldTags2);
+                                    // https://stackoverflow.com/questions/1187518/how-to-get-the-difference-between-two-arrays-in-javascript
+                                    Array.prototype.diff = function(a) {
+                                        return this.filter(function(i) {return a.indexOf(i) < 0;});
+                                    };
+                                    var filtered = tags2.diff(oldTags2); 
+                                    console.log("tags2, filtered (filtered): ", filtered);
+                                    var newTagArr = [];
+                                    filtered.forEach(function(tagVal) {
+                                        var oid = mongoose.Types.ObjectId();
+                                        newTagArr.push({
+                                            _id: oid,
+                                            name: tagVal,
+                                            user: {
+                                                id: req.user._id,
+                                                username: req.user.username
+                                            },
+                                            entries: []
+                                        });
+                                    });
+                                    Tag.insertMany(newTagArr, function() {
+                                        var tagsToPush = oldTags.concat(newTagArr);
+                                        console.log("tagsToPush: ", tagsToPush);
+                                        console.log("entry id: ", entry._id);
+                                        Entry.findById(entry._id, function(err, foundEntry) {
+                                            if (err) {
+                                                console.log(err);
+                                            } else {
+                                                console.log("foundEntry: ", foundEntry);
+                                                Entry.findByIdAndUpdate(
+                                                    entry._id,
+                                                    { $addToSet: { tags: { $each: tagsToPush } } },
+                                                    function(err, results) {
+                                                        if (err) {
+                                                            console.log(err);
+                                                        } else {
+                                                            console.log("results of updateOne(): ", results);
+        // Welcome.... TO CALLBACK HELL!!!
+                                                            Tag.updateMany(
+                                                                { "name": { $in: tags2 }, "user.id": req.user._id }, 
+                                                                { $addToSet: { entries: entry } }, 
+                                                                function(err, results2) {
+                                                                    if (err) {
+                                                                        console.log(err);
+                                                                    } else {
+                                                                        console.log("results of updateMany(): ", results2);
+                                                                        res.redirect("/entries/" + entry._id);
+                                                                    }
+                                                                }
+                                                            );
+                                                        }
+                                                    }
+                                                );
+                                            }
+                                        });
+                                    });
+                                }
+                            });
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     });
 });
@@ -232,6 +236,12 @@ router.get("/:id/edit", middleware.isLoggedIn, function(req, res) {
 //update
 router.put("/:id", middleware.isLoggedIn, function(req, res) {
     Entry.findByIdAndUpdate(req.params.id, req.body.entry, function(err, entry) {
+        console.log("entry length: ", req.body.entry.body.length)
+        if (req.body.entry.body.length === 0) {
+            entry.body = " "; //Having it completely empty breaks the metadata display page. Something to do with ridict
+            entry.save(); //For some reason, MongoDB doesn't update the entry back to " " when user changes " " to "". This probably won't happen often if at all though. Also, editing isn't even available to users right now. So for now I won't waste time figuring it out.
+            console.log("Running dat code");
+        }
         if (err) {
             console.log(err);
         } else {
