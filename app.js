@@ -28,6 +28,23 @@ app.set("view engine", "ejs");
 
 app.locals.moment = require('moment');
 
+// From arcseldon on https://stackoverflow.com/questions/7185074/heroku-nodejs-http-to-https-ssl-forced-redirect
+
+var forceSsl = function (req, res, next) {
+    console.log("running forceSsl");
+    if (req.headers['x-forwarded-proto'] !== 'https') {
+        console.log("The header is not https");
+        return res.redirect(['https://', req.get('Host'), req.url].join(''));
+    }
+    console.log("the header is https");
+    return next();
+};
+
+if (env === 'production') {
+    console.log("Trying to force SSL");
+    app.use(forceSsl);
+}
+
 app.use(methodOverride("_method"));
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
@@ -59,19 +76,6 @@ app.use(indexRoutes);
 app.use("/entries", entryRoutes);
 app.use("/tags", tagRoutes);
 app.use("/quotes", quoteRoutes);
-
-// From arcseldon on https://stackoverflow.com/questions/7185074/heroku-nodejs-http-to-https-ssl-forced-redirect
-
-var forceSsl = function (req, res, next) {
-    if (req.headers['x-forwarded-proto'] !== 'https') {
-        return res.redirect(['https://', req.get('Host'), req.url].join(''));
-    }
-    return next();
-};
-
-if (env === 'production') {
-    app.use(forceSsl);
-}
 
 app.listen(process.env.PORT, function() {
     console.log("Server is now running");
