@@ -63,6 +63,7 @@ app.use("/quotes", quoteRoutes);
 // From arcseldon on https://stackoverflow.com/questions/7185074/heroku-nodejs-http-to-https-ssl-forced-redirect
 
 var forceSsl = function (req, res, next) {
+    console.log("running forceSsl");
     if (req.headers['x-forwarded-proto'] !== 'https') {
         console.log("The header is not https");
         return res.redirect(['https://', req.get('Host'), req.url].join(''));
