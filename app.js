@@ -72,7 +72,6 @@ var forceSsl = function (req, res, next) {
 if (env === 'production') {
     app.use(forceSsl);
 }
-// other configurations etc for express go here...
 
 app.listen(process.env.PORT, function() {
     console.log("Server is now running");
