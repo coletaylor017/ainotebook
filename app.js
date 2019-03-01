@@ -64,12 +64,15 @@ app.use("/quotes", quoteRoutes);
 
 var forceSsl = function (req, res, next) {
     if (req.headers['x-forwarded-proto'] !== 'https') {
+        console.log("The header is not https");
         return res.redirect(['https://', req.get('Host'), req.url].join(''));
     }
+    console.log("the header is https");
     return next();
 };
 
 if (env === 'production') {
+    console.log("Trying to force SSL");
     app.use(forceSsl);
 }
 
