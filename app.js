@@ -10,7 +10,10 @@ var methodOverride        = require("method-override"),
     User                  = require("./models/user"),
     passport              = require("passport"),
     LocalStrategy         = require("passport-local"),
-    passportLocalMongoose = require("passport-local-mongoose");
+    passportLocalMongoose = require("passport-local-mongoose"),
+    env                   = process.env.NODE_ENV || 'development';
+    
+    console.log("environment: ", env);
 
 var entryRoutes  = require("./routes/entries"),
     tagRoutes    = require("./routes/tags"),
@@ -56,6 +59,19 @@ app.use(indexRoutes);
 app.use("/entries", entryRoutes);
 app.use("/tags", tagRoutes);
 app.use("/quotes", quoteRoutes);
+
+// From arcseldon on https://stackoverflow.com/questions/7185074/heroku-nodejs-http-to-https-ssl-forced-redirect
+
+var forceSsl = function (req, res, next) {
+    if (req.headers['x-forwarded-proto'] !== 'https') {
+        return res.redirect(['https://', req.get('Host'), req.url].join(''));
+    }
+    return next();
+};
+
+if (env === 'production') {
+    app.use(forceSsl);
+}
 
 app.listen(process.env.PORT, function() {
     console.log("Server is now running");

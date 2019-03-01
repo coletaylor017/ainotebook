@@ -3,15 +3,6 @@ var Global    = require("../models/global"),
     User      = require("../models/user"),
     moment    = require("moment"),
     mongoose  = require("mongoose");
-    
-// UN-COMMENTING THIS WILL BREAK THINGS IF YOU DON'T KNOW EXACTLY WHAT YOU'RE DOING!
-// Global.create({}, function(err, global) {
-//     if (err) {
-//         console.log(err);
-//     } else {
-//         console.log("New global: ", global);
-//     }
-// });
 
 var middlewareObj = {
     isLoggedIn: function(req, res, next) {
