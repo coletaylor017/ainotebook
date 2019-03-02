@@ -32,6 +32,10 @@ var userSchema = new mongoose.Schema({
         },
         emailHour: String,
         emailMinute: String,
+        background: {
+            type: String,
+            default: "mountains-bg-1.jpg"
+        },
         theme: {
             type: String,
             default: "default"

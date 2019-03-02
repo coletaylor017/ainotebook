@@ -4,8 +4,6 @@ TODO!
 
 -In general: Focus on DB optimization and CSS simplicity. Fewer IDs especially. Start messing around with Semantic settings more. 
 
-*Text index has disappeared on dev DB (not deployed DB)
-
 -change 'green button' to 'primary button'
 
 General
@@ -13,7 +11,6 @@ General
     -GET EMAILS WORKING!
     -B A D G E S !!!
     -Make mobile friendly!
-    -Compare metadata values to averages. Maybe bar graphs rather than pie charts would be more informative.
     -Account page
         -password recovery
         -double check that they want to delete before deleting
