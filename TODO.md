@@ -7,10 +7,14 @@ TODO!
 -change 'green button' to 'primary button'
 
 General
+    -User-settable goals for a certain number of words or minutes every day
+    -Little prompt on sign up that says "Pick a daily writing goal (you can change this later): " and then has dropdown for either words or minutes.
+    -Honestly, the metadata attributes aren't that great. Make some new ones, even if it requires you writing them yourself.
     -Display metadata relative to averages on show page
     -GET EMAILS WORKING!
     -B A D G E S !!!
     -Make mobile friendly!
+    -Compare metadata values to averages. Maybe bar graphs rather than pie charts would be more informative.
     -Account page
         -password recovery
         -double check that they want to delete before deleting
