@@ -7,6 +7,7 @@ TODO!
 -change 'green button' to 'primary button'
 
 General
+    -User can set their timezone.
     -User-settable goals for a certain number of words or minutes every day
     -Little prompt on sign up that says "Pick a daily writing goal (you can change this later): " and then has dropdown for either words or minutes.
     -Honestly, the metadata attributes aren't that great. Make some new ones, even if it requires you writing them yourself.
