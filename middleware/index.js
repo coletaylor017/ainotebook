@@ -13,7 +13,7 @@ var middlewareObj = {
         res.redirect("/login");
     },
     isAdmin: function(req, res, next) {
-        User.find({"username": req.user.username}, function(err, user) {
+        User.findOne({"username": req.user.username}, function(err, user) {
             if (err) {
                 console.log(err);
             } else {
@@ -26,6 +26,9 @@ var middlewareObj = {
                 }
             }
         });
+    },
+    checkAchievements: function(req, res, next) {
+        User.findOne({"username": req.user.username}, function(err, user) {
     },
     updateQuote: function(req, res, next) {
         Global.findOne({}, function(err, globalBoi) {

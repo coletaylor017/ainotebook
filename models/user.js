@@ -44,6 +44,11 @@ var userSchema = new mongoose.Schema({
     timezone: {
         type: Number,
         default: 0
+    },
+    stats: {
+        words: Number,
+        entries: Number,
+        time: Number
     }
 });
 
