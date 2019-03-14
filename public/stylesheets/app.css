@@ -243,3 +243,13 @@ a:hover {
 #property3 > * {
     color: white;
 }
+
+#minutes, #seconds, .timer {
+    background-color: transparent;
+    color: white;
+    border-color: white;
+}
+
+#wordCount {
+    
+}

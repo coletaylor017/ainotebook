@@ -39,6 +39,11 @@ var userSchema = new mongoose.Schema({
         theme: {
             type: String,
             default: "default"
+        },
+        dailyGoal: {
+            type: String,
+            words: String,
+            time: String
         }
     },
     timezone: {

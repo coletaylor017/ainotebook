@@ -86,7 +86,7 @@ router.get("/account", middleware.isLoggedIn, function(req, res) {
     res.render("account");
 });
 
-router.get("/home", middleware.isLoggedIn, middleware.updateQuote, function(req, res) {
+router.get("/home", middleware.isLoggedIn, middleware.updateQuote, middleware.updateStats, middleware.checkAchievements, function(req, res) {
     User.findOne({username: req.user.username}, function(err, user) {
         if (err) {
             console.log(err);

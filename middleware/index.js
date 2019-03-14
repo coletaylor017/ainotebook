@@ -1,6 +1,7 @@
 var Global    = require("../models/global"),
     Quote     = require("../models/quote"),
     User      = require("../models/user"),
+    Entry     = require("../models/entry"),
     moment    = require("moment"),
     mongoose  = require("mongoose");
 
@@ -27,8 +28,50 @@ var middlewareObj = {
             }
         });
     },
+    updateStats: function(req, res, next) {
+        User.findOne({"username": req.user.username}, function(err, user) {
+            if (err) {
+                console.log(err);
+            } else {
+                Entry.find({ "author.id": req.user._id }, function(err, entries) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        var wordCount = 0;
+                        entries.forEach(function(entry) {
+                            var l = entry.body.split(" ");
+                            wordCount += l.length;
+                        });
+                        user.stats = {
+                            entries: entries.length,
+                            words: wordCount
+                        }
+                        user.save();
+                        return next();
+                    }
+                });
+            }
+        });
+    },
     checkAchievements: function(req, res, next) {
         User.findOne({"username": req.user.username}, function(err, user) {
+            if (err) {
+                console.log(err);
+            } else {
+                if (user.stats.words >= 10000) {
+                    req.flash("New achievement! Go to the achievements page to see it!");
+                    user.badges.push({
+                        title: "10,000 words!",
+                        descriptor: "Write your first 10,000 words"
+                        
+                    })
+                }
+                if (user.stats.entries >= 25) {
+                    req.flash("New achievement! Go to the achievements page to see it!");
+                }
+                return next();
+            }
+        });
     },
     updateQuote: function(req, res, next) {
         Global.findOne({}, function(err, globalBoi) {

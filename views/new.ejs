@@ -18,11 +18,12 @@
         <button id="pause" class="ui basic inverted icon button" style="display: none"><i class="ui pause icon"></i></button>
         <div class="ui input" style="width: 3.5em">
             <input type="text" id="minutes" value="20" maxlength="2">
-        </div>:
+        </div> :
         <div class="ui input" style="width: 3.5em">
             </input><input type="text" id="seconds" value="00" maxlength="2"></input>
         </div>
-        <div><a class="timer-close" onclick='toggleTimer()'>Hide timer</a></div>
+        <div class="ui inverted header" id="wordCount">words: 0</div>
+        <div><a class="timer-close" onclick='toggleTimer()'>Hide stats</a></div>
     </div>
     
     <form onsubmit="finalizeDates()" action="/entries" method="POST" class="ui form">
@@ -153,6 +154,19 @@
         pause.style.display = "none";
         play.style.display = "inline";
     });
+    
+    var wcount = document.querySelector("#wordCount");
+    
+    document.querySelector("#entrybox").onkeyup = function() {
+        var count = (" " + this.value).match(/\S+/g);
+        console.log(count);
+        if (count) {
+            wcount.innerHTML = "words: " + count.length;
+        } else {
+            wcount.innerHTML = "words: 0";
+        }
+    };
+    
 </script>
 
 <% include partials/footer %>
