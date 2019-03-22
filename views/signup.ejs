@@ -4,10 +4,10 @@
 
 <div class="ui inverted text container center aligned main">
     
-    <h2 class="ui header">Sign Up</h2>
+    <h2 class="ui inverted header">Sign Up</h2>
     
     <div class="ui left aligned container">
-        <form name="myForm" class="ui form" action="/register" method="POST">
+        <form name="myForm" class="ui inverted form" action="/register" method="POST">
             <div class="field">
                 <input type="text" placeholder="username" name="username" autofocus>
             </div>
@@ -20,7 +20,7 @@
             <div class="ui field">
                 <div class="ui checkbox">
                     <input type="checkbox" name="terms">
-                    <label>I agree to the <a href="/terms" target="_blank">terms and conditions</a></label>
+                    <label>I agree to the <a href="/terms" target="_blank"><u>terms and conditions</u></a></label>
                 </div>
             </div>
             <button class="ui green button">Sign Up</button>
@@ -28,7 +28,6 @@
             <div class="ui error message"></div>
         </form>
         <div class="ui hidden divider"></div>
-        <p style="color: red; text-align: center">This site is currently in beta. Please read the terms and conditions carefully before signing up.</p>
     </div>
 </div>
 

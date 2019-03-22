@@ -1,0 +1,40 @@
+<% include partials/header %>
+
+<div class="ui basic text container segment context" id="noborder">
+    <div class="main">
+        <div class="ui horizontal list">
+            <div class="item">
+                <a href="/quotes/new" class="ui blue button">New Quote</a><br>
+            </div>
+            <div class="item">
+                <form action="/quotes/reset" method="POST" style="display: inline">
+                    <button action="submit" class="ui inverted basic blue button item" title="Reset">Reset Indicies</button>
+                </form>
+            </div>
+        </div>
+        <div class="ui divider"></div>
+        <% if (quotes.length === 0) { %>
+            <p>No quotes to show.</p>
+        <% } else { %>
+            <% quotes.forEach(function(quote) { %>
+                <div class="ui inverted segment">
+                    <p class="quote"><em>"<%= quote.body %>"</em></p>
+                    <div class="ui container">
+                        <form action="/quotes/<%= quote._id %>?_method=DELETE" method="POST" style="display: inline">
+                            <button action="submit" class="ui basic inverted icon button" title="Delete"><i class="ui trash icon"></i></button>
+                        </form>
+                        <div class="authorsource">
+                        <% if (quote.author) { %>
+                            <strong>-<%= quote.author %></strong>
+                            <% if (quote.source) { %>
+                                , <%= quote.source %>
+                            <% } %>
+                        <% } %>
+                        <span class="index"><%= quote.index %></span>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        <% } %>
+    </div>
+</div>
