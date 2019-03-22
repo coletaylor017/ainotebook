@@ -2,67 +2,41 @@
 
 <div class="spacer"></div>
 
-<div class="ui inverted text container center aligned main">
-    <div class="ui hidden divider"></div>
-    <h2 class="ui inverted header">Account Settings</h2>
-
-    <div class="ui divider"></div>
+<div class="ui text container center aligned main">
     
-    <div class="ui inverted segment">
-        <p>Optional daily reminder emails, custom time zone settings, and more are coming in future releases. Hang tight!</p>
+    <h2 class="ui header">Account</h2>
+    
+    <div class="ui text container left aligned">
+        <div class="ui hidden divider"></div>
+        <h2 class="ui header"><%= currentUser.username %></h2>
+        <div class="ui divider"></div>
+        <div class="ui horizontal statistics">
+            <div class="ui statistic">
+                <div class="value"><%= moment().diff(moment(currentUser.dateCreated), 'days') %></div>
+                <div class="label">Days since creation</div>
+            </div>
+            <div class="ui statistic">
+                <div class="value"><%= entryCount %></div>
+                <div class="label">Entries (<%= hidden %> hidden)</div>
+            </div>
+            <div class="ui statistic">
+                <div class="value"><%= wordCount %></div>
+                <div class="label">Words (including hidden entries)</div>
+            </div>
+            <div class="ui statistic">
+                <div class="value"><%= currentUser.streak %></div>
+                <div class="label">Current streak</div>
+            </div>
+        </div>
     </div>
-        
-    <!--<form action="/account" method="POST" class="ui inverted form">-->
-        <!--<div class="inline fields">-->
-        <!--    <div class="ui center aligned container">-->
-        <!--        <span class="field">-->
-        <!--            <div class="ui toggle email checkbox">-->
-        <!--                <label>Daily reminder emails</label>-->
-        <!--                <% if (currentUser.settings.emails) { %>-->
-        <!--                    <input type="checkbox" name="emails" checked="true" >-->
-        <!--                <% } else { %>-->
-        <!--                    <input type="checkbox" name="emails">-->
-        <!--                <% } %>-->
-        <!--            </div>-->
-        <!--        </span>-->
-        <!--        <span class="ui field email">-->
-        <!--            <input type="time" name="emailTime" value="<%= currentUser.settings.emailHour + ":" + currentUser.settings.emailMinute %>">-->
-        <!--            <label>Notification time</label>-->
-        <!--        </span>-->
-        <!--    </div>-->
-        <!--</div>-->
-    <!--    <input type="hidden" name="timezone">-->
-    <!--    <div class="ui hidden divider"></div>-->
-    <!--    <button class="ui primary button">Save settings</button>-->
-    <!--</form>-->
+    
+    <div class="ui hidden divider"></div>
 
-    <div class="spacer"></div>
-
-    <form action="/account?_method=DELETE" method="POST" class="ui center aligned container" onsubmit="return confirm('ARE YOU POSITIVE YOU WANT TO PERMANENTLY DELETE YOUR ACCOUNT??');">
-        <button class="ui red button">Delete Account</button>
+    <form action="/account?_method=DELETE" method="POST" class="ui left aligned container">
+        <button action="submit" class="ui red button">Delete Account (Very permanent!)</button>
     </form>
 </div>
 
-<script>
 
-if (!document.querySelector(".toggle.email.checkbox input").checked) {
-    document.querySelector(".field.email").classList.add("disabled");
-}
-
-$('.ui.checkbox')
-    .checkbox({
-        onChange: function() {
-            this.style.color = "white";
-        },
-        onChecked: function() {
-            var d = document.querySelector(".field.email").classList.remove("disabled");
-        },
-        onUnchecked: function() {
-            var d = document.querySelector(".field.email").classList.add("disabled");
-        }
-    })
-;
-
-</script>
 
 <% include partials/footer %>

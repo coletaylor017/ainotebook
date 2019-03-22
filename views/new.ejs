@@ -5,17 +5,18 @@
 <link rel="stylesheet" href="/stylesheets/tagify.css">
 
 <div class="ui container center aligned main">
-    <h2 class="ui inverted header"></h2>
+    <h2 class="ui header"></h2>
     
-    <a class="modal-btn">Instructions</a>
-    
-    <br>
-    
+    <div class="ui bulleted list">
+        <div class="item">Write whatever comes to mind. It doesn't have to make any sense!</div>
+        <div class="item">Pick a time, ideally 20-30 minutes, and don't stop or pause before the time is up</div>
+        <div class="item">If you don't know what to write, write "I don't know what to write" until you do.</div>
+    </div>
     <div class="timer-on" style="display:none"><a onclick='toggleTimer()'>Show timer</a></div>
 
     <div class="timer">
-        <button id="play" class="ui basic inverted icon button"><i class="ui play icon"></i></button>
-        <button id="pause" class="ui basic inverted icon button" style="display: none"><i class="ui pause icon"></i></button>
+        <button id="play" class="ui basic icon button"><i class="ui play icon"></i></button>
+        <button id="pause" class="ui basic icon button" style="display: none"><i class="ui pause icon"></i></button>
         <div class="ui input" style="width: 3.5em">
             <input type="text" id="minutes" value="20" maxlength="2">
         </div>:
@@ -28,32 +29,95 @@
     <form onsubmit="finalizeDates()" action="/entries" method="POST" class="ui form">
         <input id="streak-date" style="display: none" name="streakDate">
         <input id="date-input" style="display: none" name="entry[date]">
-        <input style="display: none" type="text" name="tags" value="">
+        <!--<div class="field">-->
+        <!--    <input type="text" name="entry[metadata]" placeholder="Metadata">-->
+        <!--</div>-->
         <div class="ui field">
-            <textarea id="entrybox" rows="10" name="entry[body]" placeholder="Start writing" id="transparent" autofocus></textarea>
+            <textarea id="entrybox" rows="10" name="entry[body]" class="current-entry" placeholder="Start writing" id="transparent" autofocus></textarea>
         </div>
-        <a href="/home" class="ui icon button" title="Cancel"><!--<i class="ui left arrow icon">-->Cancel</i></a>
-        <button class="ui green button" type="submit" title="Save!"><i class="ui check icon"></i>Done for today</button>
+        <div class="ui field">
+            <div class="ui labeled input">
+                <label class="ui basic label"><i class="ui blue question circle outline link icon modal-btn"></i>Optional: Add tags</label>
+                <input type="text" name="tags" placeholder="Write some tags. '#' is not necessary" id="transparent">
+            </div>
+        </div>
+        <div class="ui field">
+            <div class="ui toggle checkbox">
+                <label>Hide entry</label>
+                <input type="checkbox" name="hide">
+            </div>
+            <i class="ui blue question circle outline link icon modal-btn2"></i>
+        </div>
+        <a href="/entries" class="ui icon button" title="Back"><i class="ui left arrow icon"></i></a>
+        <button class="ui green button" type="submit" title="Save!"><i class="ui check icon"></i>Done</button>
     </form>
-    
+</div>
+
 <div class="ui large modal 1">
-    <div class="header">Help</div>
-    <div class="ui content">
-        <div class="ui bulleted list">
-            <div class="item">After submitting, your entry will disappear. This is on purpose! Freewriting isn't something to treasure and look back on; rather, it's all about writing for the sake of writing.</div>
-            <div class="item">Write whatever comes to mind. It doesn't have to make any sense!</div>
-            <div class="item">Pick a time, ideally 20-30 minutes, and don't stop or pause before the time is up</div>
-            <div class="item">If you don't know what to write, write "I don't know what to write" until you do.</div>
+    <div class="header">Help: Tags</div>
+    <div class="ui items">
+        <div class="item">
+            <div class="ui image">
+                <div class="ui large bordered image">
+                    <img src="/images/tagshelp1.png">
+                </div>
+            </div>
+            <div class="middle aligned content">
+                <p>Use tags to categorize entries. For example, you could tag every entry that talks about dogs with 'dogs'.</p>
+            </div>
+        </div>
+        <div class="item">
+            <div class="ui image">
+                <div class="ui large bordered image">
+                    <img src="/images/tagshelp2.png">
+                </div>
+            </div>
+            <div class="middle aligned content">
+                <p>Your tags will show up on the entries page.</p>
+            </div>
+        </div>
+        <div class="item">
+            <div class="ui image">
+                <div class="ui large bordered image">
+                    <img src="/images/tagshelp3.png">
+                </div>
+            </div>
+            <div class="middle aligned content">
+                <p>Clicking on a tag will show you all the entries that reference that tag.</p>
+            </div>
         </div>
     </div>
     <div class="actions">
         <div class="ui close button 1">Got it</div>
     </div>
 </div>
+
+<div class="ui large modal 2">
+    <div class="header">Help: Hiding Entries</div>
+    <div class="content">
+        <p>If you don't think this entry is one you'd like to look back on, consider hiding it. Hiding isn't the same as deleting- the entry wll continue to exist, but you won't see it or be able to edit it. Hidden entries still count for streaks and contibute to total word count.</p>
+        <p>Warning: Hidden entries will remain so forever and cannot be un-hidden or deleted.</p>
+    </div>
+    <div class="actions">
+        <div class="ui close button 2">Got it</div>
+    </div>
 </div>
 
 <script>
-
+    
+    var tagArr = <%- JSON.stringify(tags) %>;
+    var input = document.querySelector("input[name=tags]");
+    // init Tagify script on the above inputs
+    tagify = new Tagify(input, {
+        delimiters          : ",| ",  // add new tags when a comma or a space character
+        keepInvalidTags     : false,  // do not remove invalid tags (but keep them marked as invalid)
+        whitelist: tagArr,
+        dropdown : {
+            enabled: 3,
+            maxItems: 5
+        }
+    });
+    
     var btn = document.querySelector(".modal-btn");
     btn.onclick = function() {
         $('.ui.modal.1').modal({
@@ -65,14 +129,32 @@
             }
         }).modal('show');
     }
-
+    
+    var btn2 = document.querySelector(".modal-btn2");
+    btn2.onclick = function() {
+        $('.ui.modal.2').modal({
+            onShow: function(){
+                console.log('shown');
+            },
+            onHide: function(){
+                console.log('hidden');
+            }
+        }).modal('show');
+    }
+    
+    $('.ui.checkbox')
+        .checkbox()
+    ;
     //workaround for a Semantic UI bug where modal buttons don't close the modal. Credit: GitHub user hammy2899, Source: https://github.com/Semantic-Org/Semantic-UI/issues/6540
     $('.ui.modal.1')
       .modal('attach events', '.close.button.1')
-    ; 
+    ;  
+    $('.ui.modal.2')
+      .modal('attach events', '.close.button.2')
+    ;  
     
     //display client date time at top of page
-    document.querySelector("h2").innerHTML = moment().format("MMMM Do, YYYY");
+    document.querySelector("h2").innerHTML = "New Entry: " + moment().format("MMMM Do, YYYY");
     
     var finalizeDates = function() {
         var e = moment().format("D MMM YYYY, h:mm a");
@@ -124,8 +206,8 @@
             i-- || (clearInterval(timer), callback());
         }, 1000);
     }
-
-    function startTimer() {
+    
+    $("#play").on("click", function(){
         pause.style.display = "inline";
         play.style.display = "none";
         countDown(disp1.value * 60 + disp2.value * 1, function(){ // *1 is to convert data type from string to number
@@ -133,19 +215,6 @@
             pause.style.display = "none";
             play.style.display = "inline";
         });
-    }
-    
-    $("#play").on("click", function(){
-        startTimer();
-    });
-    
-    var buh = 0;
-    
-    $("#entrybox").on("input", function() {
-        if (buh === 0) {
-            startTimer();
-            buh = 1;
-        }
     });
     
     $("#pause").click(function(){

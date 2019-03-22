@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Write Now</title>
+    <title>Freely</title>
     <link rel="stylesheet" type ="text/css" href="/semantic/dist/semantic.min.css">
     <link rel="stylesheet" type="text/css" href="/stylesheets/app.css">
     <link href="https://fonts.googleapis.com/css?family=Cutive+Mono" rel="stylesheet">
@@ -9,18 +9,16 @@
     <script src="/semantic/dist/semantic.min.js"></script>
 </head>
 <body>
-    <div class="ui top fixed inverted borderless menu" id="top-bar">
-        <a href="/"><h3 class="ui header item" id="site-title">Write Now</h3></a>
+    <div class="ui top fixed borderless menu">
+        <a href="/"><h3 class="ui header item" id="site-title">Freely</h3></a>
         <div class="right menu">
             <% if (!currentUser) { %>
                 <!--<a href="/about" class="item">About</a>-->
             <% } else { %>
-                <% if (currentUser.isAdmin) { %>
-                    <a id="no-darken" class="item">Welcome, admin user <%= currentUser.username %></a>
-                    <a href="/quotes" class="item">Quotes</a>
-                <% } %>
-                <a href="/home" class="item">Home</a>
-                <a href="/data" class="item">Metadata</a>
+                <div class="item">
+                    <a href="/entries/new" class="ui green button">New Entry</a>
+                </div>
+                <a href="/entries" class="item">Past Entries</a>
                 <a href="/account" class="item">Account</a>
                 <a href="/logout" class="item">Logout</a>
             <% } %>
