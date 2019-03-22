@@ -33,6 +33,8 @@ body {
     font-family: monospace;
     line-height: 175%;
     height: 35em;
+    background-color: transparent;
+    color: white;
 }
 
 #tags {
@@ -44,34 +46,12 @@ body {
     float: left;
 }
 
-#jumbotron {
-    padding: 15em;
-    margin: 0;
-    border-radius: 0;
-    background: url(/images/stock-typing2.jpeg) no-repeat center center fixed;
-    background-size: cover;
-}
-
-#jumbotron .ui {
-    z-index: 5;
-}
-
-#ten-padded {
-    padding: 10rem;
-    margin: 0;
-}
-
 #splash-content {
     margin-top: 20%;
 }
 
 #site-title {
     font-family: 'Cutive Mono', monospace;
-}
-
-#jumbotron #site-title {
-    font-weight: 500;
-    font-size: 3em;
 }
 
 #site-title {
@@ -105,27 +85,24 @@ body {
 .entrybody {
     font-family: monospace;
     font-size: 1rem;
+    color: white;
 }
 
 .spacer {
-    height: 10%;
+    height: 7em;
 }
 
 p {
     line-height: 175%;
 }
 
-.timer-close:hover, .timer-on:hover {
+a:hover {
     cursor: pointer;
 }
 
-.lander-text {
-    font-size: 1.3em;
-}
-
-.message.lander-padded, .lander-padded {
-    padding-top: 4em;
-    padding-bottom: 4em;
+.timer-on, .timer-close, .modal-btn {
+    display: inline-block;
+    margin-bottom: .6em;
 }
 
 .big-anchor {
@@ -148,4 +125,121 @@ p {
 
 #darkborder { /*do this in the semantic master styles later*/
     border-color: #aaaaaa;
+}
+
+.value i {
+    display: inline-block;
+    position: relative;
+    padding-left: .2em;
+    top: -.15em;
+}
+
+#no-darken:hover {
+    background-color: transparent;
+    cursor: default;
+}
+
+.authorsource{
+    float: right;
+    padding: .6em;
+}
+
+.index {
+    font-size: .9em;
+    color: lightblue;
+    padding: 0 0.35em;
+    border: 1px solid lightblue;
+    border-radius: .3em;
+}
+
+.quote {
+    font-size: 1.5em;
+}
+
+.huge.orange.statistic {
+    clear: both;
+}
+
+#largelad {
+    height: 2em;
+}
+
+.chart.column {
+    height: 12em;
+}
+
+.chart-label {
+    display: inline-block;
+    padding: 0.2em;
+    color: white;
+}
+
+body {
+    background: #333333 url(/images/mountains-bg-1.jpg) no-repeat center center fixed;
+    background-size: cover;
+}
+
+body:after {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.ui.basic.segment {
+    background-color: transparent;
+    /*rgba(0, 0, 0, .7)*/
+    border-radius: .4em;
+}
+
+#stats-container {
+    position: absolute;
+    bottom: 5%;
+    width: 100%
+}
+
+#home-center {
+    position: absolute;
+    top: 48%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#quote-container {
+    position: absolute;
+    top: 23%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#top-bar {
+    background-color: transparent;
+}
+
+a {
+    color: white;
+}
+
+a:hover {
+    color: white;
+}
+
+.typewriter {
+    font-family: 'Cutive Mono', monospace;
+}
+
+#property1, #property2, #property3 {
+    background-color: black;
+}
+
+#property1 > * {
+    color: lightblue;
+}
+
+#property2 > * {
+    color: red;
+}
+
+#property3 > * {
+    color: white;
 }

@@ -1,59 +1,133 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Freely</title>
-    <link rel="stylesheet" type="text/css" href="/stylesheets/app.css">
+    <title>Write Now</title>
     <link rel="stylesheet" href="/semantic/dist/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/app.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/landing.css">
     <link href="https://fonts.googleapis.com/css?family=Cutive+Mono" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="/semantic/dist/semantic.min.js"></script>
 </head>
 <body>
     <div class="ui basic center aligned inverted segment" id="jumbotron"> <!--Sometimes I question my choice of going with Semantic instead of Bootstrap...-->
-        <h1 class="ui header" id="site-title">Freely</h1>
-        <h3 class="ui header">Daily freewriting for a better life.</h3>
+        <h1 class="ui header" id="site-title">Write Now</h1>
+        <!--<h3 class="ui header">Daily stream-of-consciousness writing for a more mindful life.</h3>-->
         <div class="ui hidden divider"></div>
         <a href="/register" class="ui huge primary button">Sign up for free<i class="ui right arrow icon"></i></a><br>
         <% if (!currentUser) { %>
             <a href="/login" class="ui secondary button">Log In</a>
         <% } else { %>
-            <a href="/entries/new" class="ui secondary button">Log In</a>
+            <a href="/home" class="ui secondary button">Log In</a>
         <% } %>
     </div>
     <div class="ui lander-padded container">
         <div class="ui hidden divider"></div>
-        <div class="ui center aligned very padded raised segment">
-            <h2 class="ui header"><em>Producing writing is not so much like filling a basin or pool once, but rather getting water to keep flowing through till finally it runs clear.</em></h2>
-            <p class="ui right floated small header">-Peter Elbow, <i>freewriting pioneer</i></p>
+        <div class="ui center aligned very padded basic segment">
+            <h2 class="ui header" id="summary">Daily meditative writing is good for the mind and the soul. Write Now helps you stay motivated and provides you with insightful analysis of your writing, so that you can start to enjoy writing every day and achieve a more mindful life.</h2>
         </div>
     </div>
-
-    <div class="ui basic segment">
-        <div class="ui stackable grid container">
-          <div class="row">
-            <div class="six wide column">
-                <div class="ui very padded basic segment">
-                    <h2 class="ui header">Freely encourages you to freewrite every day.</h2>
-                    <p class="landing-p">Research shows that daily freewriting can help the mind calm down, process emotions and boost creativity. Writer Julia Cameron is known for her advocacy of doing three pages of stream-of-consciousness writing every morning. Freely is the perfect online platform for you to start and maintain a daily writing habit.</p>
+    
+    <div class="black lander-padded container">
+        <div class="ui container mission">
+            <h1 class="ui center aligned inverted header" id="mission">Writing down your thoughts in an unstructured way every day is a powerful way to find peace, happiness, and mental clarity.</h1>
+        </div>
+        
+        <div class="ui hidden divider"></div>
+        
+        <h4 class="ui horizontal green inverted header divider">
+            The Evidence
+        </h4>
+        <div class="ui lander-padded container">
+            <div class="ui three column stackable grid">
+                <div class="column">
+                    <div class="ui inverted segment">
+                        <h2 class="ui center aligned header">Expressing our emotions helps us to control them.</h2>
+                        <p class="landing-p">A 2007 UCLA study focused on the reaction of the amygdala, the brain’s alarm system, when participants were shown pictures of angry or fearful faces. Some were asked to describe each face’s emotion as it appeared, and others simply observed. Their brain activity was studied using fMRI. <strong>Participants who described what they were observing showed a decreased fear response.</strong></p>
+                        <p class="landing-p">Labelling emotions also activated a part of the brain associated with emotion processing and self-inhibition.</p>
+                        <a href="https://www.sciencedaily.com/releases/2007/06/070622090727.htm" target="_blank">University of California - Los Angeles. "Putting Feelings Into Words Produces Therapeutic Effects In The Brain." ScienceDaily. ScienceDaily, 22 June 2007. <www.sciencedaily.com/releases/2007/06/070622090727.htm>.</a>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="ui inverted segment">
+                        <h2 class="ui center aligned header">Writing can help us recover from difficult events.</h2>
+                        <p class="landing-p">
+                            In 1991, an experiment was conducted involving 41 people who were recently laid off. They were divided into three groups- one was not given special instructions; one was instructed to write about their day; and a third was asked to write about their deepest thoughts and emotions surrounding the job loss and their job search. The third group showed mich higher job placement rates compared to the other two after eight months.
+                        </p>
+                        <a href="https://www.jstor.org/stable/256708" target="_blank">Spera, Stefanie P., et al. “Expressive Writing and Coping with Job Loss.” The Academy of Management Journal, vol. 37, no. 3, 1994, pp. 722–733. JSTOR, www.jstor.org/stable/256708.</a>
+                      </div>
+                </div>
+                <div class="column">
+                    <div class="ui inverted segment">
+                        <h2 class="ui center aligned header">Writing cn improve overall health.</h2>
+                        <p class="landing-p">
+                            Another experiment had participants engage in 15-minute writing sessions for three days. Those who wrote about emotional or traumatic experiences reported that although the writing may have been distressing, they considered the experience very valuable and would do it again. These participants also exhibited increases in mental and physical health.
+                        </p>
+                        <a href="http://search.ebscohost.com/login.aspx?direct=true&db=mdc&AN=11045774&site=ehost-live" target="_blank">Pennebaker, J. W., and J. D. Seagal. “Forming a Story: The Health Benefits of Narrative.” Journal Of Clinical Psychology, vol. 55, no. 10, Oct. 1999, pp. 1243–1254. EBSCOhost, search.ebscohost.com/login.aspx?direct=true&db=mdc&AN=11045774&site=ehost-live.</a>
+                    </div>
                 </div>
             </div>
-            <div class="ten wide column">
-              <!--<img alt="Cool video explaining the product will go here" class="ui large bordered rounded image" style="display: block; width: 100%; height: 15em">-->
-              <img src="/images/streak-showcase.png" alt="Streak notification showing the writer they've written for 23 consecutive days" class="ui massive bordered image" id="darkborder">
-              <h3 class="ui center aligned header">Write every day to build streaks and keep the momentum going.</h3>
-              <div class="ui stackable grid">
-                  <div class="eight wide column">
-                      <img src="/images/tagshelp1.png" class="ui large bordered image" id="darkborder">
-                  </div>
-                  <div class="eight wide column">
-                      <img src="/images/tagshelp2.png" class="ui large bordered image" id="darkborder">
-                  </div>
-              </div>
-              <h3 class="ui center aligned header">Organize past entries with tags.</h3>
+            <div class="ui inverted center aligned segment">
+                <h3 class="ui inverted header">
+                    Numerous other studies have affirmed the ability of personal and emotional writing to improve long-term mood and even physical health. 
+                </h3>
             </div>
-          </div>
+        </div>
+        <div class="ui hidden divider"></div>
+    </div>
+    
+    <div class="ui lander-padded center aligned stripe container">
+        <h1 class="ui center aligned header" id="thiccy">Not just another journaling app</h1>
+        <div class="ui hidden divider"></div>
+        <p class="landing-p"><i>Write Now</i> views writing as a daily mindfulness exercise- a form of meditation. For this reason, your entries aren't saved after you write them. This is on purpose! The focus here isn't to create something beautiful that you'll look back on- it's about using writing to vent, rant, get something off your chest, and clear your head.</p>
+        <!--You can still look back and track metadata from past entries- things like how you were feeling and what you were thinking about. -->
+    </div>
+
+    <div class="ui lander-padded container">
+        <h1 class="ui center aligned header"><i>Write Now</i> has lots of cool features that make writing <br> interesting and enjoyable.</h1>
+        <div class="ui basic segment">
+            <div class="ui hidden divider"></div>
+            <div class="ui stackable very realaxed grid container">
+                <div class="row">
+                    <div class="six wide column">
+                        <h3 class="ui center aligned header">Beautiful, minimalist UI with inspiring daily quotes</h3>
+                    </div>
+                    <div class="ten wide column">
+                        <img src="/images/ui-showcase.png" alt="A streak" class="ui fluid image" id="darkborder">
+                    </div>
+                </div>
+                <div class="row"><div class="spacer"></div></div>
+                <div class="row">
+                    <div class="eight wide column">
+                        <h3 class="ui center aligned header">Write every day to build a streak and keep the momentum going.</h3>
+                    </div>
+                    <div class="eight wide column">
+                        <img src="/images/streak-showcase.png" alt="A streak" class="ui fluid image" id="darkborder">
+                    </div>
+                </div>
+                <div class="row"><div class="spacer"></div></div>
+                <div class="row">
+                    <div class="six wide column">
+                        <h3 class="ui center aligned header">Analyze your writing with metadata displayed after every writing session.</h3>
+                    </div>
+                    <div class="ten wide column">
+                        <img src="/images/metadata-showcase.png" alt="A streak" class="ui fluid image" id="darkborder">
+                    </div>
+                </div>
+                <div class="row"><div class="spacer"></div></div>
+                <div class="row">
+                    <div class="six wide column">
+                        <h3 class="ui center aligned header">View and compare metadata over time to  reveal fascinating insights.</h3>
+                    </div>
+                    <div class="ten wide column">
+                        <img src="/images/metadatapage-showcase.png" alt="A streak" class="ui fluid image" id="darkborder">
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    
+    <!--Testimonials will go here, if we ever get any :P-->
     <!--<div class="ui vertical stripe quote segment">-->
     <!--    <div class="ui equal width stackable internally celled grid">-->
     <!--      <div class="center aligned row">-->
@@ -70,26 +144,11 @@
     <!--      </div>-->
     <!--    </div>-->
     <!--  </div>-->
-    
-        <h4 class="ui horizontal header divider">
-            <a href="#">The Evidence</a>
-        </h4>
-        <div class="ui lander-padded text container">
-              <h2 class="ui header">Case study: expressing emotions leads to a calmer mind and healthier emotions</h2>
-              <p class="landing-p">A 2007 UCLA study focused on the reaction of the amygdala, the brain’s alarm system, when participants were shown pictures of angry or fearful faces. Participants described each face’s emotion as it appeared, and their brain activity was studied using fMRI. Matthew D. Lieberman, associate professor of psychology at UCLA: “When you attach the word 'angry,' you see a decreased response in the amygdala”.</p>
-              <p class="landing-p">Labelling emotions also activated a part of the brain associated with emotion processing and self-inhibition. These results have practical application when it comes to emotional health. Lieberman continues, <strong>"When you put feelings into words, you seem to be hitting the brakes on your emotional responses… Putting our feelings into words helps us heal.”</strong> (UCLA).</p>
-        </div>
-    
-    <!--<div class="ui huge message lander-padded">-->
-    <!--    <div class="ui hidden divider"></div>-->
-    <!--    <div class="ui center aligned container">-->
-    <!--        <p class="">Research shows that freewriting has several benefits:</p>-->
-    <!--    </div>-->
-    <!--</div>-->
+
     <div class="ui center aligned inverted stackable middle aligned grid segment" id="ten-padded">
         <div class="ten wide column">
-            <h2 class="ui inverted header">Start your freewriting journey now.</h2>
-            <p>Signing up while the app is in beta means your account is free, forever. No ads, no restrictions. <br>Thank you for believing in this project.</p>
+            <h2 class="ui inverted header">Start your writing journey now.</h2>
+            <p>Signing up while the app is in beta means your account is free, forever. No ads, no restrictions. <br>Thank you for believing in Write Now.</p>
         </div>
         <div class="ui six wide column inverted left aligned segment">
             <div class="ui container">
@@ -126,13 +185,12 @@
                 <div class="ui left floated field">
                     <div class="ui checkbox">
                         <input type="checkbox" name="terms">
-                        <label>I agree to the <a href="/terms" target="_blank">terms and conditions</a></label>
+                        <label>I agree to the <a href="/terms" target="_blank"><u>terms and conditions</u></a></label>
                     </div>
                     <button class="ui right floated primary button">Sign Up</button>
                 </div>
                 <div class="ui error message"></div>
                 <div class="ui hidden divider"></div>
-                <p style="color: red; text-align: center">This site is currently in beta. Please read the terms and conditions carefully before signing up.</p>
             </form>
         </div>
     </div>

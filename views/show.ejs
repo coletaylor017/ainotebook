@@ -1,28 +1,151 @@
 <% include partials/header %>
 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+<link rel="stylesheet" type="text/css" href="/stylesheets/chartistCustom.css">
+<script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+
+<div class="spacer"></div>
+
 <div class="ui text container center aligned main">
     
-    <h2 class="ui header"></h2>
+    <!--<h2 class="ui inverted header"></h2>-->
     
-    <div class="ui left aligned container">
-        <!--<h3 class="entry-title"><%= entry.title %></h3>-->
+    <div class="ui left aligned inverted container">
         <div class="ui horizontal list">
-            <h4 class="ui item header"><%= moment(entry.date).format("D MMM YYYY, h:mm a") %></h4>
+            <h4 class="ui inverted item header"><%= moment(entry.date).format("D MMM YYYY, h:mm a") %></h4>
             <% entry.tags.forEach(function(tag) { %>
                 <h4 class="ui item label" id="tags">
                     <%= tag.name %>
                 </h4>
             <% }); %>
-            <!--<h4 class="ui item label" id="tags"><%= entry.metadata %></h4>-->
         </div>
         <p class="entrybody"><%= entry.body %></p>
-        <a href="/entries" class="ui basic icon button" title="Back"><i class="ui arrow left icon"></i></a>
-        <a href="/entries/<%= entry._id %>/edit" class="ui basic button" title="Edit"><i class="ui edit icon"></i>edit</a>
-        <form action="/entries/<%= entry._id %>?_method=DELETE" method="POST" class="inline">
-            <button action="submit" class="ui basic button trash" title="Delete"><i class="ui trash icon"></i>delete</button>
-        </form>
-        <!--<a href="/entries/<%= entry._id %>/edit">Edit</a>-->
     </div>
+    
+    <h2 class="ui inverted header">Metadata</h2>
+    <div class="ui divider"></div>
+    <div class="ui doubling stackable grid">
+        <div class="two column row">
+            <div class="chart column" style="position: relative">
+                <div class="ct-chart ct-square" id="chart1"></div>
+                <span class="chart-label"><i class="a2 ui square icon"></i>Order</span>
+                <span class="chart-label"><i class="a1 ui square icon"></i>Chaos</span>
+            </div>
+            <div class="chart column" style="position: relative">
+                <div class="ct-chart ct-square" id="chart2"></div>
+                <span class="chart-label"><i class="b1 ui square icon"></i>Sight</span>
+                <span class="chart-label"><i class="b2 ui square icon"></i>Sound</span>
+                <span class="chart-label"><i class="b3 ui square icon"></i>Smell</span>
+                <span class="chart-label"><i class="b4 ui square icon"></i>Taste</span>
+                <span class="chart-label"><i class="b5 ui square icon"></i>Touch</span>
+            </div>
+        </div>
+        <div class="two column row">
+            <div class="chart column" style="position: relative">
+                <div class="ct-chart ct-square" id="chart3"></div>
+                <span class="chart-label"><i class="c1 ui square icon"></i>Positivity</span>
+                <span class="chart-label"><i class="c2 ui square icon"></i>Anxiety</span>
+                <span class="chart-label"><i class="c3 ui square icon"></i>Sadness</span>
+                <span class="chart-label"><i class="c4 ui square icon"></i>Affection</span>
+                <span class="chart-label"><i class="c5 ui square icon"></i>Aggression</span>
+            </div>
+            <div class="chart column" style="position: relative">
+                <div class="ct-chart ct-square" id="chart4"></div>
+                <span class="chart-label"><i class="d2 ui square icon"></i>Abstract</span>
+                <span class="chart-label"><i class="d1 ui square icon"></i>Concrete</span>
+            </div>
+        </div>
+        <div class="one column row">
+            <div class="chart column" style="position: relative">
+                <div class="ct-chart ct-square" id="chart5"></div>
+                <span class="chart-label"><i class="e2 ui square icon"></i>Work</span>
+                <span class="chart-label"><i class="e1 ui square icon"></i>Social</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="spacer"></div>
+    
+    <a href="/home" class="ui green button" title="Home"><i class="ui home icon"></i>Home</a>
 </div>
+
+<script>
+
+var data = <%-JSON.stringify(rid)%>;
+
+var options = {
+    labelOffset: 50,
+    labelDirection: 'explode',
+    chartPadding: 20
+}
+
+new Chartist.Pie('#chart1', {
+    labels: [
+        'chaos',
+        'order'
+    ],
+    series: [
+        data.CHAOS,
+        data.ORDER
+    ]
+}, options);
+
+new Chartist.Pie('#chart2', {
+    labels: [
+        'sight',
+        'sound',
+        'smell',
+        'taste',
+        'touch'
+    ],
+    series: [
+        data.VISION,
+        data.SOUND,
+        data.ODOR,
+        data.TASTE,
+        data.TOUCH
+    ]
+}, options);
+
+new Chartist.Pie('#chart3', {
+    labels: [
+        'positivity',
+        'anxiety',
+        'sadness',
+        'affection',
+        'aggression'
+    ],
+    series: [
+        data.POSITIVE_AFFECT,
+        data.ANXIETY,
+        data.SADNESS,
+        data.AFFECTION,
+        data.AGGRESSION
+    ]
+}, options);
+
+new Chartist.Pie('#chart4', {
+    labels: [
+        'concrete',
+        'abstract'
+    ],
+    series: [
+        data.CONCRETENESS,
+        data.ABSTRACT_THOUGHT
+    ]
+}, options);
+
+new Chartist.Pie('#chart5', {
+    labels: [
+        'social',
+        'work'
+    ],
+    series: [
+        data.SOCIAL_BEHAVIOR,
+        data.INSTRU_BEHAVIOR
+    ]
+}, options);
+
+</script>
 
 <% include partials/footer %>
