@@ -38,7 +38,7 @@ body {
 }
 
 #tags {
-    padding: .25em;
+    padding: .3em;
 }
 
 .index-left {
@@ -78,7 +78,6 @@ body {
 .entry-preview {
     font-family: monospace;
     font-size: .8em;
-    color: black;
     padding-bottom: 1rem;
 }
 
@@ -242,4 +241,14 @@ a:hover {
 
 #property3 > * {
     color: white;
+}
+
+#tagbox {
+    background-color: transparent;
+    color: white;
+    border: none;
+}
+
+#transparent {
+    background: transparent;
 }
