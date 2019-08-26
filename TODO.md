@@ -1,4 +1,5 @@
 **ADD TIMEZONE ON USER DOCUMENT AND MAKE DROPDOWN ON SETTINGS PAGE**
+*Remember, sudo mongod service start
 
 TODO!
 
