@@ -77,6 +77,6 @@ app.use("/entries", entryRoutes);
 app.use("/tags", tagRoutes);
 app.use("/quotes", quoteRoutes);
 
-app.listen(process.env.PORT, function() {
+app.listen(8080, function() {
     console.log("Server is now running");
 });
