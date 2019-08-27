@@ -3,6 +3,8 @@
 
 TODO!
 
+FIRST PRIORITY: Make middleware that checks if any tags refer to zero entries, then deletes them. 
+
 -In general: Focus on DB optimization and CSS simplicity. Fewer IDs especially. Start messing around with Semantic settings more. 
 
 -change 'green button' to 'primary button'
