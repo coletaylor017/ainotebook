@@ -10,7 +10,7 @@ var router = express.Router();
 
 
 //index
-router.get("/", middleware.isLoggedIn, function(req, res) {
+router.get("/", middleware.isLoggedIn, middleware.deleteDeadTags, function(req, res) {
     Tag.find({"user.id": req.user._id}, function(err, tags) {
         if (err) {
             console.log(err);

@@ -1,6 +1,7 @@
 var Global    = require("../models/global"),
     Quote     = require("../models/quote"),
     User      = require("../models/user"),
+    Tag       = require("../models/tag")
     moment    = require("moment"),
     mongoose  = require("mongoose");
 
@@ -11,6 +12,23 @@ var middlewareObj = {
         }
         req.flash("error", "Please log in first");
         res.redirect("/login");
+    },
+    deleteDeadTags: function(req, res, next) {
+        // Tags.find(err, function(err, allTags) {
+        //     allTags.forEach(function(tag) {
+        //         // console.log("this tag's value: ", tag.entries)
+        //         if (tag.entries.length = 0) {
+
+        //         }
+        //     });
+        // });
+        Tag.deleteMany( { entries: { $size: 0 } }, function(err) {
+            if (err) {
+                console.log(err);
+            } else {
+                return next();
+            }
+        });
     },
     isAdmin: function(req, res, next) {
         User.find({"username": req.user.username}, function(err, user) {
@@ -52,6 +70,7 @@ var middlewareObj = {
                                 if (err) {
                                     console.log(err);
                                 } else {
+                                    console.log("candidates: ", candidates);
                                     var luckyWinner = Math.floor(Math.random()*candidates.length);
                                     var winnerId = candidates[luckyWinner]._id;
                                     console.log(luckyWinner, winnerId);
