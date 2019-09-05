@@ -31,7 +31,7 @@ app.locals.moment = require('moment');
 
 Global.create({
     currentQuote: "5d640d02ca1e1f1050316805"
-});
+});1
 
 // From arcseldon on https://stackoverflow.com/questions/7185074/heroku-nodejs-http-to-https-ssl-forced-redirect
 

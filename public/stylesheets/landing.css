@@ -36,7 +36,12 @@ body {
 
 #jumbotron #site-title {
     font-weight: 500;
-    font-size: 3em;
+    font-size: 3.3em;
+    /* margin: 0; */
+}
+
+#site-subtitle {
+    margin: 0;
 }
 
 #jumbotron {
