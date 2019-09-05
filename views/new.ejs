@@ -28,19 +28,24 @@
     <form onsubmit="finalizeDates()" action="/entries" method="POST" class="ui form">
         <input id="streak-date" style="display: none" name="streakDate">
         <input id="date-input" style="display: none" name="entry[date]">
-        <input style="display: none" type="text" name="tags" value="">
         <div class="ui field">
             <textarea id="entrybox" rows="10" name="entry[body]" placeholder="Start writing" id="transparent" autofocus></textarea>
         </div>
+        <div class="ui field">
+            <div class="ui labeled input" id="tagbox">
+                <label class="ui label" id="tagbox"><i class="ui question circle outline link icon modal-btn-2"></i>Optional: Add tags</label>
+                <input type="text" name="tags" placeholder="Write some tags. '#' is not necessary" class="ui inverted" id="transparent">
+            </div>
+        </div>
         <a href="/home" class="ui icon button" title="Cancel"><!--<i class="ui left arrow icon">-->Cancel</i></a>
-        <button class="ui green button" type="submit" title="Save!"><i class="ui check icon"></i>Done for today</button>
+        <button class="ui green button" type="submit" title="Save!"><i class="ui check icon"></i>Done</button>
     </form>
     
 <div class="ui large modal 1">
     <div class="header">Help</div>
     <div class="ui content">
         <div class="ui bulleted list">
-            <div class="item">After submitting, your entry will disappear. This is on purpose! Freewriting isn't something to treasure and look back on; rather, it's all about writing for the sake of writing.</div>
+            <!--<div class="item">After submitting, your entry will disappear. This is on purpose! Freewriting isn't something to treasure and look back on; rather, it's all about writing for the sake of writing.</div>-->
             <div class="item">Write whatever comes to mind. It doesn't have to make any sense!</div>
             <div class="item">Pick a time, ideally 20-30 minutes, and don't stop or pause before the time is up</div>
             <div class="item">If you don't know what to write, write "I don't know what to write" until you do.</div>
@@ -52,11 +57,75 @@
 </div>
 </div>
 
-<script>
+<div class="ui large modal 2">
+    <div class="header">Help: Tags</div>
+    <div class="ui items">
+        <div class="item">
+            <div class="ui image">
+                <div class="ui large bordered image">
+                    <img src="/images/tagshelp1.png">
+                </div>
+            </div>
+            <div class="middle aligned content">
+                <p>Use tags to categorize entries. For example, you could tag every entry that talks about dogs with 'dogs'.</p>
+            </div>
+        </div>
+        <div class="item">
+            <div class="ui image">
+                <div class="ui large bordered image">
+                    <img src="/images/tagshelp2.png">
+                </div>
+            </div>
+            <div class="middle aligned content">
+                <p>Your tags will show up on the entries page.</p>
+            </div>
+        </div>
+        <div class="item">
+            <div class="ui image">
+                <div class="ui large bordered image">
+                    <img src="/images/tagshelp3.png">
+                </div>
+            </div>
+            <div class="middle aligned content">
+                <p>Clicking on a tag will show you all the entries that reference that tag.</p>
+            </div>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui close button 2">Got it</div>
+    </div>
+</div>
 
+<script>
+    
+    var tagArr = <%- JSON.stringify(tags) %>;
+    var input = document.querySelector("input[name=tags]");
+    // init Tagify script on the above inputs
+    tagify = new Tagify(input, {
+        delimiters          : ",| ",  // add new tags when a comma or a space character
+        keepInvalidTags     : false,  // do not remove invalid tags (but keep them marked as invalid)
+        whitelist: tagArr,
+        dropdown : {
+            enabled: 3,
+            maxItems: 5
+        }
+    });
+    
     var btn = document.querySelector(".modal-btn");
     btn.onclick = function() {
         $('.ui.modal.1').modal({
+            onShow: function(){
+                console.log('shown');
+            },
+            onHide: function(){
+                console.log('hidden');
+            }
+        }).modal('show');
+    }
+    
+    var btn2 = document.querySelector(".modal-btn-2");
+    btn2.onclick = function() {
+        $('.ui.modal.2').modal({
             onShow: function(){
                 console.log('shown');
             },
@@ -69,7 +138,10 @@
     //workaround for a Semantic UI bug where modal buttons don't close the modal. Credit: GitHub user hammy2899, Source: https://github.com/Semantic-Org/Semantic-UI/issues/6540
     $('.ui.modal.1')
       .modal('attach events', '.close.button.1')
-    ; 
+    ;  
+    $('.ui.modal.2')
+      .modal('attach events', '.close.button.2')
+    ;
     
     //display client date time at top of page
     document.querySelector("h2").innerHTML = moment().format("MMMM Do, YYYY");

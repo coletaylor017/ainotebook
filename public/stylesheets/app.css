@@ -38,7 +38,7 @@ body {
 }
 
 #tags {
-    padding: .25em;
+    padding: .3em;
 }
 
 .index-left {
@@ -48,10 +48,6 @@ body {
 
 #splash-content {
     margin-top: 20%;
-}
-
-#site-title {
-    font-family: 'Cutive Mono', monospace;
 }
 
 #site-title {
@@ -78,7 +74,6 @@ body {
 .entry-preview {
     font-family: monospace;
     font-size: .8em;
-    color: black;
     padding-bottom: 1rem;
 }
 
@@ -179,10 +174,10 @@ body {
     background-size: cover;
 }
 
-body:after {
+body:after { /* This doesn't work but I'm keeping it*/
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.7);
     z-index: 1;
 }
 
@@ -242,4 +237,14 @@ a:hover {
 
 #property3 > * {
     color: white;
+}
+
+#tagbox {
+    background-color: transparent;
+    color: white;
+    border: none;
+}
+
+#transparent {
+    background: transparent;
 }

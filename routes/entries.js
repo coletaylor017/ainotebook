@@ -10,7 +10,7 @@ var router = express.Router();
 
 
 //index
-router.get("/", middleware.isLoggedIn, function(req, res) {
+router.get("/", middleware.isLoggedIn, middleware.deleteDeadTags, function(req, res) {
     Tag.find({"user.id": req.user._id}, function(err, tags) {
         if (err) {
             console.log(err);
@@ -120,31 +120,31 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
                         } else {
                             var tags = JSON.parse(req.body.tags);
                             console.log("tags: ", tags);
-                            var tags2= [];
+                            var tagNames= [];
                             console.log("tags length: ", tags.length);
                             for (var i = 0; i < tags.length; i++) {
-                                tags2.push(tags[i].value);
+                                tagNames.push(tags[i].value);
                                 console.log("value of item ", i, "of tags: ", tags[i].value);
                             }
-                            console.log("tags2: ", tags2);
+                            console.log("tagNames: ", tagNames);
                             console.log("tags: ", tags);
-                            Tag.find({ "name": { $in: tags2 }, "user.id": req.user._id }, function(err, oldTags) {
+                            Tag.find({ "name": { $in: tagNames }, "user.id": req.user._id }, function(err, oldTags) {
                                 if (err) {
                                     console.log(err);
                                 } else {
                                     console.log("oldTags: ", oldTags);
-                                    var oldTags2 = [];
+                                    var oldTagNames = [];
                                     for (var i = 0; i < oldTags.length; i++) {
-                                        oldTags2.push(oldTags[i].name);
+                                        oldTagNames.push(oldTags[i].name);
                                         console.log("value of item ", i, "of oldTags: ", oldTags[i].name);
                                     }
-                                    console.log("oldTags2: ", oldTags2);
+                                    console.log("oldTagNames: ", oldTagNames);
                                     // https://stackoverflow.com/questions/1187518/how-to-get-the-difference-between-two-arrays-in-javascript
                                     Array.prototype.diff = function(a) {
                                         return this.filter(function(i) {return a.indexOf(i) < 0;});
                                     };
-                                    var filtered = tags2.diff(oldTags2); 
-                                    console.log("tags2, filtered (filtered): ", filtered);
+                                    var filtered = tagNames.diff(oldTagNames); 
+                                    console.log("tagNames, filtered (filtered): ", filtered);
                                     var newTagArr = [];
                                     filtered.forEach(function(tagVal) {
                                         var oid = mongoose.Types.ObjectId();
@@ -177,7 +177,7 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
                                                             console.log("results of updateOne(): ", results);
         // Welcome.... TO CALLBACK HELL!!!
                                                             Tag.updateMany(
-                                                                { "name": { $in: tags2 }, "user.id": req.user._id }, 
+                                                                { "name": { $in: tagNames }, "user.id": req.user._id }, 
                                                                 { $addToSet: { entries: entry } }, 
                                                                 function(err, results2) {
                                                                     if (err) {
@@ -239,7 +239,7 @@ router.put("/:id", middleware.isLoggedIn, function(req, res) {
         console.log("entry length: ", req.body.entry.body.length)
         if (req.body.entry.body.length === 0) {
             entry.body = " "; //Having it completely empty breaks the metadata display page. Something to do with ridict
-            entry.save(); //For some reason, MongoDB doesn't update the entry back to " " when user changes " " to "". This probably won't happen often if at all though. Also, editing isn't even available to users right now. So for now I won't waste time figuring it out.
+            entry.save(); //For some reason, MongoDB doesn't update the entry back to " " when user changes " " to "". This probably won't happen often if at all though.
             console.log("Running dat code");
         }
         if (err) {
@@ -251,82 +251,108 @@ router.put("/:id", middleware.isLoggedIn, function(req, res) {
                 console.log("req.body.tags: ", req.body.tags);
                 var tags = JSON.parse(req.body.tags);
                 console.log("tags: ", tags);
-                var tags2= [];
+                var tagNames= [];
                 console.log("tags length: ", tags.length);
                 for (var i = 0; i < tags.length; i++) {
-                    tags2.push(tags[i].value);
+                    tagNames.push(tags[i].value);
                     console.log("value of item ", i, "of tags: ", tags[i].value);
                 }
-                console.log("tags2: ", tags2);
+                console.log("tagNames: ", tagNames);
                 
                 console.log("ridict analysis: ", ridict.matches(entry.body));
                 
                 console.log("tags: ", tags);
-                Tag.find({ "name": { $in: tags2 }, "user.id": req.user._id }, function(err, oldTags) {
+                Tag.find({ "name": { $in: tagNames }, "user.id": req.user._id }, function(err, oldTags) {
                     if (err) {
                         console.log(err);
                     } else {
                         console.log("oldTags: ", oldTags);
-                        var oldTags2 = [];
+                        var oldTagNames = [];
                         for (var i = 0; i < oldTags.length; i++) {
-                            oldTags2.push(oldTags[i].name);
+                            oldTagNames.push(oldTags[i].name);
                             console.log("value of item ", i, "of oldTags: ", oldTags[i].name);
                         }
-                        console.log("oldTags2: ", oldTags2);
+                        console.log("oldTagNames: ", oldTagNames);
                         // https://stackoverflow.com/questions/1187518/how-to-get-the-difference-between-two-arrays-in-javascript
                         Array.prototype.diff = function(a) {
                             return this.filter(function(i) {return a.indexOf(i) < 0;});
                         };
-                        var filtered = tags2.diff(oldTags2); 
-                        console.log("tags2, filtered (filtered): ", filtered);
-                        var newTagArr = [];
-                        filtered.forEach(function(tagVal) {
-                            var oid = mongoose.Types.ObjectId();
-                            newTagArr.push({
-                                _id: oid,
-                                name: tagVal,
-                                user: {
-                                    id: req.user._id,
-                                    username: req.user.username
-                                },
-                                entries: []
-                            });
-                        });
-                        Tag.insertMany(newTagArr, function() {
-                            var tagsToPush = oldTags.concat(newTagArr);
-                            console.log("tagsToPush: ", tagsToPush);
-                            console.log("entry id: ", entry._id);
-                            Entry.findById(entry._id, function(err, foundEntry) {
-                                if (err) {
-                                    console.log(err);
-                                } else {
-                                    console.log("foundEntry: ", foundEntry);
-                                    Entry.findByIdAndUpdate(
-                                        entry._id,
-                                        { $addToSet: { tags: { $each: tagsToPush } } },
-                                        function(err, results) {
-                                            if (err) {
-                                                console.log(err);
-                                            } else {
-                                                console.log("results of updateOne(): ", results);
-    // Welcome.... TO CALLBACK HELL!!!
-                                                Tag.updateMany(
-                                                    { "name": { $in: tags2 }, "user.id": req.user._id }, 
-                                                    { $addToSet: { entries: entry } }, 
-                                                    function(err, results2) {
-                                                        if (err) {
-                                                            console.log(err);
-                                                        } else {
-                                                            console.log("results of updateMany(): ", results2);
-                                                            res.redirect("/entries");
-                                                        }
-                                                    }
-                                                );
-                                            }
-                                        }
-                                    );
+
+                        Tag.find( { "_id": { $in: entry.tags }, "user.id": req.user._id }, { name: 1, _id: 0 }, function(err, previousTags) {
+                            if (err) {
+                                console.log(err);
+                            } else {
+
+                                // Find all tags that must have this entry removed from their references
+                                console.log("PREVIOUS TAGS: ", previousTags);
+
+                                var previousTagNames = [];
+                                for (var i = 0; i < previousTags.length; i++) {
+                                    previousTagNames.push(previousTags[i].name);
+                                    console.log("value of item ", i, "of previousTags: ", previousTags[i].name);
                                 }
-                            });
+                                var tagsToUpdate = previousTagNames.diff(oldTagNames); 
+                                console.log("TAGS TO UPDATE: ", tagsToUpdate);
+
+                                Tag.updateMany( { name: { $in: previousTagNames } }, { $pull: { entries: entry._id } }, function(err) {
+                                    if (err) {
+                                        console.log(err);
+                                    } else {
+                                        var filtered = tagNames.diff(oldTagNames);
+
+                                        console.log("tagNames, filtered (filtered): ", filtered);
+                                        var newTagArr = [];
+                                        filtered.forEach(function(tagVal) {
+                                            var oid = mongoose.Types.ObjectId();
+                                            newTagArr.push({
+                                                _id: oid,
+                                                name: tagVal,
+                                                user: {
+                                                    id: req.user._id,
+                                                    username: req.user.username
+                                                },
+                                                entries: []
+                                            });
+                                        });
+                                        Tag.insertMany(newTagArr, function() {
+                                            var tagsToPush = oldTags.concat(newTagArr);
+                                            console.log("tagsToPush: ", tagsToPush);
+                                            console.log("entry id: ", entry._id);
+                                            Entry.findById(entry._id, function(err, foundEntry) {
+                                                if (err) {
+                                                    console.log(err);
+                                                } else {
+                                                    console.log("foundEntry: ", foundEntry);
+                                                    Entry.findByIdAndUpdate(
+                                                        entry._id,
+                                                        { $set: { tags: tagsToPush } },
+                                                        function(err, results) {
+                                                            if (err) {
+                                                                console.log(err);
+                                                            } else {
+                                                                console.log("results of updateOne(): ", results);
+                    // Welcome.... TO CALLBACK HELL!!!
+                                                                Tag.updateMany(
+                                                                    { "name": { $in: tagNames }, "user.id": req.user._id }, 
+                                                                    { $addToSet: { entries: entry } }, 
+                                                                    function(err, results2) {
+                                                                        if (err) {
+                                                                            console.log(err);
+                                                                        } else {
+                                                                            console.log("results of updateMany(): ", results2);
+                                                                            res.redirect("/entries");
+                                                                        }
+                                                                    }
+                                                                );
+                                                            }
+                                                        }
+                                                    );
+                                                }
+                                            });
+                                        });
+                                    }
+                                });
+                            }
                         });
                     }
                 });

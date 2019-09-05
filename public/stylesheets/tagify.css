@@ -6,7 +6,7 @@
     -webkit-flex-wrap: wrap;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    border: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
     padding: 0;
     cursor: text;
     position: relative;
@@ -141,14 +141,14 @@
     animation: .3s tags--bump 1 ease-out
 }
 
-.tagify tag:hover:not([readonly]) div::before {
-    top: -2px;
-    right: -2px;
-    bottom: -2px;
-    left: -2px;
-    -webkit-box-shadow: 0 0 0 16px #d3e2e2 inset;
-    box-shadow: 0 0 0 16px #d3e2e2 inset
-}
+/*.tagify tag:hover:not([readonly]) div::before {*/
+/*    top: -2px;*/
+/*    right: -2px;*/
+/*    bottom: -2px;*/
+/*    left: -2px;*/
+/*    -webkit-box-shadow: 0 0 0 16px #d3e2e2 inset;*/
+/*    box-shadow: 0 0 0 16px #d3e2e2 inset*/
+/*}*/
 
 .tagify tag.tagify--noAnim {
     -webkit-animation: none;
@@ -207,6 +207,7 @@
 .tagify tag x {
     font: 14px/16px Serif;
     width: 14px;
+    color: black;
     height: 14px;
     text-align: center;
     border-radius: 50px;
@@ -232,17 +233,17 @@
     background: #c77777
 }
 
-.tagify tag x:hover+div>span {
-    opacity: .5
-}
+/*.tagify tag x:hover+div>span {*/
+/*    opacity: .5*/
+/*}*/
 
-.tagify tag x:hover+div::before {
-    -webkit-box-shadow: 0 0 0 20px rgba(211,148,148,.3) inset!important;
-    box-shadow: 0 0 0 20px rgba(211,148,148,.3) inset!important;
-    -webkit-transition: .2s;
-    -o-transition: .2s;
-    transition: .2s
-}
+/*.tagify tag x:hover+div::before {*/
+/*    -webkit-box-shadow: 0 0 0 20px rgba(211,148,148,.3) inset!important;*/
+/*    box-shadow: 0 0 0 20px rgba(211,148,148,.3) inset!important;*/
+/*    -webkit-transition: .2s;*/
+/*    -o-transition: .2s;*/
+/*    transition: .2s*/
+/*}*/
 
 .tagify__input {
     /*min-width: 110px;*/
@@ -337,12 +338,12 @@
     bottom: -3px
 }
 
-.tagify__input tag:hover:not([readonly])>div::before {
-    top: -3px;
-    bottom: -3px;
-    left: 0;
-    right: 0
-}
+/*.tagify__input tag:hover:not([readonly])>div::before {*/
+/*    top: -3px;*/
+/*    bottom: -3px;*/
+/*    left: 0;*/
+/*    right: 0*/
+/*}*/
 
 .tagify--mix .tagify__input {
     padding: 5px;

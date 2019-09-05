@@ -2,7 +2,7 @@
 
 <div class="ui center aligned container main">
     <div>
-        <h1 class="ui header">Entries tagged "<%= tag.name %>"</h1>
+        <h1 class="ui inverted header">Entries tagged "<%= tag.name %>"</h1>
         <a class="big-anchor" href="/entries">Back to all entries</a>
         <form action="/tags/<%= tag._id %>?_method=DELETE" method="POST" class="inline">
             <button action="submit" class="ui basic red button" title="Delete">Delete tag</button>
@@ -13,25 +13,29 @@
     
 <div class="ui text container">
     <% if (tag.entries.length === 0) { %>
-        <p>No results were found.</p>
+        <h5 class="ui inverted header">No results were found.</h5>
     <% } else { %>
         <% tag.entries.reverse().forEach(function(entry) { %>
-            <a href="/entries/<%= entry._id %>">
-                <div class="ui horizontal list">
-                <h4 class="ui item header"><%= moment(entry.date).format("D MMM YYYY, h:mm a") %></h4>
-                <% entry.tags.forEach(function(entryTag) { %>
-                    <h4 class="ui item label" id="tags">
-                        <%= entryTag.name %>
-                    </h4>
-                <% }); %>
-                </div>
-                <p class="ui inverted entry-preview"><%= entry.body.substring(0,500) %></p>
-            </a>
-            <a href="/entries/<%= entry._id %>" class="ui basic icon button" title="View"><i class="ui eye icon"></i></a>
-            <form action="/entries/<%= entry._id %>?_method=DELETE" method="POST" class="inline">
-                <button action="submit" class="ui basic icon button trash" title="Delete"><i class="ui trash icon"></i></button>
-            </form>
-             <div class="ui hidden divider"></div>
+            <div class="ui inverted container">
+                <a href="/entries/<%= entry._id %>">
+                    <div class="ui horizontal list">
+                        <h4 class="ui inverted item header" class="date"><%= entry.date %></h4>
+                        <!--moment(entry.date).format("D MMM YYYY, h:mm a") -->
+                        <% entry.tags.forEach(function(tag) { %>
+                            <h4 class="ui item label" id="tags">
+                                <%= tag.name %>
+                            </h4>
+                        <% }); %>
+                    </div>
+                    <p class="ui inverted entry-preview"><%= entry.body.substring(0,500) %></p>
+                </a>
+                <a href="/entries/<%= entry._id %>" class="ui basic inverted button" title="View"><i class="ui eye icon"></i>view</a>
+                <a href="/entries/<%= entry._id %>/edit" class="ui basic inverted button" title="Edit"><i class="ui edit icon"></i>edit</a>
+                <form action="/entries/<%= entry._id %>?_method=DELETE" method="POST" class="inline">
+                    <button action="submit" class="ui basic inverted button trash" title="Delete"><i class="ui trash icon"></i>delete</button>
+                </form>
+                 <div class="ui hidden divider"></div>
+            </div>
         <% }); %>
     <% } %>
 </div>

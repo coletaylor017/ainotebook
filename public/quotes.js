@@ -15,7 +15,7 @@ var quotes = [
         source: "The 4-Hour Workweek"
     },
     {body: "What is next on your bucket list?"},
-    {body: "When was the last time you picked up a book?"},
+    {body: "When was the last time you read a book?"},
     {body: "Get rid of one thing you don't need today."},
     {body: "Gratitude is happiness."}
 ];

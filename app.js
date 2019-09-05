@@ -8,6 +8,7 @@ var methodOverride        = require("method-override"),
     moment                = require("moment"),
     flash                 = require("connect-flash"),
     User                  = require("./models/user"),
+    Global                = require("./models/global"),
     passport              = require("passport"),
     LocalStrategy         = require("passport-local"),
     passportLocalMongoose = require("passport-local-mongoose"),
@@ -20,7 +21,7 @@ var entryRoutes  = require("./routes/entries"),
     quoteRoutes  = require("./routes/quotes"),
     indexRoutes  = require("./routes/index");
 
-var url = process.env.DATABASEURL || "mongodb://localhost:27017/writing_blocks";
+var url = process.env.DATABASEURL || "mongodb://localhost:27017/writenow";
 mongoose.connect(url, {useNewUrlParser: true});
 
 var app = express();
@@ -28,6 +29,11 @@ app.set("view engine", "ejs");
 
 app.locals.moment = require('moment');
 
+// Global.create({
+//     currentQuote: "5d640d02ca1e1f1050316805"
+// });1
+
+// >>>>>>> develop
 // From arcseldon on https://stackoverflow.com/questions/7185074/heroku-nodejs-http-to-https-ssl-forced-redirect
 
 var forceSsl = function (req, res, next) {
@@ -77,6 +83,10 @@ app.use("/entries", entryRoutes);
 app.use("/tags", tagRoutes);
 app.use("/quotes", quoteRoutes);
 
+<<<<<<< HEAD
 app.listen(process.env.PORT, function() {
+=======
+app.listen(8080, function() {
+>>>>>>> develop
     console.log("Server is now running");
 });
