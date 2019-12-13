@@ -20,6 +20,8 @@
             <% }); %>
         </div>
         <p class="entrybody"><%= entry.body %></p>
+        <h1 class="ui inverted header">Watson data</h1>
+        <p><%- JSON.stringify(metadata) %></p>
     </div>
     
     <!-- <h2 class="ui inverted header">Metadata</h2>
@@ -71,80 +73,80 @@
 
 <script>
 
-var data = <%-JSON.stringify(rid)%>;
+// var data = <%-JSON.stringify(rid)%>;
 
-var options = {
-    labelOffset: 50,
-    labelDirection: 'explode',
-    chartPadding: 20
-}
+// var options = {
+//     labelOffset: 50,
+//     labelDirection: 'explode',
+//     chartPadding: 20
+// }
 
-new Chartist.Pie('#chart1', {
-    labels: [
-        'chaos',
-        'order'
-    ],
-    series: [
-        data.CHAOS,
-        data.ORDER
-    ]
-}, options);
+// new Chartist.Pie('#chart1', {
+//     labels: [
+//         'chaos',
+//         'order'
+//     ],
+//     series: [
+//         data.CHAOS,
+//         data.ORDER
+//     ]
+// }, options);
 
-new Chartist.Pie('#chart2', {
-    labels: [
-        'sight',
-        'sound',
-        'smell',
-        'taste',
-        'touch'
-    ],
-    series: [
-        data.VISION,
-        data.SOUND,
-        data.ODOR,
-        data.TASTE,
-        data.TOUCH
-    ]
-}, options);
+// new Chartist.Pie('#chart2', {
+//     labels: [
+//         'sight',
+//         'sound',
+//         'smell',
+//         'taste',
+//         'touch'
+//     ],
+//     series: [
+//         data.VISION,
+//         data.SOUND,
+//         data.ODOR,
+//         data.TASTE,
+//         data.TOUCH
+//     ]
+// }, options);
 
-new Chartist.Pie('#chart3', {
-    labels: [
-        'positivity',
-        'anxiety',
-        'sadness',
-        'affection',
-        'aggression'
-    ],
-    series: [
-        data.POSITIVE_AFFECT,
-        data.ANXIETY,
-        data.SADNESS,
-        data.AFFECTION,
-        data.AGGRESSION
-    ]
-}, options);
+// new Chartist.Pie('#chart3', {
+//     labels: [
+//         'positivity',
+//         'anxiety',
+//         'sadness',
+//         'affection',
+//         'aggression'
+//     ],
+//     series: [
+//         data.POSITIVE_AFFECT,
+//         data.ANXIETY,
+//         data.SADNESS,
+//         data.AFFECTION,
+//         data.AGGRESSION
+//     ]
+// }, options);
 
-new Chartist.Pie('#chart4', {
-    labels: [
-        'concrete',
-        'abstract'
-    ],
-    series: [
-        data.CONCRETENESS,
-        data.ABSTRACT_THOUGHT
-    ]
-}, options);
+// new Chartist.Pie('#chart4', {
+//     labels: [
+//         'concrete',
+//         'abstract'
+//     ],
+//     series: [
+//         data.CONCRETENESS,
+//         data.ABSTRACT_THOUGHT
+//     ]
+// }, options);
 
-new Chartist.Pie('#chart5', {
-    labels: [
-        'social',
-        'work'
-    ],
-    series: [
-        data.SOCIAL_BEHAVIOR,
-        data.INSTRU_BEHAVIOR
-    ]
-}, options);
+// new Chartist.Pie('#chart5', {
+//     labels: [
+//         'social',
+//         'work'
+//     ],
+//     series: [
+//         data.SOCIAL_BEHAVIOR,
+//         data.INSTRU_BEHAVIOR
+//     ]
+// }, options);
 
 </script>
 

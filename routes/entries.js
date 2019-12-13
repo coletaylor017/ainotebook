@@ -19,6 +19,18 @@ Array.prototype.diff = function (a) {
     return this.filter(function (i) { return a.indexOf(i) < 0; });
 };
 
+// initialize an object for dealing with Watson analysis
+const nlu = new nluV1({
+    version: "2019-07-12",
+    // username: process.env.USERNAME,
+    // password: process.env.PASSWORD,
+    iam_apikey: process.env.WATSON_API_KEY,
+    url: "https://gateway.watsonplatform.net/natural-language-understanding/api",
+    headers: {
+        "X-Watson-Learning-Opt-Out": "true"
+    }
+});
+
 /**=============================================================
  * 'GET' ROUTES
  * =============================================================
@@ -73,8 +85,8 @@ router.get("/:id", middleware.isLoggedIn, function (req, res) {
             if (err) {
                 handleErr(err);
             }
-            var rid = ridict.matches(entry.body); // replace with call to entry metadata property
-            res.render("show", { entry: entry, rid: rid });
+            var metadata = entry.metadata;
+            res.render("show", { entry: entry, metadata: metadata });
         });
 });
 
@@ -103,98 +115,112 @@ router.post("/search", middleware.isLoggedIn, function (req, res) {
 
 // create new entry
 router.post("/", middleware.isLoggedIn, function (req, res) {
-    try {
-        const user = req.user;
-        // trim the entry if it is all whtiespace
-        if (req.body.entry.body.trim().length === 0) {
-            res.flash("error", "Entry cannot be blank");
-            res.redirect("back");
+    const user = req.user;
+    // trim the entry if it is all whtiespace
+    if (req.body.entry.body.trim().length === 0) {
+        res.flash("error", "Entry cannot be blank");
+        res.redirect("back");
+    }
+    const analyzeParams = {
+        text: req.body.entry.body,
+        "features": {
+            "entities": {
+                "sentiment": true,
+                "emotion": true
+            }
         }
-        Entry.create({
-            body: req.body.entry.body,
-            date: req.body.entry.date,
-            author: {
-                id: req.user._id,
-                username: req.user.username
-            },
-            metadata: {
-                aiData: null
-            }
-        }, function (err, entry) {
-            if (err) {
-                handleErr(res, err);
-            }
-            var streakDate = req.body.streakDate.split(",");
-            var d1 = new Date(user.lastEntry[0], user.lastEntry[1], user.lastEntry[2]);
-            var d2 = new Date(streakDate[0], streakDate[1], streakDate[2]);
-            var diff = d2 - d1;
-            // convert ms to days
-            diff = diff / 86400000;
+    }
 
-            if (diff == 1 || user.streak == 0) {
-                user.streak++;
-            } else if (diff > 1) {
-                user.streak = 1;
-            }
+    nlu.analyze(analyzeParams, function (err, watsonResults) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(JSON.stringify(watsonResults, null, 4));
 
-            user.lastEntry = streakDate;
-            // add the new entry to the user's list
-            user.entries.push(entry);
-            user.save();
-
-            if (diff == 0) { // if they've already submitted an entry today
-                req.flash("success", "Entry submitted!");
-            } else {
-                if (user.streak > 1) {
-                    req.flash("success", "Nice job! You've written for " + user.streak + " consecutive days. Come back tomorrow to keep the streak going!");
-                } else {
-                    req.flash("success", "Nice job! Come back tomorrow to start building a streak!");
+            Entry.create({
+                body: req.body.entry.body,
+                date: req.body.entry.date,
+                author: {
+                    id: req.user._id,
+                    username: req.user.username
+                },
+                metadata: {
+                    aiData: watsonResults
                 }
-            }
-
-            if (req.body.tags.length == 0) { // if there are no tags
-                res.redirect("/entries/" + entry._id);
-            }
-            // otherwise, handle those tags
-            var tags = JSON.parse(req.body.tags);
-            let tagNames = tags.map((t) => t.value);
-
-            // Find all tags that already exist so that we don't create duplicates
-            Tag.find({ "name": { $in: tagNames }, "user.id": req.user._id }, function (err, existingTags) {
+            }, function (err, entry) {
                 if (err) {
                     handleErr(res, err);
                 }
-                let existingTagNames = existingTags.map((t) => t.name);
-                // Determine which tag names don't already exist so we can create those in a second
-                var tagsToCreate = tagNames.diff(existingTagNames);
+                var streakDate = req.body.streakDate.split(",");
+                var d1 = new Date(user.lastEntry[0], user.lastEntry[1], user.lastEntry[2]);
+                var d2 = new Date(streakDate[0], streakDate[1], streakDate[2]);
+                var diff = d2 - d1;
+                // convert ms to days
+                diff = diff / 86400000;
 
-                var newTagArr = [];
-                // create new mongodb-fiendly objects for each new tag
-                tagsToCreate.forEach(function (tName) {
-                    var oid = mongoose.Types.ObjectId();
-                    newTagArr.push({
-                        _id: oid,
-                        name: tName,
-                        user: {
-                            id: req.user._id,
-                            username: req.user.username
-                        },
-                        entries: []
-                    });
-                });
-                Tag.insertMany(newTagArr, function (err) {
+                if (diff == 1 || user.streak == 0) {
+                    user.streak++;
+                } else if (diff > 1) {
+                    user.streak = 1;
+                }
+
+                user.lastEntry = streakDate;
+                // add the new entry to the user's list
+                user.entries.push(entry);
+                user.save();
+
+                if (diff == 0) { // if they've already submitted an entry today
+                    req.flash("success", "Entry submitted!");
+                } else {
+                    if (user.streak > 1) {
+                        req.flash("success", "Nice job! You've written for " + user.streak + " consecutive days. Come back tomorrow to keep the streak going!");
+                    } else {
+                        req.flash("success", "Nice job! Come back tomorrow to start building a streak!");
+                    }
+                }
+
+                if (req.body.tags.length == 0) { // if there are no tags
+                    res.redirect("/entries/" + entry._id);
+                }
+                // otherwise, handle those tags
+                var tags = JSON.parse(req.body.tags);
+                let tagNames = tags.map((t) => t.value);
+
+                // Find all tags that already exist so that we don't create duplicates
+                Tag.find({ "name": { $in: tagNames }, "user.id": req.user._id }, function (err, existingTags) {
                     if (err) {
                         handleErr(res, err);
                     }
-                    var tagsToPush = existingTags.concat(newTagArr);
-                    addNewTags(req, res, entry, tagNames, tagsToPush);
+                    let existingTagNames = existingTags.map((t) => t.name);
+                    // Determine which tag names don't already exist so we can create those in a second
+                    var tagsToCreate = tagNames.diff(existingTagNames);
+
+                    var newTagArr = [];
+                    // create new mongodb-fiendly objects for each new tag
+                    tagsToCreate.forEach(function (tName) {
+                        var oid = mongoose.Types.ObjectId();
+                        newTagArr.push({
+                            _id: oid,
+                            name: tName,
+                            user: {
+                                id: req.user._id,
+                                username: req.user.username
+                            },
+                            entries: []
+                        });
+                    });
+                    Tag.insertMany(newTagArr, function (err) {
+                        if (err) {
+                            handleErr(res, err);
+                        }
+                        var tagsToPush = existingTags.concat(newTagArr);
+                        addNewTags(req, res, entry, tagNames, tagsToPush);
+                    });
                 });
             });
-        });
-    }
-    catch (err) {
-        handleErr(res, err);
-    }
+        }
+    });
+}
 });
 
 //update
