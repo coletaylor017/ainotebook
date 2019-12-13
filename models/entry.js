@@ -9,11 +9,6 @@ var entrySchema = new mongoose.Schema({
         }
     ],
     body: String,
-    date: String,
-    hidden: {
-        type: Boolean,
-        default: 0
-    },
     author: {
         id: {
             type: mongoose.Schema.Types.ObjectId,

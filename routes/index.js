@@ -105,26 +105,20 @@ router.get("/home", middleware.isLoggedIn, middleware.updateQuote, function(req,
                     wordCount += l.length;
                 });
                 var entryCount = entries.length;
-                Entry.find({"author.id": req.user._id, "hidden": 1}, {hidden: 1, _id: 0}, function(err, hiddenEntries) { // return as little as possible for speed
+
+                Global.findOne({}, { currentQuote: 1 }, function(err, global) {
                     if (err) {
                         console.log(err);
                     } else {
-                        var hidden = hiddenEntries.length;
-                        Global.findOne({}, { currentQuote: 1 }, function(err, global) {
+                        Quote.findById(global.currentQuote, function(err, quote) {
                             if (err) {
                                 console.log(err);
                             } else {
-                                Quote.findById(global.currentQuote, function(err, quote) {
-                                    if (err) {
-                                        console.log(err);
-                                    } else {
-                                        res.render("home", {quote: quote, entryCount: entryCount, wordCount: wordCount, hidden: hidden});
-                                    }
-                                })
+                                res.render("home", {quote: quote, entryCount: entryCount, wordCount: wordCount});
                             }
                         })
                     }
-                });
+                })
                 // Optimization uestion: Is it better to do calculation on the server side or pass the entire entry body to the client and do the calculation there?
             });
         }
