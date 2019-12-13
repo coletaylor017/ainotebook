@@ -180,47 +180,48 @@ router.post("/", middleware.isLoggedIn, function (req, res) {
                 }
 
                 if (req.body.tags.length == 0) { // if there are no tags
+                    console.log("Tag length is zero");
                     res.redirect("/entries/" + entry._id);
-                }
-                // otherwise, handle those tags
-                var tags = JSON.parse(req.body.tags);
-                let tagNames = tags.map((t) => t.value);
+                } else {
+                    // otherwise, handle those tags
+                    var tags = JSON.parse(req.body.tags);
+                    let tagNames = tags.map((t) => t.value);
 
-                // Find all tags that already exist so that we don't create duplicates
-                Tag.find({ "name": { $in: tagNames }, "user.id": req.user._id }, function (err, existingTags) {
-                    if (err) {
-                        handleErr(res, err);
-                    }
-                    let existingTagNames = existingTags.map((t) => t.name);
-                    // Determine which tag names don't already exist so we can create those in a second
-                    var tagsToCreate = tagNames.diff(existingTagNames);
-
-                    var newTagArr = [];
-                    // create new mongodb-fiendly objects for each new tag
-                    tagsToCreate.forEach(function (tName) {
-                        var oid = mongoose.Types.ObjectId();
-                        newTagArr.push({
-                            _id: oid,
-                            name: tName,
-                            user: {
-                                id: req.user._id,
-                                username: req.user.username
-                            },
-                            entries: []
-                        });
-                    });
-                    Tag.insertMany(newTagArr, function (err) {
+                    // Find all tags that already exist so that we don't create duplicates
+                    Tag.find({ "name": { $in: tagNames }, "user.id": req.user._id }, function (err, existingTags) {
                         if (err) {
                             handleErr(res, err);
                         }
-                        var tagsToPush = existingTags.concat(newTagArr);
-                        addNewTags(req, res, entry, tagNames, tagsToPush);
+                        let existingTagNames = existingTags.map((t) => t.name);
+                        // Determine which tag names don't already exist so we can create those in a second
+                        var tagsToCreate = tagNames.diff(existingTagNames);
+
+                        var newTagArr = [];
+                        // create new mongodb-fiendly objects for each new tag
+                        tagsToCreate.forEach(function (tName) {
+                            var oid = mongoose.Types.ObjectId();
+                            newTagArr.push({
+                                _id: oid,
+                                name: tName,
+                                user: {
+                                    id: req.user._id,
+                                    username: req.user.username
+                                },
+                                entries: []
+                            });
+                        });
+                        Tag.insertMany(newTagArr, function (err) {
+                            if (err) {
+                                handleErr(res, err);
+                            }
+                            var tagsToPush = existingTags.concat(newTagArr);
+                            addNewTags(req, res, entry, tagNames, tagsToPush);
+                        });
                     });
-                });
+                }
             });
         }
     });
-}
 });
 
 //update

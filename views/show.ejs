@@ -21,7 +21,7 @@
         </div>
         <p class="entrybody"><%= entry.body %></p>
         <h1 class="ui inverted header">Watson data</h1>
-        <p><%- JSON.stringify(metadata) %></p>
+        <p class="entrybody"><%- JSON.stringify(metadata, null, 4) %></p>
     </div>
     
     <!-- <h2 class="ui inverted header">Metadata</h2>
@@ -73,7 +73,7 @@
 
 <script>
 
-// var data = <%-JSON.stringify(rid)%>;
+
 
 // var options = {
 //     labelOffset: 50,
