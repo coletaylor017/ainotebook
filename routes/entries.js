@@ -160,8 +160,9 @@ router.post("/", middleware.isLoggedIn, function (req, res) {
             let tagNames = tags.map((t) => t.value);
 
             // Find all tags that already exist so that we don't create duplicates
-            Tag.find({ "name": { $in: tagNames }, "user.id": req.user._id }, function (err, existingTags) {
+            Tag.find({ "name": { $in: tagNames }, "user.idn": req.user._id }, function (err, existingTags) {
                 if (err) {
+                    console.log("There's an error!");
                     handleErr(res, err);
                 }
                 let existingTagNames = existingTags.map((t) => t.name);
