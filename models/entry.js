@@ -19,7 +19,7 @@ var entrySchema = new mongoose.Schema({
     metadata: {
         mood: String,
         weather: String,
-        ri: {}
+        aiData: {}
     }
 });
 

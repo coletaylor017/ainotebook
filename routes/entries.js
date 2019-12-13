@@ -103,12 +103,13 @@ router.post("/search", middleware.isLoggedIn, function (req, res) {
 
 // create new entry
 router.post("/", middleware.isLoggedIn, function (req, res) {
-    const user = req.user;
-    // trim the entry if it is all whtiespace
-    if (req.body.entry.body.trim().length === 0) {
-        res.flash("error", "Entry cannot be blank");
-        res.redirect("back");
-    } else {
+    try {
+        const user = req.user;
+        // trim the entry if it is all whtiespace
+        if (req.body.entry.body.trim().length === 0) {
+            res.flash("error", "Entry cannot be blank");
+            res.redirect("back");
+        }
         Entry.create({
             body: req.body.entry.body,
             date: req.body.entry.date,
@@ -117,7 +118,7 @@ router.post("/", middleware.isLoggedIn, function (req, res) {
                 username: req.user.username
             },
             metadata: {
-                ri: ridict.matches(req.body.entry.body) // Replace with Watson API call later
+                aiData: null
             }
         }, function (err, entry) {
             if (err) {
@@ -152,28 +153,94 @@ router.post("/", middleware.isLoggedIn, function (req, res) {
             }
 
             if (req.body.tags.length == 0) { // if there are no tags
-                res.redirect("/entries/" + entry._id)
-            } else { // handle those tags
+                res.redirect("/entries/" + entry._id);
+            }
+            // otherwise, handle those tags
+            var tags = JSON.parse(req.body.tags);
+            let tagNames = tags.map((t) => t.value);
 
-                var tags = JSON.parse(req.body.tags);
-                let tagNames = tags.map((t) => t.value);
+            // Find all tags that already exist so that we don't create duplicates
+            Tag.find({ "name": { $in: tagNames }, "user.id": req.user._id }, function (err, existingTags) {
+                if (err) {
+                    handleErr(res, err);
+                }
+                let existingTagNames = existingTags.map((t) => t.name);
+                // Determine which tag names don't already exist so we can create those in a second
+                var tagsToCreate = tagNames.diff(existingTagNames);
 
-                // Find all tags that already exist so that we don't create duplicates
-                Tag.find({ "name": { $in: tagNames }, "user.id": req.user._id }, function (err, existingTags) {
+                var newTagArr = [];
+                // create new mongodb-fiendly objects for each new tag
+                tagsToCreate.forEach(function (tName) {
+                    var oid = mongoose.Types.ObjectId();
+                    newTagArr.push({
+                        _id: oid,
+                        name: tName,
+                        user: {
+                            id: req.user._id,
+                            username: req.user.username
+                        },
+                        entries: []
+                    });
+                });
+                Tag.insertMany(newTagArr, function (err) {
                     if (err) {
                         handleErr(res, err);
                     }
-                    let existingTagNames = existingTags.map((t) => t.name);
-                    // Determine which tag names don't already exist so we can create those in a second
-                    var tagsToCreate = tagNames.diff(existingTagNames);
+                    var tagsToPush = existingTags.concat(newTagArr);
+                    addNewTags(req, res, entry, tagNames, tagsToPush);
+                });
+            });
+        });
+    }
+    catch (err) {
+        handleErr(res, err);
+    }
+});
+
+//update
+router.put("/:id", middleware.isLoggedIn, function (req, res) {
+    Entry.findByIdAndUpdate(req.params.id, req.body.entry, function (err, entry) {
+        if (req.body.entry.body.trim().length === 0) { // if entry is all whitespace
+            res.flash("error", "Entry cannot be blank");
+            res.redirect("back");
+        }
+        if (err) {
+            handleErr(res, err);
+        }
+        if (req.body.tags.length === 0) {
+            res.redirect("/entries/" + entry._id)
+        }
+        var tags = JSON.parse(req.body.tags);
+        let tagNames = tags.map((t) => t.value);
+
+        Tag.find({ "name": { $in: tagNames }, "user.id": req.user._id }, function (err, oldTags) {
+            if (err) {
+                handleErr(res, err);
+            }
+            let oldTagNames = oldTags.map((t) => t.name);
+
+            Tag.find({ "_id": { $in: entry.tags }, "user.id": req.user._id }, { name: 1, _id: 0 }, function (err, previousTags) {
+                if (err) {
+                    handleErr(res, err);
+                }
+
+                // Find all tags that must have this entry removed from their references
+                let previousTagNames = previousTags.map((t) => t.name);
+                // var tagsToUpdate = previousTagNames.diff(oldTagNames);
+
+                Tag.updateMany({ name: { $in: previousTagNames } }, { $pull: { entries: entry._id } }, function (err) {
+                    if (err) {
+                        handleErr(res, err);
+                    }
+                    var filtered = tagNames.diff(oldTagNames);
 
                     var newTagArr = [];
                     // create new mongodb-fiendly objects for each new tag
-                    tagsToCreate.forEach(function (tName) {
+                    filtered.forEach(function (tagVal) {
                         var oid = mongoose.Types.ObjectId();
                         newTagArr.push({
                             _id: oid,
-                            name: tName,
+                            name: tagVal,
                             user: {
                                 id: req.user._id,
                                 username: req.user.username
@@ -185,104 +252,12 @@ router.post("/", middleware.isLoggedIn, function (req, res) {
                         if (err) {
                             handleErr(res, err);
                         }
-                        var tagsToPush = existingTags.concat(newTagArr);
+                        var tagsToPush = oldTags.concat(newTagArr);
                         addNewTags(req, res, entry, tagNames, tagsToPush);
                     });
                 });
-            }
+            });
         });
-    }
-});
-
-//update
-router.put("/:id", middleware.isLoggedIn, function (req, res) {
-    Entry.findByIdAndUpdate(req.params.id, req.body.entry, function (err, entry) {
-        console.log("entry length: ", req.body.entry.body.length)
-        if (req.body.entry.body.trim().length === 0) { // if entry is all whitespace
-
-        }
-        if (err) {
-            console.log(err);
-        } else {
-            if (req.body.tags.length === 0) {
-                res.flash("error", "Entry cannot be blank");
-                res.redirect("back");
-            } else {
-                console.log("req.body.tags: ", req.body.tags);
-                var tags = JSON.parse(req.body.tags);
-                console.log("tags: ", tags);
-                var tagNames = [];
-                console.log("tags length: ", tags.length);
-                for (var i = 0; i < tags.length; i++) {
-                    tagNames.push(tags[i].value);
-                    console.log("value of item ", i, "of tags: ", tags[i].value);
-                }
-                console.log("tagNames: ", tagNames);
-
-                console.log("ridict analysis: ", ridict.matches(entry.body));
-
-                console.log("tags: ", tags);
-                Tag.find({ "name": { $in: tagNames }, "user.id": req.user._id }, function (err, oldTags) {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        console.log("oldTags: ", oldTags);
-                        var oldTagNames = [];
-                        for (var i = 0; i < oldTags.length; i++) {
-                            oldTagNames.push(oldTags[i].name);
-                            console.log("value of item ", i, "of oldTags: ", oldTags[i].name);
-                        }
-                        console.log("oldTagNames: ", oldTagNames);
-
-                        Tag.find({ "_id": { $in: entry.tags }, "user.id": req.user._id }, { name: 1, _id: 0 }, function (err, previousTags) {
-                            if (err) {
-                                console.log(err);
-                            } else {
-
-                                // Find all tags that must have this entry removed from their references
-                                console.log("PREVIOUS TAGS: ", previousTags);
-
-                                var previousTagNames = [];
-                                for (var i = 0; i < previousTags.length; i++) {
-                                    previousTagNames.push(previousTags[i].name);
-                                    console.log("value of item ", i, "of previousTags: ", previousTags[i].name);
-                                }
-                                var tagsToUpdate = previousTagNames.diff(oldTagNames);
-                                console.log("TAGS TO UPDATE: ", tagsToUpdate);
-
-                                Tag.updateMany({ name: { $in: previousTagNames } }, { $pull: { entries: entry._id } }, function (err) {
-                                    if (err) {
-                                        console.log(err);
-                                    } else {
-                                        var filtered = tagNames.diff(oldTagNames);
-                                        console.log("tagNames, filtered (filtered): ", filtered);
-                                        var newTagArr = [];
-                                        filtered.forEach(function (tagVal) {
-                                            var oid = mongoose.Types.ObjectId();
-                                            newTagArr.push({
-                                                _id: oid,
-                                                name: tagVal,
-                                                user: {
-                                                    id: req.user._id,
-                                                    username: req.user.username
-                                                },
-                                                entries: []
-                                            });
-                                        });
-                                        Tag.insertMany(newTagArr, function () {
-                                            var tagsToPush = oldTags.concat(newTagArr);
-                                            console.log("tagsToPush: ", tagsToPush);
-                                            console.log("entry id: ", entry._id);
-                                            addNewTags(req, res, entry, tagNames, tagsToPush);
-                                        });
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-            }
-        }
     });
 });
 
