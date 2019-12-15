@@ -131,96 +131,102 @@ router.post("/", middleware.isLoggedIn, function (req, res) {
         }
     }
 
-    nlu.analyze(analyzeParams, function (err, watsonResults) {
+    nlu.analyze(analyzeParams, function (err, watsonResponse) {
         if (err) {
+            if (err.code == 422) {
+                console.log("Text analysis error: entry was too short for Watson analysis:");
+            } else if (err.code != null) {
+                console.log("An unusual text analysis error occurred:");
+            }
             console.log(err);
         } else {
-            console.log(JSON.stringify(watsonResults, null, 4));
+            // if no error, print out response for debugging
+            console.log(JSON.stringify(watsonResponse, null, 4));
+        }
 
-            Entry.create({
-                body: req.body.entry.body,
-                date: req.body.entry.date,
-                author: {
-                    id: req.user._id,
-                    username: req.user.username
-                },
-                metadata: {
-                    aiData: watsonResults
-                }
-            }, function (err, entry) {
-                if (err) {
-                    handleErr(res, err);
-                }
-                var streakDate = req.body.streakDate.split(",");
-                var d1 = new Date(user.lastEntry[0], user.lastEntry[1], user.lastEntry[2]);
-                var d2 = new Date(streakDate[0], streakDate[1], streakDate[2]);
-                var diff = d2 - d1;
-                // convert ms to days
-                diff = diff / 86400000;
+        Entry.create({
+            body: req.body.entry.body,
+            date: req.body.entry.date,
+            author: {
+                id: req.user._id,
+                username: req.user.username
+            },
+            metadata: {
+                // if there was an error with Watson analysis, set AI data to null
+                aiData: err ? watsonResponse : null
+            }
+        }, function (err, entry) {
+            if (err) {
+                handleErr(res, err);
+            }
+            var streakDate = req.body.streakDate.split(",");
+            var d1 = new Date(user.lastEntry[0], user.lastEntry[1], user.lastEntry[2]);
+            var d2 = new Date(streakDate[0], streakDate[1], streakDate[2]);
+            var diff = d2 - d1;
+            // convert ms to days
+            diff = diff / 86400000;
 
-                if (diff == 1 || user.streak == 0) {
-                    user.streak++;
-                } else if (diff > 1) {
-                    user.streak = 1;
-                }
+            if (diff == 1 || user.streak == 0) {
+                user.streak++;
+            } else if (diff > 1) {
+                user.streak = 1;
+            }
 
-                user.lastEntry = streakDate;
-                // add the new entry to the user's list
-                user.entries.push(entry);
-                user.save();
+            user.lastEntry = streakDate;
+            // add the new entry to the user's list
+            user.entries.push(entry);
+            user.save();
 
-                if (diff == 0) { // if they've already submitted an entry today
-                    req.flash("success", "Entry submitted!");
+            if (diff == 0) { // if they've already submitted an entry today
+                req.flash("success", "Entry submitted!");
+            } else {
+                if (user.streak > 1) {
+                    req.flash("success", "Nice job! You've written for " + user.streak + " consecutive days. Come back tomorrow to keep the streak going!");
                 } else {
-                    if (user.streak > 1) {
-                        req.flash("success", "Nice job! You've written for " + user.streak + " consecutive days. Come back tomorrow to keep the streak going!");
-                    } else {
-                        req.flash("success", "Nice job! Come back tomorrow to start building a streak!");
+                    req.flash("success", "Nice job! Come back tomorrow to start building a streak!");
+                }
+            }
+
+            if (req.body.tags.length == 0) { // if there are no tags
+                res.redirect("/entries/" + entry._id);
+            } else {
+                // otherwise, handle those tags
+                var tags = JSON.parse(req.body.tags);
+                let tagNames = tags.map((t) => t.value);
+
+                // Select entry tags that already exist
+                Tag.find({ "name": { $in: tagNames }, "user.id": req.user._id }, { name: 1, _id: 0 }, function (err, existingTags) {
+                    if (err) {
+                        handleErr(res, err);
                     }
-                }
+                    let existingTagNames = existingTags.map((t) => t.name);
+                    // Determine which tag names don't already exist so we can create those in a second
+                    var tagsToCreate = tagNames.diff(existingTagNames);
 
-                if (req.body.tags.length == 0) { // if there are no tags
-                    console.log("Tag length is zero");
-                    res.redirect("/entries/" + entry._id);
-                } else {
-                    // otherwise, handle those tags
-                    var tags = JSON.parse(req.body.tags);
-                    let tagNames = tags.map((t) => t.value);
-
-                    // Find all tags that already exist so that we don't create duplicates
-                    Tag.find({ "name": { $in: tagNames }, "user.id": req.user._id }, function (err, existingTags) {
+                    var newTagArr = [];
+                    // create new mongodb-fiendly    objects for each new tag
+                    tagsToCreate.forEach(function (tName) {
+                        var oid = mongoose.Types.ObjectId();
+                        newTagArr.push({
+                            _id: oid,
+                            name: tName,
+                            user: {
+                                id: req.user._id,
+                                username: req.user.username
+                            },
+                            entries: []
+                        });
+                    });
+                    Tag.insertMany(newTagArr, function (err) {
                         if (err) {
                             handleErr(res, err);
                         }
-                        let existingTagNames = existingTags.map((t) => t.name);
-                        // Determine which tag names don't already exist so we can create those in a second
-                        var tagsToCreate = tagNames.diff(existingTagNames);
-
-                        var newTagArr = [];
-                        // create new mongodb-fiendly objects for each new tag
-                        tagsToCreate.forEach(function (tName) {
-                            var oid = mongoose.Types.ObjectId();
-                            newTagArr.push({
-                                _id: oid,
-                                name: tName,
-                                user: {
-                                    id: req.user._id,
-                                    username: req.user.username
-                                },
-                                entries: []
-                            });
-                        });
-                        Tag.insertMany(newTagArr, function (err) {
-                            if (err) {
-                                handleErr(res, err);
-                            }
-                            var tagsToPush = existingTags.concat(newTagArr);
-                            addNewTags(req, res, entry, tagNames, tagsToPush);
-                        });
+                        var tagsToPush = existingTags.concat(newTagArr);
+                        addNewTags(req, res, entry, tagNames, tagsToPush);
                     });
-                }
-            });
-        }
+                });
+            }
+        });
     });
 });
 
@@ -240,7 +246,8 @@ router.put("/:id", middleware.isLoggedIn, function (req, res) {
         var tags = JSON.parse(req.body.tags);
         let tagNames = tags.map((t) => t.value);
 
-        Tag.find({ "name": { $in: tagNames }, "user.id": req.user._id }, function (err, oldTags) {
+        // Select entry tags that already exist
+        Tag.find({ "name": { $in: tagNames }, "user.id": req.user._id }, { name: 1, _id: 0 }, function (err, oldTags) {
             if (err) {
                 handleErr(res, err);
             }

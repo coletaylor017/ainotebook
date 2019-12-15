@@ -14,14 +14,6 @@ var middlewareObj = {
         res.redirect("/login");
     },
     deleteDeadTags: function(req, res, next) {
-        // Tags.find(err, function(err, allTags) {
-        //     allTags.forEach(function(tag) {
-        //         // console.log("this tag's value: ", tag.entries)
-        //         if (tag.entries.length = 0) {
-
-        //         }
-        //     });
-        // });
         Tag.deleteMany( { entries: { $size: 0 } }, function(err) {
             if (err) {
                 console.log(err);
@@ -63,17 +55,13 @@ var middlewareObj = {
                                     min = quotes[i].index;
                                 }
                             }
-                            console.log("Indicies: ", quotes);
-                            console.log("min: ", min)
                             
                             Quote.find({index: min}, function(err, candidates) {
                                 if (err) {
                                     console.log(err);
                                 } else {
-                                    console.log("candidates: ", candidates);
                                     var luckyWinner = Math.floor(Math.random()*candidates.length);
                                     var winnerId = candidates[luckyWinner]._id;
-                                    console.log(luckyWinner, winnerId);
                                     Quote.findById(winnerId, function(err, quote) {
                                         if (err) {
                                             console.log(err);
