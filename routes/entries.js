@@ -20,16 +20,16 @@ Array.prototype.diff = function (a) {
 };
 
 // initialize an object for dealing with Watson analysis
-const nlu = new nluV1({
-    version: "2019-07-12",
-    // username: process.env.USERNAME,
-    // password: process.env.PASSWORD,
-    iam_apikey: process.env.WATSON_API_KEY,
-    url: "https://gateway.watsonplatform.net/natural-language-understanding/api",
-    headers: {
-        "X-Watson-Learning-Opt-Out": "true"
-    }
-});
+// const nlu = new nluV1({
+//     version: "2019-07-12",
+//     // username: process.env.USERNAME,
+//     // password: process.env.PASSWORD,
+//     iam_apikey: process.env.WATSON_API_KEY,
+//     url: "https://gateway.watsonplatform.net/natural-language-understanding/api",
+//     headers: {
+//         "X-Watson-Learning-Opt-Out": "true"
+//     }
+// });
 
 /**=============================================================
  * 'GET' ROUTES
@@ -37,10 +37,10 @@ const nlu = new nluV1({
  */
 
 // index, or "All Entries Page"
-router.get("/", middleware.isLoggedIn, middleware.deleteDeadTags /*put this on entry delete and tag delete routes */, function (req, res) {
+router.get("/", middleware.isLoggedIn, middleware.deleteDeadTags, function (req, res) {
     Tag.find({ "user.id": req.user._id }, function (err, tags) {
         if (err) {
-            handleErr(err, res);
+            handleErr(res, err);
         }
 
         // I took out the "hidden" condition on refactor. Don't think I'm gonna use it anymore.
@@ -49,7 +49,7 @@ router.get("/", middleware.isLoggedIn, middleware.deleteDeadTags /*put this on e
                 .populate("tags", "name") // Because we wanna display the tags and title
                 .exec(function (err, entries) {
                     if (err) {
-                        handleErr(err);
+                        handleErr(res, err);
                     }
                     res.render("index", { tags: tags, entries: entries.reverse(), keyword: "" });
                 });
@@ -58,7 +58,7 @@ router.get("/", middleware.isLoggedIn, middleware.deleteDeadTags /*put this on e
                 .populate("tags", "name")
                 .exec(function (err, entries) {
                     if (err) {
-                        handleErr(err);
+                        handleErr(res, err);
                     }
                     res.render("index", { tags: tags, entries: entries.reverse(), keyword: req.query.keyword });
                 });
@@ -70,7 +70,7 @@ router.get("/", middleware.isLoggedIn, middleware.deleteDeadTags /*put this on e
 router.get("/new", middleware.isLoggedIn, function (req, res) {
     Tag.find({ "user.id": req.user._id }, { name: 1, _id: 0 }, function (err, tags) {
         if (err) {
-            handleErr(err);
+            handleErr(res, err);
         }
         let tagNames = tags.map((t) => t.name);
         res.render("new", { tags: tagNames });  // using es6 spread operator to get rid of a for loop
@@ -83,7 +83,7 @@ router.get("/:id", middleware.isLoggedIn, function (req, res) {
         .populate("tags", "name")
         .exec(function (err, entry) {
             if (err) {
-                handleErr(err);
+                handleErr(res, err);
             }
             var metadata = entry.metadata;
             res.render("show", { entry: entry, metadata: metadata });
@@ -96,7 +96,7 @@ router.get("/:id/edit", middleware.isLoggedIn, function (req, res) {
         .populate("tags", "name")
         .exec(function (err, entry) {
             if (err) {
-                handleErr(err);
+                handleErr(res, err);
             }
             let tagNames = entry.tags.map((t) => t.name);
             res.render("edit", { entry: entry, tags: tagNames });
@@ -296,7 +296,7 @@ router.put("/:id", middleware.isLoggedIn, function (req, res) {
 });
 
 //destroy
-router.delete("/:id", middleware.isLoggedIn, function (req, res) {
+router.delete("/:id", middleware.isLoggedIn, middleware.deleteDeadTags, function (req, res) {
     User.findOneAndUpdate({ "_id": req.user._id }, { $pull: { entries: req.params.id } }, function (err) {
         if (err) {
             console.log(err);

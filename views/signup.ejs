@@ -1,11 +1,12 @@
 <% include partials/header %>
 
-<div class="spacer"></div><div class="spacer"></div>
+<div class="spacer"></div>
+<div class="spacer"></div>
 
 <div class="ui inverted text container center aligned main">
-    
+
     <h2 class="ui inverted header">Sign Up</h2>
-    
+
     <div class="ui left aligned container">
         <form name="myForm" class="ui inverted form" action="/register" method="POST">
             <div class="field">
@@ -33,42 +34,42 @@
 
 <script>
 
-$('.ui.form')
-    .form({
-        fields: {
-            username: {
-                identifier: 'username',
-                rules: [
-                    {
-                        type   : 'empty',
-                        prompt : 'Please enter a username'
-                    }
-                ]
-            },
-            password: {
-                identifier: 'password',
-                rules: [
-                    {
-                        type   : 'empty',
-                        prompt : 'Please enter a password'
-                    },
-                    {
-                        type: 'match[password2]',
-                        prompt: "Passwords must match"
-                    }
-                ]
-            },
-            terms: {
-                identifier: 'terms',
-                rules: [
-                {
-                        type   : 'checked',
-                        prompt : 'You must agree to the terms and conditions'
-                    }
-                ]
+    $('.ui.form')
+        .form({
+            fields: {
+                username: {
+                    identifier: 'username',
+                    rules: [
+                        {
+                            type: 'empty',
+                            prompt: 'Please enter a username'
+                        }
+                    ]
+                },
+                password: {
+                    identifier: 'password',
+                    rules: [
+                        {
+                            type: 'empty',
+                            prompt: 'Please enter a password'
+                        },
+                        {
+                            type: 'match[password2]',
+                            prompt: "Passwords must match"
+                        }
+                    ]
+                },
+                terms: {
+                    identifier: 'terms',
+                    rules: [
+                        {
+                            type: 'checked',
+                            prompt: 'You must agree to the terms and conditions'
+                        }
+                    ]
+                }
             }
-        }
-    })
-;
+        })
+        ;
 
 </script>
