@@ -16,7 +16,6 @@
     "body-parser": "^1.19.0",
     "bootstrap": "^4.3.1",
     "connect-flash": "^0.1.1",
-<<<<<<< HEAD
     "cron": "^1.7.2",
     "ejs": "^2.7.1",
     "express": "^4.17.1",
@@ -29,19 +28,6 @@
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.27",
     "mongoose": "^5.7.6",
-=======
-    "cron": "^1.6.0",
-    "ejs": "^2.6.1",
-    "express": "^4.16.3",
-    "express-session": "^1.15.6",
-    "ibm-watson": "^4.5.1",
-    "jquery": "^3.5.0",
-    "method-override": "^3.0.0",
-    "moment": "^2.22.2",
-    "moment-timezone": "^0.5.23",
-    "mongo": "^0.1.0",
-    "mongoose": "^5.7.5",
->>>>>>> 9492d90ea2f8b6a0049aaad39b3a86a0fa1afb35
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^5.0.1",
