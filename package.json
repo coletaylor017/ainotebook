@@ -1,10 +1,11 @@
 {
   "name": "writingblocks",
   "version": "1.0.0",
-  "description": "",
+  "description": "Write Now",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "debug": "PORT='8080' DATABASEURL='mongodb://localhost:27017/writenow' node app.js",
     "start": "node app.js"
   },
   "author": "Cole Taylor",
@@ -13,6 +14,8 @@
     "@sendgrid/mail": "^6.4.0",
     "@yaireo/tagify": "^2.31.2",
     "aylien_textapi": "^0.7.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-react-app": "^3.1.2",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.3.1",
     "connect-flash": "^0.1.1",
@@ -38,5 +41,14 @@
   },
   "devDependencies": {
     "gulp": "^4.0.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coletaylor017/ainotebook.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/coletaylor017/ainotebook/issues"
+  },
+  "homepage": "https://github.com/coletaylor017/ainotebook#readme"
 }
