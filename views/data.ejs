@@ -1,223 +1,29 @@
 <% include partials/header %>
 
-<link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
-<link rel="stylesheet" type="text/css" href="/stylesheets/chartistCustom.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
-
 <div class="spacer"></div>
 
-<div class="ui text container center aligned main">
-    <h2 class="ui inverted header">Metadata</h2>
+
+<div class="container">
+    
+    <h2 class="text-light">Metadata</h2>
     <div class="ui divider"></div>
-    
-    <div class="ui basic inverted segment">
-        <p>Use the dropdowns to compare stats over time. The first two let you see what types of emotions and thoughts are expressed in your entries.</p>
-    </div>
-    
-    <div class="ui selection dropdown" id="property1">
-        <input type="hidden" name="category1">
-        <i class="dropdown icon"></i>
-        <div class="default text">Property 1</div>
-        <div class="menu">
-            <div class="item" data-value="">-</div>
-            <div class="item" data-value="ORDER">Order</div>
-            <div class="item" data-value="CHAOS">Chaos</div>
-            <div class="item" data-value="POSITIVE_AFFECT">Positivity</div>
-            <div class="item" data-value="ANXIETY">Anxiety</div>
-            <div class="item" data-value="SADNESS">Sadness</div>
-            <div class="item" data-value="AFFECTION">Affection</div>
-            <div class="item" data-value="AGGRESSION">Aggression</div>
-            <div class="item" data-value="CONCRETENESS">Concreteness</div>
-            <div class="item" data-value="ABSTRACT_THOUGHT">Abstract thought</div>
-            <div class="item" data-value="SOCIAL_BEHAVIOR">Social thoughts</div>
-            <div class="item" data-value="INSTRU_BEHAVIOR">Work thoughts</div>
-        </div>
-    </div>
-    <div class="ui selection dropdown" id="property2">
-        <input type="hidden" name="category2">
-        <i class="dropdown icon"></i>
-        <div class="default text">Property 2</div>
-        <div class="menu">
-            <div class="item" data-value="">-</div>
-            <div class="item" data-value="ORDER">Order</div>
-            <div class="item" data-value="CHAOS">Chaos</div>
-            <div class="item" data-value="POSITIVE_AFFECT">Positivity</div>
-            <div class="item" data-value="ANXIETY">Anxiety</div>
-            <div class="item" data-value="SADNESS">Sadness</div>
-            <div class="item" data-value="AFFECTION">Affection</div>
-            <div class="item" data-value="AGGRESSION">Aggression</div>
-            <div class="item" data-value="CONCRETENESS">Concreteness</div>
-            <div class="item" data-value="ABSTRACT_THOUGHT">Abstract thought</div>
-            <div class="item" data-value="SOCIAL_BEHAVIOR">Social thoughts</div>
-            <div class="item" data-value="INSTRU_BEHAVIOR">Work thoughts</div>
-        </div>
-    </div>
-    <div class="ui selection dropdown" id="property3">
-        <input type="hidden" name="category3">
-        <i class="dropdown icon"></i>
-        <div class="default text">Property 3</div>
-        <div class="menu">
-            <div class="item" data-value="">-</div>
-            <div class="item" data-value="LENGTH (WORDS)">Entry word count</div>
-        </div>
-    </div>
-    <div class="ui hidden divider"></div>
-    <a onclick="refresh()" class="ui primary button">Update graph</a>
-</div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active btn btn-primary">
+                <a class="nav-link " href="#">
+                    Add Metric
+                </a>
+            </li>
+        </ul>
+    </nav>
 
-<div class="ui text container">
-    <canvas id="myChart" width="600" height="300"></canvas>
+    <div class="row">
+        <div class="col-md-6">
+            <%- include('./partials/lineGraph') %>
+        </div>
+    </div>
 </div>
 
 <div class="spacer"></div>
-
-<script>
-
-var entries = <%- JSON.stringify(entries) %>;
-
-function refresh() {
-    var term1 = document.querySelector("input[name='category1']").value,
-        term2 = document.querySelector("input[name='category2']").value,
-        term3 = document.querySelector("input[name='category3']").value,
-        total1 = 0,
-        total2 = 0,
-        total3 = 0,
-        arr1 = [],
-        arr2 = [],
-        arr3 = [],
-        labelArr = [];
-        console.log(term3);
-        
-    entries.forEach(function(entry) {
-        total1 += entry.metadata.ri[term1] / entry.body.length; // so that longer entries aren't weighted heavier
-        total2 += entry.metadata.ri[term2] / entry.body.length;
-        if (term3 === "LENGTH (WORDS)") {
-            total3 += entry.body.split(" ").length;
-        }
-    });
-    
-    var avg1 = total1 / entries.length,
-        avg2 = total2 / entries.length,
-        avg3;
-        
-    if (term3 === "LENGTH (WORDS)") {
-        avg3 = total3 / entries.length;
-    }
-
-    entries.forEach(function(entry, index) {
-        arr1.push(entry.metadata.ri[term1] / entry.body.length - avg1);
-        arr2.push(entry.metadata.ri[term2] / entry.body.length - avg2);
-        if (term3 === "LENGTH (WORDS)") {
-            arr3.push(entry.body.split(" ").length);
-        }
-        labelArr.push(entry.date);
-    });
-
-    var ctx = document.getElementById("myChart").getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labelArr,
-            datasets: [
-                {
-                    label: term1,
-                    data: arr1,
-                    backgroundColor: 'transparent',
-                    borderColor: 'lightblue',
-                    borderWidth: 1,
-                    borderCapStyle: "round",
-                    borderJoinStyle: "round",
-                    pointBackgroundColor: 'lightblue',
-                    pointHoverRadius: 2,
-                    spanGaps: false,
-                    yAxisID: 'y-axis-1'
-                },
-                {
-                    label: term2,
-                    data: arr2,
-                    backgroundColor: 'transparent',
-                    borderColor: 'red',
-                    borderWidth: 1,
-                    borderCapStyle: "round",
-                    borderJoinStyle: "round",
-                    pointBackgroundColor: 'red',
-                    pointHoverRadius: 2,
-                    spanGaps: false,
-                    yAxisID: 'y-axis-2'
-                },
-                {
-                    label: term3,
-                    data: arr3,
-                    backgroundColor: 'transparent',
-                    borderColor: 'white',
-                    borderWidth: 1,
-                    borderCapStyle: "round",
-                    borderJoinStyle: "round",
-                    pointBackgroundColor: 'white',
-                    pointHoverRadius: 2,
-                    spanGaps: false,
-                    yAxisID: "y-axis-3"
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                xAxes: [{
-                    display: false
-                }],
-                yAxes: [{
-                    type: 'linear',
-                    ticks: {
-                        beginAtZero:true,
-                        fontColor: 'white'
-                    },
-                    position: 'left',
-                    id: 'y-axis-1',
-                    display: false
-                },
-                {
-                    type: 'linear',
-                    ticks: {
-                        beginAtZero:true,
-                        fontColor: 'white'
-                    },
-                    position: 'left',
-                    id: 'y-axis-2',
-                    display: false
-                },
-                {
-                    type: 'linear',
-                    ticks: {
-                        beginAtZero:true,
-                        fontColor: 'white'
-                    },
-                    position: 'right',
-                    id: 'y-axis-3',
-                    scaleLabel: {
-                        labelString: 'Words'
-                    },
-                    display: false
-                }]
-            },
-            tooltips: {
-                mode: 'index',
-                intersect: false
-            },
-            legend: {
-                labels: {
-                    fontColor: 'white'
-                }
-            }
-        }
-    });
-
-}
-
-$('.ui.dropdown')
-    .dropdown()
-;
-
-</script>
 
 <% include partials/footer %>

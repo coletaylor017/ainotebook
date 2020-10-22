@@ -18,6 +18,7 @@
     "babel-preset-react-app": "^3.1.2",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.3.1",
+    "bootstrap-icons": "^1.0.0",
     "connect-flash": "^0.1.1",
     "cron": "^1.7.2",
     "ejs": "^2.7.1",
