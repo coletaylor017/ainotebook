@@ -1,13 +1,41 @@
-var express    = require("express"),
-    Entry      = require("../models/entry"),
-    Tag        = require("../models/tag"),
-    User       = require("../models/user"),
-    middleware = require("../middleware"),
-    ridict     = require("ridict"),
-    mongoose   = require("mongoose");
+const   express    = require("express"),
+        Entry      = require("../models/entry"),
+        Tag        = require("../models/tag"),
+        User       = require("../models/user"),
+        middleware = require("../middleware"),
+        ridict     = require("ridict"),
+        mongoose   = require("mongoose"),
+        nluV1        = require("ibm-watson/natural-language-understanding/v1");
 
-var router = express.Router();
+const router = express.Router();
+const nlu = new nluV1({
+    version: "2019-07-12",
+    // username: process.env.USERNAME,
+    // password: process.env.PASSWORD,
+    iam_apikey: process.env.WATSON_API_KEY,
+    url: "https://gateway.watsonplatform.net/natural-language-understanding/api",
+    headers: {
+        "X-Watson-Learning-Opt-Out": "true"
+    }
+});
 
+const analyzeParams = {
+    text: "I really really love Cristina with all my heart. She is the best. However, I hate Nate. He's so obnoxious and just the worst, most awful person ever. Nate, nate nate. What a loser Nate is.",
+    "features": {
+        "entities": {
+            "sentiment": true,
+            "emotion": true
+        }
+    }
+}
+
+nlu.analyze(analyzeParams, function(err, body) {
+    if (err) {
+        console.log(err);
+    } else {
+        console.log(JSON.stringify(body, null, 4));
+    }
+})
 
 //index
 router.get("/", middleware.isLoggedIn, middleware.deleteDeadTags, function(req, res) {

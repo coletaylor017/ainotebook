@@ -1,5 +1,13 @@
 **ADD TIMEZONE ON USER DOCUMENT AND MAKE DROPDOWN ON SETTINGS PAGE**
 *Remember, sudo mongod service start
+Also, sudo killall mongod will stop already running instances! :)
+
+
+**Watson Integration**
+Emotion- general emotion of the document. Can also taget specific words or phrases. 
+Entities- returns a sentiment index and range of emotion indexes for each detected entity.
+Categories and concepts- experiment with auto-tagging or telling the user "You've been thinking mostly about ______ for the past ______"
+
 
 TODO!
 
