@@ -1,7 +1,6 @@
 html {
     font-size: 14px;
 }
-
 body {
     height: 100%;
 }
@@ -247,4 +246,10 @@ a:hover {
 
 #transparent {
     background: transparent;
+}
+
+/* Fix for bootstrap's dumb menu bar shadows */
+.navbar-brand,
+.navbar-nav > li > a {
+  text-shadow: 0 0 0 rgba(255,255,255,.25);
 }
