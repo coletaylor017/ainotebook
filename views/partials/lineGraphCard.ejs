@@ -1,0 +1,56 @@
+<link rel="stylesheet" type="text/css" href="/stylesheets/chartistCustom.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+<div class="card">
+    <div class="card-body">
+        <h2 class="card-title"><%= cardTitle %></h2>
+        <canvas id="myChart" width="600" height="300"></canvas>
+    </div>
+</div>
+
+<script>
+    
+
+    var ctx = document.getElementById("myChart").getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: <%- JSON.stringify(xAxisLabels) %>,
+            datasets: [
+                {
+                    label: <%- JSON.stringify(dataSetLabels[0]) %>,
+                    data: <%- JSON.stringify(dataSets[0]) %>,
+                    backgroundColor: 'transparent',
+                    borderColor: 'rgb(255, 99, 132)',
+                    borderCapStyle: "round",
+                    borderJoinStyle: "round",
+                    pointBackgroundColor: 'rgb(255, 99, 132)',
+                    pointHoverRadius: 2,
+                    spanGaps: false,
+                    yAxisID: 'y-axis-1'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                xAxes: [{
+                    display: false
+                }],
+                yAxes: [{
+                    type: 'linear',
+                    ticks: {
+                        beginAtZero:true
+                    },
+                    position: 'left',
+                    id: 'y-axis-1'
+                }]
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false
+            }
+        }
+    });
+    
+    </script>

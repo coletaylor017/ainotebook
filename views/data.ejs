@@ -1,12 +1,53 @@
 <% include partials/header %>
 
-<div class="spacer"></div>
+<%
+    var filteredEntries = (entries).filter(x => x.body.length > 250);
+    
+    var totals = [],
+        averages = [],
+        xAxisLabels = [],
+        dataSets = [],
+        dataSetAverages = [],
+        dataSetLabels = [];
 
+    var i = 0;
+        
+    totals.push(0);
+    filteredEntries.forEach(function(entry) {
+        totals[i] += entry.metadata.ri["POSITIVE_AFFECT"] / entry.body.length; // so that longer entries aren't weighted heavier
+    });
+    
+    if (entries.length != 0) { // handle divide by zero
+        averages.push(totals[i] / entries.length); 
+    }
+    else {
+        averages.push(0);
+    }
+
+    var dataSet1 = [];
+    filteredEntries.forEach(function(entry, index) {
+        dataSet1.push(entry.metadata.ri["POSITIVE_AFFECT"] / entry.body.length - averages[i]);
+        xAxisLabels.push(entry.date);
+    });
+
+    dataSetLabels.push("Mood");
+    dataSetAverages.push(averages[i]);
+    dataSets.push(dataSet1);
+
+    var cards = [
+        {
+            graphStyle: "line",
+            cardTitle: "Mood over Time",
+            dataSetLabels: dataSetLabels,
+            dataSetAverages: dataSetAverages,
+            xAxisLabels: xAxisLabels,
+            dataSets: dataSets
+        }
+    ]
+%>
 
 <div class="container">
-    
-    <h2 class="text-light">Metadata</h2>
-    <div class="ui divider"></div>
+    <h2 class="text-light border-bottom">Metadata</h2>
     <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active btn btn-primary">
@@ -19,7 +60,14 @@
 
     <div class="row">
         <div class="col-md-6">
-            <%- include('./partials/lineGraph', {entries: entries}) %>
+            <%- include('./partials/lineGraphCard', {
+                graphStyle: cards[0].graphStyle,
+                cardTitle: cards[0].cardTitle,
+                dataSetLabels: cards[0].dataSetLabels,
+                dataSetAverages: cards[0].dataSetAverages,
+                xAxisLabels: cards[0].xAxisLabels,
+                dataSets: cards[0].dataSets
+            }) %>
         </div>
     </div>
 </div>
