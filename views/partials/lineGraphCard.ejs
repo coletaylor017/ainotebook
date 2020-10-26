@@ -4,32 +4,41 @@
 <div class="card">
     <div class="card-body">
         <h2 class="card-title"><%= cardTitle %></h2>
-        <canvas id="myChart" width="600" height="300"></canvas>
+        <canvas id="<%- key %>" width="600" height="300"></canvas>
     </div>
 </div>
 
 <script>
     
+    var dataSets = <%- JSON.stringify(dataSets) %>;
+    var dataSetLabels = <%- JSON.stringify(dataSetLabels) %>;
+    var graphColors = <%- JSON.stringify(colors) %>;
+    var graphDataSets = [];
 
-    var ctx = document.getElementById("myChart").getContext('2d');
+    for (var i = 0; i < dataSets.length; i++)
+    {
+        graphDataSets.push(
+            {
+                label: dataSetLabels[i],
+                data: dataSets[i],
+                backgroundColor: 'transparent',
+                borderColor: graphColors[i],
+                borderCapStyle: "round",
+                borderJoinStyle: "round",
+                pointBackgroundColor: graphColors[i],
+                pointHoverRadius: 2,
+                spanGaps: false,
+                yAxisID: 'y-axis-1'
+            }
+        );
+    }
+
+    var ctx = document.getElementById("<%- key %>").getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: <%- JSON.stringify(xAxisLabels) %>,
-            datasets: [
-                {
-                    label: <%- JSON.stringify(dataSetLabels[0]) %>,
-                    data: <%- JSON.stringify(dataSets[0]) %>,
-                    backgroundColor: 'transparent',
-                    borderColor: 'rgb(255, 99, 132)',
-                    borderCapStyle: "round",
-                    borderJoinStyle: "round",
-                    pointBackgroundColor: 'rgb(255, 99, 132)',
-                    pointHoverRadius: 2,
-                    spanGaps: false,
-                    yAxisID: 'y-axis-1'
-                }
-            ]
+            datasets: graphDataSets
         },
         options: {
             responsive: true,
