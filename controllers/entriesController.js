@@ -1,4 +1,5 @@
 const Entry = require("../models/entry"),
+	Entity = require("../models/entity"),
   Tag = require("../models/tag"),
   User = require("../models/user"),
   mongoose = require("mongoose"),
@@ -18,9 +19,9 @@ exports.processNewEntry = function (req, res) {
     res.redirect("back");
   }
 
-	const authenticator = new IamAuthenticator({
-		apikey: process.env.WATSON_API_KEY,
-	});
+  const authenticator = new IamAuthenticator({
+    apikey: process.env.WATSON_API_KEY,
+  });
   const nlu = new nluV1({
     version: "2020-08-01",
     authenticator: authenticator,
@@ -28,7 +29,7 @@ exports.processNewEntry = function (req, res) {
   });
 
   const analyzeParams = {
-    text: req.body.entry.body,
+    text: req.body.entry.body.toLowerCase(),
     features: {
       entities: {
         sentiment: true,
@@ -39,149 +40,148 @@ exports.processNewEntry = function (req, res) {
       },
       concepts: {
         limit: 5,
-			},
-			sentiment: {},
-			emotion: {},
+      },
+      sentiment: {},
+      emotion: {},
     },
-	};
-	
-	let entrySchemaData = null;
+  };
 
-	nlu.analyze(analyzeParams)
-	.then(function (returnedNLUData) {
+  let entrySchemaData = null;
 
-		// if no error, print out response for debugging
-		console.log(JSON.stringify(returnedNLUData, null, 4));
+  nlu
+    .analyze(analyzeParams)
+    .then(function (returnedNLUData) {
+      // if no error, print out response for debugging
+      console.log(JSON.stringify(returnedNLUData, null, 4));
 
-		entrySchemaData = {
-			body: req.body.entry.body,
-			date: req.body.entry.date,
-			author: {
-				id: req.user._id,
-				username: req.user.username,
-			},
-			metadata: {
-				containsNLUData: true,
-				nluData: mapWatsonToSchema(returnedNLUData)
-			}
-		};
+      entrySchemaData = {
+        body: req.body.entry.body,
+        date: req.body.entry.date,
+        author: {
+          id: req.user._id,
+          username: req.user.username,
+        },
+        metadata: {
+          containsNLUData: true,
+          nluData: mapWatsonDataToNluSchema(returnedNLUData.result),
+        },
+      };
+    })
+    .catch(function (err) {
+      // watson API error
+      if (err.code == 422) {
+        console.log(
+          "Text analysis error: entry was too short for Watson analysis:"
+        );
+      } else if (err.code != null) {
+        console.log("An unusual text analysis error occurred:");
+      }
+      console.log(err);
+      // continue with entry processing regardless of NLU errors
+      entrySchemaData = {
+        body: req.body.entry.body,
+        date: req.body.entry.date,
+        author: {
+          id: req.user._id,
+          username: req.user.username,
+        },
+        metadata: {
+          containsNLUData: false,
+        },
+      };
+    })
+    .finally(function () {
+      Entry.create(entrySchemaData, function (err, entry) {
+        if (err) {
+          handleErr(res, err);
+        }
+        var streakDate = req.body.streakDate.split(",");
+        var d1 = new Date(
+          user.lastEntry[0],
+          user.lastEntry[1],
+          user.lastEntry[2]
+        );
+        var d2 = new Date(streakDate[0], streakDate[1], streakDate[2]);
+        var diff = d2 - d1;
+        // convert ms to days
+        diff = diff / 86400000;
 
-	})
-	.catch(function(err) { // watson API error
-		if (err.code == 422) {
-			console.log(
-				"Text analysis error: entry was too short for Watson analysis:"
-			);
-		} else if (err.code != null) {
-			console.log("An unusual text analysis error occurred:");
-		}
-		console.log(err);
-		// continue with entry processing regardless of NLU errors
-		entrySchemaData = {
-			body: req.body.entry.body,
-			date: req.body.entry.date,
-			author: {
-				id: req.user._id,
-				username: req.user.username,
-			},
-			metadata: {
-				containsNLUData: false
-			}
-		};
-	})
-	.finally(function() {
-		Entry.create(entrySchemaData, function (err, entry) {
-			if (err) {
-				handleErr(res, err);
-			}
-			var streakDate = req.body.streakDate.split(",");
-			var d1 = new Date(
-				user.lastEntry[0],
-				user.lastEntry[1],
-				user.lastEntry[2]
-			);
-			var d2 = new Date(streakDate[0], streakDate[1], streakDate[2]);
-			var diff = d2 - d1;
-			// convert ms to days
-			diff = diff / 86400000;
+        if (diff == 1 || user.streak == 0) {
+          user.streak++;
+        } else if (diff > 1) {
+          user.streak = 1;
+        }
 
-			if (diff == 1 || user.streak == 0) {
-				user.streak++;
-			} else if (diff > 1) {
-				user.streak = 1;
-			}
+        user.lastEntry = streakDate;
+        // add the new entry to the user's list
+        user.entries.push(entry);
+        user.save();
 
-			user.lastEntry = streakDate;
-			// add the new entry to the user's list
-			user.entries.push(entry);
-			user.save();
+        if (diff == 0) {
+          // if they've already submitted an entry today
+          req.flash("success", "Entry submitted!");
+        } else {
+          if (user.streak > 1) {
+            req.flash(
+              "success",
+              "Nice job! You've written for " +
+                user.streak +
+                " consecutive days. Come back tomorrow to keep the streak going!"
+            );
+          } else {
+            req.flash(
+              "success",
+              "Nice job! Come back tomorrow to start building a streak!"
+            );
+          }
+        }
 
-			if (diff == 0) {
-				// if they've already submitted an entry today
-				req.flash("success", "Entry submitted!");
-			} else {
-				if (user.streak > 1) {
-					req.flash(
-						"success",
-						"Nice job! You've written for " +
-							user.streak +
-							" consecutive days. Come back tomorrow to keep the streak going!"
-					);
-				} else {
-					req.flash(
-						"success",
-						"Nice job! Come back tomorrow to start building a streak!"
-					);
-				}
-			}
+        if (req.body.tags.length == 0) {
+          // if there are no tags
+          res.redirect("/entries/" + entry._id);
+        } else {
+          // otherwise, handle those tags
+          var tags = JSON.parse(req.body.tags);
+          let tagNames = tags.map((t) => t.value);
 
-			if (req.body.tags.length == 0) {
-				// if there are no tags
-				res.redirect("/entries/" + entry._id);
-			} else {
-				// otherwise, handle those tags
-				var tags = JSON.parse(req.body.tags);
-				let tagNames = tags.map((t) => t.value);
+          // Select entry tags that already exist
+          Tag.find(
+            { name: { $in: tagNames }, "user.id": req.user._id },
+            { name: 1, _id: 0 },
+            function (err, existingTags) {
+              if (err) {
+                handleErr(res, err);
+              }
+              let existingTagNames = existingTags.map((t) => t.name);
+              // Determine which tag names don't already exist so we can create those in a second
+              var tagsToCreate = tagNames.diff(existingTagNames);
 
-				// Select entry tags that already exist
-				Tag.find(
-					{ name: { $in: tagNames }, "user.id": req.user._id },
-					{ name: 1, _id: 0 },
-					function (err, existingTags) {
-						if (err) {
-							handleErr(res, err);
-						}
-						let existingTagNames = existingTags.map((t) => t.name);
-						// Determine which tag names don't already exist so we can create those in a second
-						var tagsToCreate = tagNames.diff(existingTagNames);
-
-						var newTagArr = [];
-						// create new mongodb-fiendly    objects for each new tag
-						tagsToCreate.forEach(function (tName) {
-							var oid = mongoose.Types.ObjectId();
-							newTagArr.push({
-								_id: oid,
-								name: tName,
-								user: {
-									id: req.user._id,
-									username: req.user.username,
-								},
-								entries: [],
-							});
-						});
-						Tag.insertMany(newTagArr, function (err) {
-							if (err) {
-								handleErr(res, err);
-							}
-							var tagsToPush = existingTags.concat(newTagArr);
-							addNewTags(req, res, entry, tagNames, tagsToPush);
-						});
-					}
-				);
-			}
-			}
-		);
-	});	
+              var newTagArr = [];
+              // create new mongodb-fiendly    objects for each new tag
+              tagsToCreate.forEach(function (tName) {
+                var oid = mongoose.Types.ObjectId();
+                newTagArr.push({
+                  _id: oid,
+                  name: tName,
+                  user: {
+                    id: req.user._id,
+                    username: req.user.username,
+                  },
+                  entries: [],
+                });
+              });
+              Tag.insertMany(newTagArr, function (err) {
+                if (err) {
+                  handleErr(res, err);
+                }
+                var tagsToPush = existingTags.concat(newTagArr);
+                addNewTags(req, res, entry, tagNames, tagsToPush);
+              });
+            }
+          );
+        }
+      });
+    });
 };
 
 // Adds new tags to the newly created entry and adds the entry to all tags
@@ -209,9 +209,33 @@ const addNewTags = (req, res, entry, allEntryTagNames, newTags) => {
   );
 };
 
-const mapWatsonToSchema = (watsonData) =>
-{
-	return {
-
-	};
-}
+const mapWatsonDataToNluSchema = (data) => {
+  return {
+    entities: [], // populate empty for starters then we'll go back and add this in after the entry is created
+    concepts: data.concepts.map(function(concept) {
+			return {
+				text: concept.text,
+				relevance: concept.relevance,
+				infoURL: concept.dbpedia_resource
+			}
+		}),
+		keywords: data.keywords.map(function(keyword) {
+			return {
+				text: keyword.text,
+				relevance: keyword.relevance,
+				count: keyword.count
+			};
+		}),
+    sentiment: {
+      score: data.sentiment.document.score,
+      label: data.sentiment.document.label,
+    },
+    emotion: {
+      sadness: data.emotion.document.emotion.sadness,
+      joy: data.emotion.document.emotion.joy,
+      fear: data.emotion.document.emotion.fear,
+      disgust: data.emotion.document.emotion.disgust,
+      anger: data.emotion.document.emotion.anger,
+    },
+  };
+};
