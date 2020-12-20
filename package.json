@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "debug": "PORT='8080' DATABASEURL='mongodb://localhost:27017/writenow' node app.js",
+    "debug": "PORT='8080' DATABASEURL='mongodb://localhost:27017/writenow' node --trace-warnings app.js",
     "start": "node app.js"
   },
   "author": "Cole Taylor",
@@ -26,7 +26,7 @@
     "express-session": "^1.17.0",
     "fstream": "^1.0.12",
     "graceful-fs": "^4.2.3",
-    "ibm-watson": "^4.5.4",
+    "ibm-watson": "^6.0.0",
     "jquery": "^3.5.0",
     "method-override": "^3.0.0",
     "moment": "^2.24.0",

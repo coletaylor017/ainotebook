@@ -18,8 +18,40 @@ var entrySchema = new mongoose.Schema({
     },
     metadata: {
         mood: String,
-        weather: String,
-        aiData: {}
+        containsNLUData: Boolean,
+        nluData: {
+            entities: [
+                {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "Entity"
+                }
+            ],
+            concepts: [
+                {
+                    text: String,
+                    relevance: Number,
+                    infoURL: String
+                }
+            ],
+            keywords: [
+                {
+                    text: String,
+                    relevance: Number,
+                    count: Number
+                }
+            ],
+            sentiment: {
+                score: Number,
+                label: String
+            },
+            emotion: {
+                sadness: Number,
+                joy: Number,
+                fear: Number,
+                disgust: Number,
+                anger: Number
+            },
+        }
     }
 });
 
