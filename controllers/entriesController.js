@@ -153,7 +153,7 @@ exports.processNewEntry = function (req, res) {
               var tagsToCreate = tagNames.diff(existingTagNames);
 
               var newTagArr = [];
-              // create new mongodb-fiendly    objects for each new tag
+              // create new mongodb-fiendly objects for each new tag
               tagsToCreate.forEach(function (tName) {
                 var oid = mongoose.Types.ObjectId();
                 newTagArr.push({
