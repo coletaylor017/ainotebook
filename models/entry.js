@@ -17,13 +17,26 @@ var entrySchema = new mongoose.Schema({
         username: String
     },
     metadata: {
-        mood: String,
         containsNLUData: Boolean,
         nluData: {
             entities: [
                 {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: "Entity"
+                    category: String,
+                    text: String,
+                    sentiment: {
+                        score: Number,
+                        label: String
+                    },
+                    relevance: Number,
+                    confidence: Number,
+                    emotion: {
+                        sadness: Number,
+                        joy: Number,
+                        fear: Number,
+                        disgust: Number,
+                        anger: Number
+                    },
+                    count: Number
                 }
             ],
             concepts: [

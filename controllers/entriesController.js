@@ -1,5 +1,4 @@
 const Entry = require("../models/entry"),
-	Entity = require("../models/entity"),
   Tag = require("../models/tag"),
   User = require("../models/user"),
   mongoose = require("mongoose"),
@@ -68,11 +67,8 @@ exports.processNewEntry = function (req, res) {
       };
     })
     .catch(function (err) {
-      // watson API error
-      if (err.code == 422) {
-        console.log(
-          "Text analysis error: entry was too short for Watson analysis:"
-        );
+      if (err.code == 422) { // entry was too short to analyze
+        console.log("Entry was too short for NLU analysis");
       } else if (err.code != null) {
         console.log("An unusual text analysis error occurred:");
       }
@@ -209,23 +205,42 @@ const addNewTags = (req, res, entry, allEntryTagNames, newTags) => {
   );
 };
 
-const mapWatsonDataToNluSchema = (data) => {
+const mapWatsonDataToNluSchema = function(data) {
   return {
-    entities: [], // populate empty for starters then we'll go back and add this in after the entry is created
-    concepts: data.concepts.map(function(concept) {
-			return {
-				text: concept.text,
-				relevance: concept.relevance,
-				infoURL: concept.dbpedia_resource
-			}
-		}),
-		keywords: data.keywords.map(function(keyword) {
-			return {
-				text: keyword.text,
-				relevance: keyword.relevance,
-				count: keyword.count
-			};
-		}),
+    entities: data.entities.map(function (entity) {
+      return {
+        category: entity.type,
+        text: entity.text,
+        sentiment: {
+          score: entity.sentiment.score,
+          label: entity.sentiment.label,
+        },
+        relevance: entity.relevance,
+        confidence: entity.confidence,
+        emotion: {
+          sadness: entity.emotion.sadness,
+          joy: entity.emotion.joy,
+          fear: entity.emotion.fear,
+          disgust: entity.emotion.disgust,
+          anger: entity.emotion.anger,
+        },
+        count: entity.count
+      };
+    }),
+    concepts: data.concepts.map(function (concept) {
+      return {
+        text: concept.text,
+        relevance: concept.relevance,
+        infoURL: concept.dbpedia_resource,
+      };
+    }),
+    keywords: data.keywords.map(function (keyword) {
+      return {
+        text: keyword.text,
+        relevance: keyword.relevance,
+        count: keyword.count,
+      };
+    }),
     sentiment: {
       score: data.sentiment.document.score,
       label: data.sentiment.document.label,
