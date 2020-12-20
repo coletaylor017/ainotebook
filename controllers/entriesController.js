@@ -210,7 +210,7 @@ const mapWatsonDataToNluSchema = function(data) {
     entities: data.entities.map(function (entity) {
       return {
         category: entity.type,
-        text: entity.text,
+        name: entity.text,
         sentiment: {
           score: entity.sentiment.score,
           label: entity.sentiment.label,

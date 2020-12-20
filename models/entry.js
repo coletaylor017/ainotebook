@@ -22,7 +22,7 @@ var entrySchema = new mongoose.Schema({
             entities: [
                 {
                     category: String,
-                    text: String,
+                    name: String,
                     sentiment: {
                         score: Number,
                         label: String
