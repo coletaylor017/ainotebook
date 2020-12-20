@@ -19,7 +19,7 @@ exports.processNewEntry = function (req, res) {
   }
 
 	const authenticator = new IamAuthenticator({
-		apikey: "A2aBQAYVj04Pp8jxP1aGUDXOhozhjJBDQ5IYDZqrcpmH",
+		apikey: process.env.WATSON_API_KEY,
 	});
   const nlu = new nluV1({
     version: "2020-08-01",
