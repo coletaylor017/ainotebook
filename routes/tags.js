@@ -23,9 +23,9 @@ router.delete("/:id", middleware.isLoggedIn, function(req, res) {
             console.log(err);
         } else {
             // User.update( { _id: userId }, { $pull: { followers: "foo_bar" } } );
-            Tag.findByIdAndDelete(req.params.id, function(err) {
-                if (err) {
-                    console.log(err);
+            Tag.findByIdAndDelete(req.params.id, function(deleteErr) {
+                if (deleteErr) {
+                    console.log(deleteErr);
                 } else {
                     res.redirect("/entries");
                 }
