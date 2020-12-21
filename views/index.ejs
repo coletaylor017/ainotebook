@@ -18,7 +18,7 @@
             <div class="ui list">
                 <% tags.forEach(function(tag) { %>
                     <a class="item">
-                        <a href="/tags/<%= tag._id %>"><%= tag.name %> (<%= tag.entries.length %>)</a>
+                        <a href="/tags/<%= tag.name %>"><%= tag.name %> (<%= tag.entryCount %>)</a>
                     </a>
                 <% }) %>
             </div>
@@ -41,7 +41,7 @@
                             <!--moment(entry.date).format("D MMM YYYY, h:mm a") -->
                             <% entry.tags.forEach(function(tag) { %>
                                 <h4 class="ui item label" id="tags">
-                                    <%= tag.name %>
+                                    <%= tag %>
                                 </h4>
                             <% }); %>
                         </div>

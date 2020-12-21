@@ -15,13 +15,13 @@
             <h4 class="ui inverted item header"><%= moment(entry.date).format("D MMM YYYY, h:mm a") %></h4>
             <% entry.tags.forEach(function(tag) { %>
                 <h4 class="ui item label" id="tags">
-                    <%= tag.name %>
+                    <%= tag %>
                 </h4>
             <% }); %>
         </div>
         <p class="entrybody"><%= entry.body %></p>
         <h1 class="ui inverted header">Watson data</h1>
-        <p class="entrybody"><%- JSON.stringify(metadata, null, 4) %></p>
+        <p class="entrybody"><%- JSON.stringify(entry, null, 4) %></p>
     </div>
     
     <!-- <h2 class="ui inverted header">Metadata</h2>

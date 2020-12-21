@@ -25,6 +25,9 @@ exports.processNewEntry = function (req, res) {
     version: "2020-08-01",
     authenticator: authenticator,
     serviceUrl: process.env.WATSON_URL,
+    headers: {
+      "X-Watson-Learning-Opt-Out": "true",
+    },
   });
 
   const analyzeParams = {
@@ -137,11 +140,15 @@ exports.processNewEntry = function (req, res) {
           let tags = JSON.parse(req.body.tags);
           let tagNames = tags.map((t) => t.value);
 
-          Entry.findByIdAndUpdate(entry._id, {
-            $addToSet: { tags: { $each: tagNames } },
-          }).catch(function (err) {
-            handleErr(res, err);
-          });
+          Entry.findByIdAndUpdate(
+            entry._id,
+            { $addToSet: { tags: { $each: tagNames } } },
+            function (tagErr) {
+              if (tagErr) {
+                handleErr(res, tagErr);
+              }
+            }
+          );
         }
 
         // regardless of the number of tags, show entry page when completed
