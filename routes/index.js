@@ -4,38 +4,7 @@ var express = require("express"),
     Quote = require("../models/quote"),
     Global = require("../models/global"),
     middleware = require("../middleware"),
-    sgMail = require('@sendgrid/mail'),
-    CronJob = require('cron').CronJob,
     passport = require("passport");
-
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-// const msg = {
-//     to: ['coletaylor017@gmail.com', 'cnovac01@gmail.com'],
-//     from: 'donotreply@writing-blocks.herokuapp.com',
-//     subject: 'Yay!',
-//     html: '<h1>This is a scheduled message sent using SendGrid. It should arrive at 1549985880, or UTC 15:38 on February 12th, 2019.</h1>',
-//     send_each_at: [1549985880, 1549985880]
-// };
-// sgMail.send(msg);
-
-// var CronJob = require('cron').CronJob;
-// new CronJob('* * * * * *', function() {
-//   console.log('You will see this message every second');
-// }, null, true, 'America/Los_Angeles');
-
-
-// // using SendGrid's v3 Node.js Library
-// // https://github.com/sendgrid/sendgrid-nodejs
-// const sgMail = require('@sendgrid/mail');
-// sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-// const msg = {
-//   to: 'coletaylor017@gmail.com',
-//   from: 'coletaylor017@gmail.com',
-//   subject: 'Buh.',
-//   html: '<h1>B U H</h1>'
-// };
-// sgMail.send(msg);
 
 var router = express.Router();
 
@@ -133,14 +102,6 @@ router.get("/data", middleware.isLoggedIn, function (req, res) {
         }
     });
 });
-
-// Entry.find({"author.id": req.user._id, "hidden": 0, $text: { $search: req.query.keyword } }).populate("tags", "name").exec(function(err, entries) {
-//     if (err) {
-//         console.log(err);
-//     } else {
-//         res.render("index", {tags: tags, entries: entries.reverse(), keyword: req.query.keyword});
-//     }
-// });
 
 router.post("/data", middleware.isLoggedIn, function (req, res) {
     res.redirect("/data/" + "?category=" + req.body.category);

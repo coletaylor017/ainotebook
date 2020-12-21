@@ -13,15 +13,6 @@ var middlewareObj = {
         req.flash("error", "Please log in first");
         res.redirect("/login");
     },
-    deleteDeadTags: function(req, res, next) {
-        Tag.deleteMany( { entries: { $size: 0 } }, function(err) {
-            if (err) {
-                console.log(err);
-            } else {
-                return next();
-            }
-        });
-    },
     isAdmin: function(req, res, next) {
         User.find({"username": req.user.username}, function(err, user) {
             if (err) {

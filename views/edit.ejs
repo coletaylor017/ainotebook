@@ -15,24 +15,24 @@
             <div class="ui field">
                 <div class="ui labeled input" id="tagbox">
                     <label class="ui label" id="tagbox"><i class="ui question circle outline link icon modal-btn-2"></i>Optional: Add tags</label>
-                    <input type="text" name="tags" placeholder="Write some tags. '#' is not necessary" value="<%= tags %>" class="ui inverted" id="transparent">
+                    <input type="text" name="tags" placeholder="Write some tags. '#' is not necessary" value="<%= entry.tags %>" class="ui inverted" id="transparent">
                 </div>
             </div>
-            <a href="/entries/<%= entry._id %>" class="ui basic icon button" title="Back"><i class="ui arrow left icon"></i></a>
+            <a href="/entries" class="ui basic icon button" title="Back"><i class="ui arrow left icon"></i></a>
             <button type="submit" class="ui green button" title="Save!"><i class="ui check icon"></i>Done</button>
         </form>
     </div>
 </div>
 
 <script>
-    var tagArr = <%- JSON.stringify(tags) %>;
+    var tagArr = <%- JSON.stringify(tags.map(t => t.name)) %>;
     var input = document.querySelector("input[name=tags]");
     new Tagify(input, {
         delimiters          : ",| ",  // add new tags when a comma or a space character
         keepInvalidTags     : false,  // do not remove invalid tags (but keep them marked as invalid)
         whitelist: tagArr,
         dropdown : {
-            enabled: 3,
+            enabled: 1,
             maxItems: 5
         }
     });
