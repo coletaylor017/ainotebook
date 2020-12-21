@@ -32,83 +32,101 @@ router.get(
   "/",
   middleware.isLoggedIn,
   middleware.deleteDeadTags,
-  async function (req, res) {
-    // get an object for each tag with a name and a count of how many entries reference it
-    await Entry.aggregate([
+  function (req, res) {
+    // generate an object for each tag containing a name and a count of how many entries reference it
+    Entry.aggregate(
+      [
         {
-          '$match': {
-            'tags.0': {
-              '$exists': true
-            }
-          }
-        }, {
-          '$unwind': {
-            'path': '$tags', 
-            'preserveNullAndEmptyArrays': false
-          }
-        }, {
-          '$group': {
-            '_id': '$tags', 
-            'entryCount': {
-              '$sum': 1
-            }
-          }
-        }, {
-          '$project': {
-            '_id': false, 
-            'name': '$_id', 
-            'entryCount': true
-          }
+          $match: {
+            "tags.0": {
+              $exists: true,
+            },
+          },
+        },
+        {
+          $unwind: {
+            path: "$tags",
+            preserveNullAndEmptyArrays: false,
+          },
+        },
+        {
+          $group: {
+            _id: "$tags",
+            entryCount: {
+              $sum: 1,
+            },
+          },
+        },
+        {
+          $project: {
+            _id: false,
+            name: "$_id",
+            entryCount: true,
+          },
+        },
+      ],
+      function (aggErr, tags) {
+        if (aggErr) {
+          handleErr(res, aggErr);
         }
-      ], function(aggErr, tags) {
-          if (aggErr) {
-              handleErr(res, aggErr);
-          }
 
-          if (!req.query.keyword) {
-            //if no search query
-            Entry.find({ "author.id": req.user._id }, function (err, entries) {
-              if (err) {
-                handleErr(res, err);
-              }
-              res.render("index", {
-                tags: tags,
-                entries: entries.reverse(),
-                keyword: "",
-              });
-            });
-          } else {
-            Entry.find({
-              "author.id": req.user._id,
-              $text: { $search: req.query.keyword },
-            })
-              .populate("tags", "name")
-              .exec(function (err, entries) {
-                if (err) {
-                  handleErr(res, err);
-                }
-                res.render("index", {
-                  tags: tags,
-                  entries: entries.reverse(),
-                  keyword: req.query.keyword,
-                });
-              });
+        let entryQuery;
+
+        // if the user has entered a search term, search for entries containing that term
+        if (!req.query.keyword) {
+          entryQuery = { "author.id": req.user._id };
+        } else {
+          entryQuery = {
+            "author.id": req.user._id,
+            $text: { $search: req.query.keyword },
+          };
+        }
+
+        Entry.find(entryQuery, function (err, entries) {
+          if (err) {
+            handleErr(res, err);
           }
-      });
+          res.render("index", {
+            tags: tags,
+            entries: entries.reverse(),
+            keyword: req.query.keyword ? req.query.keyword : "",
+          });
+        });
+      }
+    );
   }
 );
 
 // entry creation page
 router.get("/new", middleware.isLoggedIn, function (req, res) {
-  Tag.find(
-    { "user.id": req.user._id },
-    { name: 1, _id: 0 },
-    function (err, tags) {
+	Entry.aggregate([
+		{
+			'$match': {
+				'tags.0': {
+					'$exists': true
+				}
+			}
+		}, {
+			'$unwind': {
+				'path': '$tags', 
+				'preserveNullAndEmptyArrays': false
+			}
+		}, {
+			'$group': {
+				'_id': '$tags'
+			}
+		}, {
+			'$project': {
+				'_id': false, 
+				'name': '$_id', 
+				'entryCount': true
+			}
+		}
+	], function (err, tags) {
       if (err) {
         handleErr(res, err);
       }
-      let tagNames = tags.map((t) => t.name);
-      res.render("new", { tags: tagNames }); // using es6 spread operator to get rid of a for loop
+      res.render("new", { tags: tags });
     }
   );
 });

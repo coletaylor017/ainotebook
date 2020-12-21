@@ -6,7 +6,7 @@ const Entry = require("../models/entry"),
   { IamAuthenticator } = require("ibm-watson/auth");
 
 const handleErr = (res, err) => {
-  console.log("Now displaying error page with err: ", err);
+  console.log("Now displaying DB error page with err: ", err);
   res.render("dbError", { err: err });
 };
 
@@ -14,8 +14,9 @@ exports.processNewEntry = function (req, res) {
   const user = req.user;
   // trim the entry if it is all whtiespace
   if (req.body.entry.body.trim().length === 0) {
-    res.flash("error", "Entry cannot be blank");
+    req.flash("error", "Entry cannot be blank");
     res.redirect("back");
+    return;
   }
 
   const authenticator = new IamAuthenticator({
@@ -53,9 +54,6 @@ exports.processNewEntry = function (req, res) {
   nlu
     .analyze(analyzeParams)
     .then(function (returnedNLUData) {
-      // if no error, print out response for debugging
-      console.log(JSON.stringify(returnedNLUData, null, 4));
-
       entrySchemaData = {
         body: req.body.entry.body,
         date: req.body.entry.date,
@@ -70,13 +68,10 @@ exports.processNewEntry = function (req, res) {
       };
     })
     .catch(function (err) {
-      if (err.code == 422) {
-        // entry was too short to analyze
-        console.log("Entry was too short for NLU analysis");
-      } else if (err.code != null) {
+      if (err.code != null && err.code != 422) {
         console.log("An unusual text analysis error occurred:");
+        console.log(err);
       }
-      console.log(err);
       // continue with entry processing regardless of NLU errors
       entrySchemaData = {
         body: req.body.entry.body,
