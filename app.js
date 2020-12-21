@@ -21,7 +21,7 @@ var entryRoutes = require("./routes/entries"),
     quoteRoutes = require("./routes/quotes"),
     indexRoutes = require("./routes/index");
 
-var url = process.env.DATABASEURL;
+var url = process.env.DATABASE_URL;
 mongoose.connect(url, { useNewUrlParser: true });
 
 var app = express();

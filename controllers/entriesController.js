@@ -45,7 +45,7 @@ exports.processNewEntry = function (req, res) {
     },
   };
 
-  let entrySchemaData = null;
+  let entrySchemaData;
 
   nlu
     .analyze(analyzeParams)
@@ -67,7 +67,8 @@ exports.processNewEntry = function (req, res) {
       };
     })
     .catch(function (err) {
-      if (err.code == 422) { // entry was too short to analyze
+      if (err.code == 422) {
+        // entry was too short to analyze
         console.log("Entry was too short for NLU analysis");
       } else if (err.code != null) {
         console.log("An unusual text analysis error occurred:");
@@ -132,80 +133,24 @@ exports.processNewEntry = function (req, res) {
           }
         }
 
-        if (req.body.tags.length == 0) {
-          // if there are no tags
-          res.redirect("/entries/" + entry._id);
-        } else {
-          // otherwise, handle those tags
-          var tags = JSON.parse(req.body.tags);
+        if (req.body.tags.length > 0) {
+          let tags = JSON.parse(req.body.tags);
           let tagNames = tags.map((t) => t.value);
 
-          // Select entry tags that already exist
-          Tag.find(
-            { name: { $in: tagNames }, "user.id": req.user._id },
-            { name: 1, _id: 0 },
-            function (err, existingTags) {
-              if (err) {
-                handleErr(res, err);
-              }
-              let existingTagNames = existingTags.map((t) => t.name);
-              // Determine which tag names don't already exist so we can create those in a second
-              var tagsToCreate = tagNames.diff(existingTagNames);
-
-              var newTagArr = [];
-              // create new mongodb-fiendly objects for each new tag
-              tagsToCreate.forEach(function (tName) {
-                var oid = mongoose.Types.ObjectId();
-                newTagArr.push({
-                  _id: oid,
-                  name: tName,
-                  user: {
-                    id: req.user._id,
-                    username: req.user.username,
-                  },
-                  entries: [],
-                });
-              });
-              Tag.insertMany(newTagArr, function (err) {
-                if (err) {
-                  handleErr(res, err);
-                }
-                var tagsToPush = existingTags.concat(newTagArr);
-                addNewTags(req, res, entry, tagNames, tagsToPush);
-              });
-            }
-          );
+          Entry.findByIdAndUpdate(entry._id, {
+            $addToSet: { tags: { $each: tagNames } },
+          }).catch(function (err) {
+            handleErr(res, err);
+          });
         }
+
+        // regardless of the number of tags, show entry page when completed
+        res.redirect("/entries/" + entry._id);
       });
     });
 };
 
-// Adds new tags to the newly created entry and adds the entry to all tags
-const addNewTags = (req, res, entry, allEntryTagNames, newTags) => {
-  // Add all new tags to the newly created entry
-  Entry.findByIdAndUpdate(
-    entry._id,
-    { $addToSet: { tags: { $each: newTags } } },
-    function (err) {
-      if (err) {
-        handleErr(res, err);
-      }
-      // Add this entry to all tags associated with it
-      Tag.updateMany(
-        { name: { $in: allEntryTagNames }, "user.id": req.user._id },
-        { $addToSet: { entries: entry } },
-        function (err) {
-          if (err) {
-            handleErr(res, err);
-          }
-          res.redirect("/entries/" + entry._id);
-        }
-      );
-    }
-  );
-};
-
-const mapWatsonDataToNluSchema = function(data) {
+const mapWatsonDataToNluSchema = function (data) {
   return {
     entities: data.entities.map(function (entity) {
       return {
@@ -224,7 +169,7 @@ const mapWatsonDataToNluSchema = function(data) {
           disgust: entity.emotion.disgust,
           anger: entity.emotion.anger,
         },
-        count: entity.count
+        count: entity.count,
       };
     }),
     concepts: data.concepts.map(function (concept) {
