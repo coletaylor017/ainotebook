@@ -21,17 +21,13 @@ var entryRoutes = require("./routes/entries"),
     quoteRoutes = require("./routes/quotes"),
     indexRoutes = require("./routes/index");
 
-var url = process.env.DATABASEURL;
+var url = process.env.DATABASE_URL;
 mongoose.connect(url, { useNewUrlParser: true });
 
 var app = express();
 app.set("view engine", "ejs");
 
 app.locals.moment = require('moment');
-
-Global.create({
-    currentQuote: "5d640d02ca1e1f1050316805"
-});
 
 // From arcseldon on https://stackoverflow.com/questions/7185074/heroku-nodejs-http-to-https-ssl-forced-redirect
 

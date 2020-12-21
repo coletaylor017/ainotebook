@@ -4,21 +4,33 @@
     <div class="ui left dividing rail">
         <div class="ui right aligned container sticky theting">
             <h1 class="ui inverted header">Past Entries</h1>
-            <form action="/entries/search" method="POST">
+            <form action="<%= "/entries/search" + (queriedTags.length > 0 ? "?tags=" + encodeURIComponent(queriedTags) : "") %>" method="POST">
                 <div class="ui left labeled button">
-                    <input class="ui basic label input" type="text" name="searchterm" placeholder="Search">
+                    <input class="ui basic label input" type="text" name="searchterm" placeholder="Search by phrase...">
                     <button class="ui icon button" action="submit"><i class="search icon"></i></button>
                 </div>
             </form>
             <% if (keyword !== "") { %>
-                <p>Keyword: <%= keyword %></p>
-                <a href="/entries">clear search term</a><br>
+                <p class="mt-2">Filtering by phrase: "<%= keyword %>"</p>
             <% } %>
+            <% if (queriedTags.length > 0) { %>
+                <p class="mt-2">Filtering by tags:
+                    <% queriedTags.forEach(function(tag) { %>
+                        <span class="ui item label"><%= tag %></span>
+                    <% }); %>
+                </p>
+            <% } %>
+
+            <% if (keyword !== "" || queriedTags.length > 0) { %>
+                <a href="/entries">clear search terms</a><br>
+            <% } %>
+
+
             <h2>Tags</h2>
             <div class="ui list">
                 <% tags.forEach(function(tag) { %>
                     <a class="item">
-                        <a href="/tags/<%= tag._id %>"><%= tag.name %> (<%= tag.entries.length %>)</a>
+                        <a href="<%= "/entries" + "?tags=" + (queriedTags.length > 0 ? encodeURIComponent(queriedTags) + "," : "") + encodeURIComponent(tag.name) + (keyword != "" ? "&keyword=" + keyword : "") %>"><%= tag.name %> (<%= tag.entryCount %>)</a>
                     </a>
                 <% }) %>
             </div>
@@ -41,7 +53,7 @@
                             <!--moment(entry.date).format("D MMM YYYY, h:mm a") -->
                             <% entry.tags.forEach(function(tag) { %>
                                 <h4 class="ui item label" id="tags">
-                                    <%= tag.name %>
+                                    <%= tag %>
                                 </h4>
                             <% }); %>
                         </div>

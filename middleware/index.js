@@ -1,10 +1,7 @@
 var Global    = require("../models/global"),
     Quote     = require("../models/quote"),
-    User      = require("../models/user"),
-    Tag       = require("../models/tag")
-    moment    = require("moment"),
-    mongoose  = require("mongoose");
-
+    User      = require("../models/user");
+    
 var middlewareObj = {
     isLoggedIn: function(req, res, next) {
         if(req.isAuthenticated()) {
@@ -12,15 +9,6 @@ var middlewareObj = {
         }
         req.flash("error", "Please log in first");
         res.redirect("/login");
-    },
-    deleteDeadTags: function(req, res, next) {
-        Tag.deleteMany( { entries: { $size: 0 } }, function(err) {
-            if (err) {
-                console.log(err);
-            } else {
-                return next();
-            }
-        });
     },
     isAdmin: function(req, res, next) {
         User.find({"username": req.user.username}, function(err, user) {
