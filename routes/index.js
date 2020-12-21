@@ -20,7 +20,6 @@ router.get("/terms", function (req, res) {
     res.render("terms");
 })
 
-//Register
 router.get("/register", function (req, res) {
     res.render("signup");
 });
@@ -87,7 +86,6 @@ router.get("/home", middleware.isLoggedIn, middleware.updateQuote, function (req
                         })
                     }
                 })
-                // Optimization uestion: Is it better to do calculation on the server side or pass the entire entry body to the client and do the calculation there?
             });
         }
     });
@@ -125,17 +123,6 @@ router.get("/logout", function (req, res) {
 
 router.post("/account", middleware.isLoggedIn, function (req, res) {
     console.log(req.body.emails);
-    // var job = new CronJob({cronTime: '* * 22 * * *', onTick: function() {
-    //     // const msg = {
-    //     //     to: 'coletaylor017@gmail.com',
-    //     //     from: 'donotreply@writing-blocks.herokuapp.com',
-    //     //     subject: 'Have you done your freewriting yet today?',
-    //     //     html: '<h1>Get on it!</h1><a>GO!</a>'
-    //     // };
-    //     // sgMail.send(msg);
-    //     console.log("sending a reminder email");
-    // }, utcOffset: -req.body.timezone});
-    // job.start();
 
     User.findById(req.user._id, function (err, user) {
         if (err) {
