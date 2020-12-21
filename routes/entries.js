@@ -200,25 +200,7 @@ router.post("/", middleware.isLoggedIn, function (req, res) {
 
 //update
 router.put("/:id", middleware.isLoggedIn, function (req, res) {
-  if (req.body.entry.body.trim().length === 0) { // if entry is all whitespace
-    res.flash("error", "Entry cannot be blank");
-		res.redirect("back");
-		return;
-  }
-
-  Entry.findByIdAndUpdate(
-    req.params.id,
-    {
-      $set: { body: req.body.entry.body, tags: JSON.parse(req.body.tags).map(t => t.value) },
-    },
-    function (err, entry) {
-      if (err) {
-        handleErr(res, err);
-			}
-			
-			res.redirect("/entries/" + entry._id);
-		}
-  );
+	entriesController.updateEntry(req, res);
 });
 
 //destroy
