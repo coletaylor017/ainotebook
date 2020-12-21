@@ -1,50 +1,54 @@
 const Entry = require("../models/entry"),
   nlu = require("../helpers/nlu"),
   User = require("../models/user"),
-  queries = require("../helpers/queries");
+  queries = require("../helpers/queries"),
+  errorHandlers = require("../helpers/errorHandlers");
 
 class EntriesController {
-  handleErr(res, err) {
-    console.log("Now displaying DB error page with err: ", err);
-    res.render("dbError", { err: err });
-  }
 
   static async allEntriesPage(req, res) {
-    // generate an object for each tag containing a name and a count of how many entries reference it
-    Entry.aggregate(queries.getTagsWithCounts, function (aggErr, tags) {
-      if (aggErr) {
-        this.handleErr(res, aggErr);
+    let tagsArr = [];
+
+    let entryQuery = {
+      "author.id": req.user._id,
+    };
+
+    // if the user has filtered by tag(s), search for entries with those tags
+    if (req.query.tags) {
+      tagsArr = req.query.tags.split(",");
+      entryQuery.tags = { $all: tagsArr };
+    }
+    // if the user has entered a search term, search for entries containing that term
+    if (req.query.keyword) {
+      entryQuery["$text"] = { $search: req.query.keyword };
+    }
+
+    Entry.find(entryQuery, function (err, entries) {
+      if (err) {
+        errorHandlers.dbError(res, err);
       }
-
-      let entryQuery;
-
-      // if the user has entered a search term, search for entries containing that term
-      if (!req.query.keyword) {
-        entryQuery = { "author.id": req.user._id };
-      } else {
-        entryQuery = {
-          "author.id": req.user._id,
-          $text: { $search: req.query.keyword },
-        };
-      }
-
-      Entry.find(entryQuery, function (err, entries) {
-        if (err) {
-          this.handleErr(res, err);
+      // generate an object for each tag containing a name and a count of how many entries reference it
+      Entry.aggregate(
+        queries.getTagsWithCounts(tagsArr, req.query.keyword ? req.query.keyword : null),
+        function (aggErr, tags) {
+          if (aggErr) {
+            errorHandlers.dbError(res, aggErr);
+          }
+          res.render("index", {
+            queriedTags: tagsArr, // [String]
+            tags: tags, // [{name: String, count: Number}]
+            entries: entries.reverse(),
+            keyword: req.query.keyword ? req.query.keyword : "",
+          });
         }
-        res.render("index", {
-          tags: tags,
-          entries: entries.reverse(),
-          keyword: req.query.keyword ? req.query.keyword : "",
-        });
-      });
+      );
     });
   }
 
   static async entryShowPage(req, res) {
     Entry.findById(req.params.id).exec(function (err, entry) {
       if (err) {
-        this.handleErr(res, err);
+        errorHandlers.dbError(res, err);
       }
       res.render("show", { entry: entry });
     });
@@ -53,7 +57,7 @@ class EntriesController {
   static async newEntryPage(req, res) {
     Entry.aggregate(queries.getTagNames, function (err, tags) {
       if (err) {
-        this.handleErr(res, err);
+        errorHandlers.dbError(res, err);
       }
       res.render("new", { tags: tags });
     });
@@ -62,11 +66,11 @@ class EntriesController {
   static async entryEditPage(req, res) {
     Entry.findById(req.params.id, function (err, entry) {
       if (err) {
-        this.handleErr(res, err);
+        errorHandlers.dbError(res, err);
       }
       Entry.aggregate(queries.getTagNames, function (tagErr, tags) {
         if (tagErr) {
-          this.handleErr(res, tagErr);
+          errorHandlers.dbError(res, tagErr);
         }
         res.render("edit", { entry: entry, tags: tags });
       });
@@ -99,7 +103,7 @@ class EntriesController {
 
         Entry.create(entrySchemaData, function (err, entry) {
           if (err) {
-            this.handleErr(res, err);
+            errorHandlers.dbError(res, err);
           }
           var streakDate = req.body.streakDate.split(",");
           var d1 = new Date(
@@ -151,7 +155,7 @@ class EntriesController {
               { $addToSet: { tags: { $each: tagNames } } },
               function (tagErr) {
                 if (tagErr) {
-                  this.handleErr(res, tagErr);
+                  errorHandlers.dbError(res, tagErr);
                 }
               }
             );
@@ -188,7 +192,7 @@ class EntriesController {
           },
           function (err, entry) {
             if (err) {
-              this.handleErr(res, err);
+              errorHandlers.dbError(res, err);
             }
 
             res.redirect("/entries/" + entry._id);
@@ -196,7 +200,7 @@ class EntriesController {
         );
       })
       .catch(function (reason) {
-        this.handleErr(res, reason);
+        errorHandlers.dbError(res, reason);
       });
   }
 
@@ -206,13 +210,13 @@ class EntriesController {
       { $pull: { entries: req.params.id } },
       function (err) {
         if (err) {
-          this.handleErr(res, err); // returns
+          errorHandlers.dbError(res, err); // returns
         }
       }
     );
     await Entry.findByIdAndDelete(req.params.id, function (err) {
       if (err) {
-        this.handleErr(res, err); // returns
+        errorHandlers.dbError(res, err); // returns
       }
     });
     res.redirect("/entries");

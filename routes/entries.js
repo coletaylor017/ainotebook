@@ -23,7 +23,11 @@ router.get("/:id/edit", middleware.isLoggedIn, function (req, res) {
 
 // when "search" button clicked, this runs
 router.post("/search", middleware.isLoggedIn, function (req, res) {
-  res.redirect("/entries/" + "?keyword=" + req.body.searchterm);
+  if (req.query.tags) {
+    res.redirect("/entries?keyword=" + req.body.searchterm + "&tags=" + encodeURIComponent(req.query.tags));
+  } else {
+    res.redirect("/entries?keyword=" + req.body.searchterm);
+  }
 });
 
 router.post("/", middleware.isLoggedIn, function (req, res) {

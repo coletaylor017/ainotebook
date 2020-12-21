@@ -1,10 +1,7 @@
 var Global    = require("../models/global"),
     Quote     = require("../models/quote"),
-    User      = require("../models/user"),
-    Tag       = require("../models/tag")
-    moment    = require("moment"),
-    mongoose  = require("mongoose");
-
+    User      = require("../models/user");
+    
 var middlewareObj = {
     isLoggedIn: function(req, res, next) {
         if(req.isAuthenticated()) {
