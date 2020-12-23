@@ -1,23 +1,16 @@
-//Hi there please contact before copying
-
 var methodOverride = require("method-override"),
     bodyParser = require("body-parser"),
     mongoose = require("mongoose"),
     express = require("express"),
-    request = require("request"),
-    moment = require("moment"),
     flash = require("connect-flash"),
     User = require("./models/user"),
-    Global = require("./models/global"),
     passport = require("passport"),
     LocalStrategy = require("passport-local"),
-    passportLocalMongoose = require("passport-local-mongoose"),
     env = process.env.NODE_ENV || 'development';
 
 console.log("environment: ", env);
 
 var entryRoutes = require("./routes/entries"),
-    tagRoutes = require("./routes/tags"),
     quoteRoutes = require("./routes/quotes"),
     indexRoutes = require("./routes/index");
 
@@ -75,7 +68,6 @@ app.use(function (req, res, next) {
 
 app.use(indexRoutes);
 app.use("/entries", entryRoutes);
-app.use("/tags", tagRoutes);
 app.use("/quotes", quoteRoutes);
 
 app.listen(process.env.PORT, function () {
