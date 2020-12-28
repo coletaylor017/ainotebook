@@ -4,7 +4,9 @@ var express = require("express"),
     Quote = require("../models/quote"),
     Global = require("../models/global"),
     middleware = require("../middleware"),
-    passport = require("passport");
+    passport = require("passport"),
+    queries = require("../helpers/queries"),
+    errorHandlers = require("../helpers/errorHandlers");
 
 var router = express.Router();
 
@@ -54,61 +56,47 @@ router.get("/account", middleware.isLoggedIn, function (req, res) {
 });
 
 router.get("/home", middleware.isLoggedIn, middleware.updateQuote, function (req, res) {
-    User.findOne({ username: req.user.username }, function (err, user) {
+    Entry.find({ "author.id": req.user._id }, { body: 1, _id: 0 }, function (err, entries) {
         if (err) {
-            console.log(err);
-        } else {
-            // var date = new Date();
-            // if (date - user.lastEntry > 86400000) { // if the difference is greater than 24 hours
-            //     user.streak = 0;
-            // }
-            Entry.find({ "author.id": req.user._id }, { body: 1, _id: 0 }, function (err, entries) {
-                if (err) {
-                    console.log(err);
-                }
-                var wordCount = 0;
-                entries.forEach(function (entry) {
-                    var l = entry.body.split(" ");
-                    wordCount += l.length;
-                });
-                var entryCount = entries.length;
+            errorHandlers.dbError(res, err);
+        }
+        var wordCount = 0;
+        entries.forEach(function (entry) {
+            var l = entry.body.split(" ");
+            wordCount += l.length;
+        });
+        var entryCount = entries.length;
 
-                Global.findOne({}, { currentQuote: 1 }, function (err, global) {
-                    if (err) {
-                        console.log(err);
+        Global.findOne({}, { currentQuote: 1 }, function (globalErr, global) {
+            if (globalErr) {
+                errorHandlers.dbError(res, globalErr);
+            } else {
+                Quote.findById(global.currentQuote, function (quoteErr, quote) {
+                    if (quoteErr) {
+                        errorHandlers.dbError(res, quoteErr);
                     } else {
-                        Quote.findById(global.currentQuote, function (err, quote) {
-                            if (err) {
-                                console.log(err);
-                            } else {
-                                res.render("home", { quote: quote, entryCount: entryCount, wordCount: wordCount });
-                            }
-                        })
+                        res.render("home", { quote: quote, entryCount: entryCount, wordCount: wordCount });
                     }
                 })
-            });
-        }
+            }
+        })
     });
 });
 
 router.get("/data", middleware.isLoggedIn, function (req, res) {
     Entry.find({ "author.id": req.user._id }, { date: 1, metadata: 1, body: 1 }, function (err, entries) {
         if (err) {
-            console.log(err);
+            errorHandlers.dbError(res, err);
         } else {
             res.render("data", { entries: entries });
         }
     });
 });
 
-router.post("/data", middleware.isLoggedIn, function (req, res) {
-    res.redirect("/data/" + "?category=" + req.body.category);
-});
-
 router.delete("/account", middleware.isLoggedIn, function (req, res) {
     User.findByIdAndRemove(req.user._id, function (err) {
         if (err) {
-            console.log(err);
+            errorHandlers.dbError(res, err);
         } else {
             res.redirect("/");
         }
@@ -126,7 +114,7 @@ router.post("/account", middleware.isLoggedIn, function (req, res) {
 
     User.findById(req.user._id, function (err, user) {
         if (err) {
-            console.log(err);
+            errorHandlers.dbError(res, err);
         } else {
             if (req.body.emails) {
                 user.settings.emails = 1;
