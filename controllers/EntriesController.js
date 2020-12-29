@@ -2,6 +2,7 @@ const Entry = require("../models/entry"),
   nlu = require("../helpers/nlu"),
   User = require("../models/user"),
   queries = require("../helpers/queries"),
+  metadataQueries = require("../helpers/metadataQueries"),
   errorHandlers = require("../helpers/errorHandlers");
 
 class EntriesController {
@@ -29,7 +30,7 @@ class EntriesController {
       }
       // generate an object for each tag containing a name and a count of how many entries reference it
       Entry.aggregate(
-        queries.getTagsWithCounts(tagsArr, req.query.keyword ? req.query.keyword : null),
+        queries.getTagsWithCounts(req.user._id, tagsArr, req.query.keyword ? req.query.keyword : null),
         function (aggErr, tags) {
           if (aggErr) {
             errorHandlers.dbError(res, aggErr);
@@ -50,12 +51,33 @@ class EntriesController {
       if (err) {
         errorHandlers.dbError(res, err);
       }
-      res.render("show", { entry: entry });
+      // get entity data
+      const entityNames = entry.metadata.nluData.entities.map(e => e.name);
+      Entry.aggregate(
+        metadataQueries.getEntities(
+          req.user._id,
+          0.5,
+          entityNames,
+          null,
+          null
+          // new Date(Date.now() - 12096e5), // two weeks ago
+          // new Date()
+        ),
+        function (aggErr, entities) {
+          if (aggErr) {
+            errorHandlers.dbError(res, aggErr);
+          }
+          res.render("show", {
+            entry,
+            entities
+          });
+        }
+      )
     });
   }
 
   static async newEntryPage(req, res) {
-    Entry.aggregate(queries.getTagNames, function (err, tags) {
+    Entry.aggregate(queries.getTagNames(req.user._id), function (err, tags) {
       if (err) {
         errorHandlers.dbError(res, err);
       }
@@ -68,7 +90,7 @@ class EntriesController {
       if (err) {
         errorHandlers.dbError(res, err);
       }
-      Entry.aggregate(queries.getTagNames, function (tagErr, tags) {
+      Entry.aggregate(queries.getTagNames(req.user._id), function (tagErr, tags) {
         if (tagErr) {
           errorHandlers.dbError(res, tagErr);
         }

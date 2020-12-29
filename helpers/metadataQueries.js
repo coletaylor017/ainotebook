@@ -1,5 +1,5 @@
 exports.getEntities = function (
-	authorId,
+	userId,
   confidenceThreshold,
   namesToMatch,
   dateStart,
@@ -8,7 +8,7 @@ exports.getEntities = function (
   const query = [
     {
       $match: {
-				"author.id": authorId,
+				"author.id": userId,
         "metadata.nluData.entities.confidence": {
           $gte: confidenceThreshold,
         },
@@ -20,9 +20,16 @@ exports.getEntities = function (
         includeArrayIndex: "string",
         preserveNullAndEmptyArrays: false,
       },
-    },
+		},
+		{
+			'$match': {
+				'metadata.nluData.entities.name': {
+					'$in': namesToMatch
+				}
+			}
+		},
     {
-      $project: {
+      $project: { // just for convenenience
         _id: 0,
         data: "$metadata.nluData.entities",
       },
@@ -32,7 +39,7 @@ exports.getEntities = function (
         _id: "$data.name",
         categories: {
           $addToSet: "$data.category",
-        },
+				},
         entriesMentioning: {
           $sum: 1,
         },
@@ -41,27 +48,27 @@ exports.getEntities = function (
         },
         sentimentScore: {
           $avg: {
-            $multiply: ["$data.sentiment.score", "$data.confidence"],
+            $multiply: ["$data.sentiment.score", /*"$data.confidence"*/ 1],
           },
         },
         sadness: {
           $avg: {
-            $multiply: ["$data.emotion.sadness", "$data.confidence"],
+            $multiply: ["$data.emotion.sadness", /*"$data.confidence"*/ 1],
           },
         },
         joy: {
           $avg: {
-            $multiply: ["$data.emotion.joy", "$data.confidence"],
+            $multiply: ["$data.emotion.joy", /*"$data.confidence"*/ 1],
           },
         },
         fear: {
           $avg: {
-            $multiply: ["$data.emotion.fear", "$data.confidence"],
+            $multiply: ["$data.emotion.fear", /*"$data.confidence"*/ 1],
           },
         },
         disgust: {
           $avg: {
-            $multiply: ["$data.emotion.disgust", "$data.confidence"],
+            $multiply: ["$data.emotion.disgust", /*"$data.confidence"*/ 1],
           },
         },
         anger: {

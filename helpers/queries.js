@@ -1,36 +1,40 @@
-exports.getTagNames = [
-  {
-    $match: {
-      "tags.0": {
-        $exists: true,
+exports.getTagNames = function(userId) 
+{
+  return [
+    {
+      $match: {
+        "author.id": userId,
+        "tags.0": {
+          $exists: true,
+        },
       },
     },
-  },
-  {
-    $unwind: {
-      path: "$tags",
-      preserveNullAndEmptyArrays: false,
+    {
+      $unwind: {
+        path: "$tags",
+        preserveNullAndEmptyArrays: false,
+      },
     },
-  },
-  {
-    $group: {
-      _id: "$tags",
+    {
+      $group: {
+        _id: "$tags",
+      },
     },
-  },
-  {
-    $project: {
-      _id: false,
-      name: "$_id",
-      entryCount: true,
+    {
+      $project: {
+        _id: false,
+        name: "$_id",
+        entryCount: true,
+      },
     },
-  },
-];
+  ];
+}
 
 /**
  * Return tags with counts, but only for entries containing a particular set of tags. Excludes the original queried tags.
  * @param {tags to filter by} tagArr
  */
-exports.getTagsWithCounts = function (tagArr, keyword) {
+exports.getTagsWithCounts = function (userId, tagArr, keyword) {
 
   let query;
 
@@ -38,6 +42,7 @@ exports.getTagsWithCounts = function (tagArr, keyword) {
     query = [
       {
         $match: {
+          "author.id": userId,
           "tags.0": {
             $exists: true,
           },

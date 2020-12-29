@@ -70,6 +70,11 @@ app.use(indexRoutes);
 app.use("/entries", entryRoutes);
 app.use("/quotes", quoteRoutes);
 
+app.locals.formatWithSign = function(num) {
+    return (num > 0 ? "+" : "") + num;
+};
+
+
 app.listen(process.env.PORT, function () {
     console.log("Server is now running on port " + process.env.PORT);
 });
