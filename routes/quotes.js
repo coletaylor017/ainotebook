@@ -9,9 +9,8 @@ router.get("/", middleware.isLoggedIn, middleware.isAdmin, function(req, res) {
     Quote.find(function(err, quotes) {
         if (err) {
             errorHandlers.dbError(res, err);
-        } else {
-            res.render("quotes", {quotes: quotes.reverse()});
         }
+        res.render("quotes", {quotes: quotes.reverse()});
     });
 });
 
@@ -23,13 +22,12 @@ router.post("/", middleware.isLoggedIn, middleware.isAdmin, function(req, res) {
     Quote.create(req.body.quote, function(err, quote) {
         if (err) {
             errorHandlers.dbError(res, err);
-        } else {
-            quote.uploader.id = req.user._id;
-            quote.uploader.username = req.body.username;
-            console.log("New qoute: ", quote);
-            quote.save();
-            res.redirect("/quotes");
         }
+        quote.uploader.id = req.user._id;
+        quote.uploader.username = req.body.username;
+        console.log("New qoute: ", quote);
+        quote.save();
+        res.redirect("/quotes");
     });
 });
 
@@ -37,9 +35,8 @@ router.delete("/:id", middleware.isLoggedIn, middleware.isAdmin, function(req, r
     Quote.findByIdAndDelete(req.params.id, function(err) {
         if (err) {
             errorHandlers.dbError(res, err);
-        } else {
-            res.redirect("/quotes");
         }
+        res.redirect("/quotes");
     });
 });
 
@@ -47,9 +44,8 @@ router.post("/reset", function(req, res) {
     Quote.updateMany({}, { $set: { index: 0 } }, function(err) {
         if (err) {
             errorHandlers.dbError(res, err);
-        } else {
-            res.redirect("/quotes");
         }
+        res.redirect("/quotes");
     })
 })
 

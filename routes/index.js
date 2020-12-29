@@ -70,15 +70,13 @@ router.get("/home", middleware.isLoggedIn, middleware.updateQuote, function (req
         Global.findOne({}, { currentQuote: 1 }, function (globalErr, global) {
             if (globalErr) {
                 errorHandlers.dbError(res, globalErr);
-            } else {
-                Quote.findById(global.currentQuote, function (quoteErr, quote) {
-                    if (quoteErr) {
-                        errorHandlers.dbError(res, quoteErr);
-                    } else {
-                        res.render("home", { quote: quote, entryCount: entryCount, wordCount: wordCount });
-                    }
-                })
             }
+            Quote.findById(global.currentQuote, function (quoteErr, quote) {
+                if (quoteErr) {
+                    errorHandlers.dbError(res, quoteErr);
+                }
+                res.render("home", { quote: quote, entryCount: entryCount, wordCount: wordCount });
+            });
         })
     });
 });
@@ -87,9 +85,9 @@ router.get("/data", middleware.isLoggedIn, function (req, res) {
     Entry.find({ "author.id": req.user._id }, { date: 1, metadata: 1, body: 1 }, function (err, entries) {
         if (err) {
             errorHandlers.dbError(res, err);
-        } else {
-            res.render("data", { entries: entries });
         }
+        res.render("data", { entries: entries });
+
     });
 });
 
@@ -97,9 +95,8 @@ router.delete("/account", middleware.isLoggedIn, function (req, res) {
     User.findByIdAndRemove(req.user._id, function (err) {
         if (err) {
             errorHandlers.dbError(res, err);
-        } else {
-            res.redirect("/");
         }
+        res.redirect("/");
     });
 });
 
@@ -115,20 +112,19 @@ router.post("/account", middleware.isLoggedIn, function (req, res) {
     User.findById(req.user._id, function (err, user) {
         if (err) {
             errorHandlers.dbError(res, err);
-        } else {
-            if (req.body.emails) {
-                user.settings.emails = 1;
-            } else {
-                user.settings.emails = 0;
-            }
-            var hour = req.body.emailTime.substring(0, 2);
-            var minute = req.body.emailTime.substring(3, 5);
-            console.log(hour + " : " + minute);
-            user.emails = req.body.emails;
-            user.settings.emailHour = hour;
-            user.settings.emailMinute = minute;
-            user.save();
         }
+        if (req.body.emails) {
+            user.settings.emails = 1;
+        } else {
+            user.settings.emails = 0;
+        }
+        var hour = req.body.emailTime.substring(0, 2);
+        var minute = req.body.emailTime.substring(3, 5);
+        console.log(hour + " : " + minute);
+        user.emails = req.body.emails;
+        user.settings.emailHour = hour;
+        user.settings.emailMinute = minute;
+        user.save();
     });
     res.redirect("/account");
 });
