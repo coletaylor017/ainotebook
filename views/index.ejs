@@ -30,7 +30,7 @@
             <div class="ui list">
                 <% tags.forEach(function(tag) { %>
                     <a class="item">
-                        <a href="<%= "/entries" + "?tags=" + (queriedTags.length > 0 ? encodeURIComponent(queriedTags) + "," : "") + encodeURIComponent(tag.name) + (keyword != "" ? "&keyword=" + keyword : "") %>"><%= tag.name %> (<%= tag.entryCount %>)</a>
+                        <a href="<%= "/entries?tags=" + (queriedTags.length > 0 ? encodeURIComponent(queriedTags) + "," : "") + encodeURIComponent(tag.name) + (keyword != "" ? "&keyword=" + keyword : "") %>"><%= tag.name %> (<%= tag.entryCount %>)</a>
                     </a>
                 <% }) %>
             </div>

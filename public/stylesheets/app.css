@@ -36,10 +36,6 @@ body {
     color: white;
 }
 
-#tags {
-    padding: .3em;
-}
-
 .index-left {
     display: block;
     float: left;
@@ -77,7 +73,6 @@ body {
 }
 
 .entrybody {
-    font-family: monospace;
     font-size: 1rem;
     color: white;
 }

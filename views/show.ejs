@@ -1,107 +1,59 @@
 <% include partials/header %>
 
-<link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
-<link rel="stylesheet" type="text/css" href="/stylesheets/chartistCustom.css">
-<script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+<div class="container">
+    <h4 class="text-light"><%= moment(entry.dateCreated).format("D MMM YYYY, h:mm a") %></h4>
+    <% entry.tags.forEach(function(tag) { %>
+        <a class="badge badge-light p-2 mb-4" href="<%= "/entries?tags=" + encodeURIComponent(tag) %>">
+            <%= tag %>
+        </a>
+    <% }); %>
+    <p class="text-light" id="entry-body"><%= entry.body.substring(0, 2000) + (entry.body.length > 2000 ? "..." : "") %></p>
+    <a class="toggle-entry btn btn-light" role="button" onclick=expandEntry()>See more</a>
+    <a class="toggle-entry btn btn-light d-none" role="button" onclick=collapseEntry()>See less</a>
+    <a href="/entries" class="btn btn-primary"></i>All Entries</a>
 
-<div class="spacer"></div>
-
-<div class="ui text container center aligned main">
-        
-    <div class="ui left aligned inverted container">
-        <div class="ui horizontal list">
-            <h4 class="ui inverted item header"><%= moment(entry.date).format("D MMM YYYY, h:mm a") %></h4>
-            <% entry.tags.forEach(function(tag) { %>
-                <h4 class="ui item label" id="tags">
-                    <%= tag %>
-                </h4>
-            <% }); %>
+    <h1 class="text-light">Metadata</h1>
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Entities</h3>
+                    <ul class="list-group">
+                        <% entry.metadata.nluData.entities.forEach(function(entity, index) { %>
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-left">
+                                    <h4 class="m-0"><strong>"<%= entity.name %>"</strong></h4>
+                                    <a class="text-primary ml-2" data-toggle="collapse" href="#entity-<%= index %>" role="button" aria-expanded="false" aria-controls="extendedDescription">
+                                        Link with href
+                                    </a>
+                                    <span class="badge badge-primary badge-pill ml-auto">14 mentions</span>
+                                </div>
+                                <div class="collapse mt-2" id="entity-<%= index %>">
+                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                                </div>
+                            </li>
+                        <% }); %>
+                      </ul>
+                </div>
+            </div>
         </div>
-        <p class="entrybody"><%= entry.body %></p>
-        <h1 class="ui inverted header">Watson data</h1>
-        <p class="entrybody"><%- JSON.stringify(entry, null, 4) %></p>
     </div>
     
-    <a href="/entries" class="ui green button" title="Home"></i>All Entries</a>
 </div>
 
 <script>
-
-
-
-// var options = {
-//     labelOffset: 50,
-//     labelDirection: 'explode',
-//     chartPadding: 20
-// }
-
-// new Chartist.Pie('#chart1', {
-//     labels: [
-//         'chaos',
-//         'order'
-//     ],
-//     series: [
-//         data.CHAOS,
-//         data.ORDER
-//     ]
-// }, options);
-
-// new Chartist.Pie('#chart2', {
-//     labels: [
-//         'sight',
-//         'sound',
-//         'smell',
-//         'taste',
-//         'touch'
-//     ],
-//     series: [
-//         data.VISION,
-//         data.SOUND,
-//         data.ODOR,
-//         data.TASTE,
-//         data.TOUCH
-//     ]
-// }, options);
-
-// new Chartist.Pie('#chart3', {
-//     labels: [
-//         'positivity',
-//         'anxiety',
-//         'sadness',
-//         'affection',
-//         'aggression'
-//     ],
-//     series: [
-//         data.POSITIVE_AFFECT,
-//         data.ANXIETY,
-//         data.SADNESS,
-//         data.AFFECTION,
-//         data.AGGRESSION
-//     ]
-// }, options);
-
-// new Chartist.Pie('#chart4', {
-//     labels: [
-//         'concrete',
-//         'abstract'
-//     ],
-//     series: [
-//         data.CONCRETENESS,
-//         data.ABSTRACT_THOUGHT
-//     ]
-// }, options);
-
-// new Chartist.Pie('#chart5', {
-//     labels: [
-//         'social',
-//         'work'
-//     ],
-//     series: [
-//         data.SOCIAL_BEHAVIOR,
-//         data.INSTRU_BEHAVIOR
-//     ]
-// }, options);
-
+    function expandEntry()
+    {
+        $("#entry-body").empty();
+        $("#entry-body").append("<%= entry.body %>");
+        $(".toggle-entry").toggleClass("d-none");
+    }
+    function collapseEntry()
+    {
+        $("#entry-body").empty();
+        $("#entry-body").append("<%= entry.body.substring(0, 2000) + (entry.body.length > 2000 ? '...' : '') %>");
+        $(".toggle-entry").toggleClass("d-none");
+    }
 </script>
 
 <% include partials/footer %>

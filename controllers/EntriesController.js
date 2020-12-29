@@ -91,7 +91,7 @@ class EntriesController {
       .then(function (formattedData) {
         let entrySchemaData = {
           body: req.body.entry.body,
-          date: req.body.entry.date,
+          dateCreated: new Date(), // current date & time
           author: {
             id: req.user._id,
             username: req.user.username,

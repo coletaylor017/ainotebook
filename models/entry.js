@@ -6,6 +6,8 @@ var entrySchema = new mongoose.Schema({
     String
   ],
   body: String,
+  date: String,
+  dateCreated: Date,
   author: {
     id: {
       type: mongoose.Schema.Types.ObjectId,
