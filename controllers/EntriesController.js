@@ -37,7 +37,7 @@ class EntriesController {
           }
           res.render("index", {
             queriedTags: tagsArr, // [String]
-            tags: tags, // [{name: String, count: Number}]
+            tags: tags.sort((a, b) => b.entryCount - a.entryCount), // [{name: String, entryCount: Number}]
             entries: entries.reverse(),
             keyword: req.query.keyword ? req.query.keyword : "",
           });

@@ -1,79 +1,88 @@
 <% include partials/header %>
 
-<div class="ui inverted text container segment context" id="transparent">
-    <div class="ui left dividing rail">
-        <div class="ui right aligned container sticky theting">
-            <h1 class="ui inverted header">Past Entries</h1>
-            <form action="<%= "/entries/search" + (queriedTags.length > 0 ? "?tags=" + encodeURIComponent(queriedTags) : "") %>" method="POST">
-                <div class="ui left labeled button">
-                    <input class="ui basic label input" type="text" name="searchterm" placeholder="Search by phrase...">
-                    <button class="ui icon button" action="submit"><i class="search icon"></i></button>
-                </div>
-            </form>
-            <% if (keyword !== "") { %>
-                <p class="mt-2">Filtering by phrase: "<%= keyword %>"</p>
-            <% } %>
-            <% if (queriedTags.length > 0) { %>
-                <p class="mt-2">Filtering by tags:
-                    <% queriedTags.forEach(function(tag) { %>
-                        <span class="ui item label"><%= tag %></span>
-                    <% }); %>
-                </p>
-            <% } %>
+<div class="container my-md-5 text-light">
+    <div class="row">
+        <nav class="navbar navbar-dark bg-dark d-md-none text-center sticky-top secondary-nav">
+            <button class="btn btn-secondary mx-auto" id="filter-toggle-button" type="button" data-toggle="collapse" data-target="#filter-controls" aria-controls="filter-controls" aria-expanded="false" aria-label="Toggle search filters">
+              Show Search Filters
+            </button>
+        </nav>
+        <div class="col-12 col-md-3 collapse d-md-block p-0 pr-md-2 sticky-top filter-controls" id="filter-controls">
+            <div class="bg-dark p-2 rounded">
+                <% if (keyword !== "" || queriedTags.length > 0) { %>
+                    <h2><%= entries.length %> Results</h2>
+                <% } else { %>
+                    <h2>Past Entries</h2>
+                <% } %>
+                <form action="<%= "/entries/search" + (queriedTags.length > 0 ? "?tags=" + encodeURIComponent(queriedTags) : "") %>" method="POST">
+                    <div class="input-group">
+                        <input class="form-control" type="text" value="<%= keyword %>" name="searchterm" placeholder="Search by phrase..." aria-label="Search by phrase" aria-describedby="search-button">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" action="submit" id="search-button">Search</button>
+                        </div>
+                    </div>
+                </form>
 
-            <% if (keyword !== "" || queriedTags.length > 0) { %>
-                <a href="/entries">clear search terms</a><br>
-            <% } %>
+                <% if (keyword !== "") { %>
+                    <p class="mt-2">Filtering by phrase: "<%= keyword %>"</p>
+                    <a class="btn btn-outline-light mb-1" href="<%= "/entries?tags=" + encodeURIComponent(queriedTags) %>">Clear keyword</a><br>
+                <% } %>
+
+                <% if (queriedTags.length > 0) { %>
+                    <p class="mt-2">Filtering by tags:
+                        <% queriedTags.forEach(function(tag) { %>
+                            <a class="badge badge-light p-1" href="<%= "/entries?tags=" + encodeURIComponent(queriedTags.filter(qTag => qTag != tag)) + "&keyword=" + keyword %>"><%= tag %></a>
+                        <% }); %>
+                    </p>
+                <% } %>
+
+                <% if (keyword !== "" || queriedTags.length > 0) { %>
+                    <a class="btn btn-outline-light mb-1" href="/entries">Clear all search terms</a><br>
+                <% } %>
 
 
-            <h2>Tags</h2>
-            <div class="ui list">
+                <h2 class="mt-5">Tags</h2>
                 <% tags.forEach(function(tag) { %>
-                    <a class="item">
-                        <a href="<%= "/entries?tags=" + (queriedTags.length > 0 ? encodeURIComponent(queriedTags) + "," : "") + encodeURIComponent(tag.name) + (keyword != "" ? "&keyword=" + keyword : "") %>"><%= tag.name %> (<%= tag.entryCount %>)</a>
-                    </a>
+                    <a class="badge badge-light p-1 my-1 mr-1" href="<%= "/entries?tags=" + (queriedTags.length > 0 ? encodeURIComponent(queriedTags) + "," : "") + encodeURIComponent(tag.name) + "&keyword=" + keyword %>"><%= tag.name %> (<%= tag.entryCount %>)</a>
                 <% }) %>
+                <br>
+                <a href="/entries/new" class="mt-5 btn btn-primary">Create new entry</a>
             </div>
         </div>
-    </div>
-    
-    <div class="main">
-        <div class="ui container">
-            <a href="/entries/new" class="ui large primary button">Create new entry</a>
-        </div>
-        <div class="ui hidden divider"></div>
-        <% if (entries.length === 0) { %>
-            <p>No entries found.</p>
-        <% } else { %>
-            <% entries.forEach(function(entry) { %>
-                <div class="ui inverted container">
-                    <a href="/entries/<%= entry._id %>">
-                        <div class="ui horizontal list">
-                            <h4 class="ui inverted item header" class="date"><%= entry.date %></h4>
-                            <!--moment(entry.date).format("D MMM YYYY, h:mm a") -->
+        
+        <div class="col-12 col-md-9 my-5 my-md-0">
+            <% if (entries.length === 0) { %>
+                <p>No entries found.</p>
+            <% } else { %>
+                <% entries.forEach(function(entry) { %>
+                    <div class="mb-5">
+                        <a href="/entries/<%= entry._id %>">
+                            <% const date = new Date(entry.dateCreated) %>
+                            <% var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]; %>
+                            <p class="mb-1"><%= `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}` %></p>
                             <% entry.tags.forEach(function(tag) { %>
-                                <h4 class="ui item label" id="tags">
-                                    <%= tag %>
-                                </h4>
-                            <% }); %>
-                        </div>
-                        <p class="ui inverted entry-preview"><%= entry.body.substring(0,500) %></p>
-                    </a>
-                    <a href="/entries/<%= entry._id %>" class="ui basic inverted button" title="View"><i class="ui eye icon"></i>view</a>
-                    <a href="/entries/<%= entry._id %>/edit" class="ui basic inverted button" title="Edit"><i class="ui edit icon"></i>edit</a>
-                    <form action="/entries/<%= entry._id %>?_method=DELETE" method="POST" class="inline">
-                        <button action="submit" class="ui basic inverted button trash" title="Delete"><i class="ui trash icon"></i>delete</button>
-                    </form>
-                     <div class="ui hidden divider"></div>
-                </div>
-            <% }); %>
-        <% } %>
+                                <a class="badge badge-light p-1 mr-1" href="<%= "/entries?tags=" + (queriedTags.length > 0 ? encodeURIComponent(queriedTags) + "," : "") + encodeURIComponent(tag) + "&keyword=" + keyword %>"><%= tag %></a>
+                            <% }) %>
+                            <p class="my-2"><%= entry.body.substring(0,500) %>...</p>
+                        </a>
+                        <a href="/entries/<%= entry._id %>" class="btn btn-outline-light" title="View">view</a>
+                        <a href="/entries/<%= entry._id %>/edit" class="btn btn-outline-light" title="Edit">edit</a>
+                        <form action="/entries/<%= entry._id %>?_method=DELETE" method="POST" class="d-inline">
+                            <button action="submit" class="btn btn-outline-light" title="Delete">delete</button>
+                        </form>
+                    </div>
+                <% }); %>
+            <% } %>
+        </div>
     </div>
 </div>
 
 <script>
-    $('.ui.sticky')
-      .sticky({
-        context: '.context',
-      });
+    $('#filter-controls').on('show.bs.collapse', function() {
+        $('#filter-toggle-button').html("Hide Search Filters");
+    });
+
+    $('#filter-controls').on('hide.bs.collapse', function() {
+        $('#filter-toggle-button').html("Show Search Filters");
+    });
 </script>

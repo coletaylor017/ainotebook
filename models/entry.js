@@ -5,6 +5,7 @@ var entrySchema = new mongoose.Schema({
   tags: [
     String
   ],
+  title: String,
   body: String,
   date: String,
   dateCreated: Date,

@@ -3,7 +3,7 @@
 <div class="container">
     <h4 class="text-light"><%= moment(entry.dateCreated).format("D MMM YYYY, h:mm a") %></h4>
     <% entry.tags.forEach(function(tag) { %>
-        <a class="badge badge-light p-2 mb-4" href="<%= "/entries?tags=" + encodeURIComponent(tag) %>">
+        <a class="badge badge-light p-1 mb-4" href="<%= "/entries?tags=" + encodeURIComponent(tag) %>">
             <%= tag %>
         </a>
     <% }); %>
