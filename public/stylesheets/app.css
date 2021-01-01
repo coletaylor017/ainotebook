@@ -128,11 +128,6 @@ a:hover {
     cursor: default;
 }
 
-.authorsource{
-    float: right;
-    padding: .6em;
-}
-
 .index {
     font-size: .9em;
     color: lightblue;
