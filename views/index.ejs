@@ -24,12 +24,12 @@
                 </form>
 
                 <% if (keyword !== "") { %>
-                    <p class="mt-2">Filtering by phrase: "<%= keyword %>"</p>
-                    <a class="btn btn-outline-light mb-1" href="<%= "/entries?tags=" + encodeURIComponent(queriedTags) %>">Clear keyword</a><br>
+                    <p class="my-2">Filtering by phrase: "<%= keyword %>"</p>
+                    <a class="mb-1 text-primary" href="<%= "/entries?tags=" + encodeURIComponent(queriedTags) %>">Clear keyword</a><br>
                 <% } %>
 
                 <% if (queriedTags.length > 0) { %>
-                    <p class="mt-2">Filtering by tags:
+                    <p class="my-2">Filtering by tags:
                         <% queriedTags.forEach(function(tag) { %>
                             <a class="badge badge-light p-1" href="<%= "/entries?tags=" + encodeURIComponent(queriedTags.filter(qTag => qTag != tag)) + "&keyword=" + keyword %>"><%= tag %></a>
                         <% }); %>
@@ -37,7 +37,7 @@
                 <% } %>
 
                 <% if (keyword !== "" || queriedTags.length > 0) { %>
-                    <a class="btn btn-outline-light mb-1" href="/entries">Clear all search terms</a><br>
+                    <a class="mb-1 text-primary" href="/entries">Clear all search terms</a><br>
                 <% } %>
 
 
@@ -46,7 +46,7 @@
                     <a class="badge badge-light p-1 my-1 mr-1" href="<%= "/entries?tags=" + (queriedTags.length > 0 ? encodeURIComponent(queriedTags) + "," : "") + encodeURIComponent(tag.name) + "&keyword=" + keyword %>"><%= tag.name %> (<%= tag.entryCount %>)</a>
                 <% }) %>
                 <br>
-                <a href="/entries/new" class="mt-5 btn btn-primary">Create new entry</a>
+                <a href="/entries/new" class="mt-5 btn btn-primary d-block mx-auto">Create new entry</a>
             </div>
         </div>
         
@@ -56,14 +56,14 @@
             <% } else { %>
                 <% entries.forEach(function(entry) { %>
                     <div class="mb-5">
-                        <a href="/entries/<%= entry._id %>">
+                        <a href="/entries/<%= entry._id %>" class="no-anchor-styles">
                             <% const date = new Date(entry.dateCreated) %>
                             <% var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]; %>
                             <p class="mb-1"><%= `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}` %></p>
                             <% entry.tags.forEach(function(tag) { %>
-                                <a class="badge badge-light p-1 mr-1" href="<%= "/entries?tags=" + (queriedTags.length > 0 ? encodeURIComponent(queriedTags) + "," : "") + encodeURIComponent(tag) + "&keyword=" + keyword %>"><%= tag %></a>
+                                <span class="badge badge-light p-1 mr-1 my-0"><%= tag %></span>
                             <% }) %>
-                            <p class="my-2"><%= entry.body.substring(0,500) %>...</p>
+                            <p class="py-2 m-0"><%= entry.body.substring(0,500) %>...</p>
                         </a>
                         <a href="/entries/<%= entry._id %>" class="btn btn-outline-light" title="View">view</a>
                         <a href="/entries/<%= entry._id %>/edit" class="btn btn-outline-light" title="Edit">edit</a>
