@@ -85,16 +85,6 @@ router.get("/home", middleware.isLoggedIn, middleware.updateQuote, function (req
     });
 });
 
-router.get("/data", middleware.isLoggedIn, function (req, res) {
-    Entry.find({ "author.id": req.user._id }, { date: 1, metadata: 1, body: 1 }, function (err, entries) {
-        if (err) {
-            errorHandlers.dbError(res, err);
-        }
-        res.render("data", { entries: entries });
-
-    });
-});
-
 router.delete("/account", middleware.isLoggedIn, function (req, res) {
     User.findByIdAndRemove(req.user._id, function (err) {
         if (err) {
