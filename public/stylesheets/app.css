@@ -37,10 +37,6 @@ p {
     line-height: 1.8;
 }
 
-#darkborder { /*do this in the semantic master styles later*/
-    border-color: #aaaaaa;
-}
-
 .value i {
     display: inline-block;
     position: relative;
@@ -51,14 +47,6 @@ p {
 #no-darken:hover {
     background-color: transparent;
     cursor: default;
-}
-
-.index {
-    font-size: .9em;
-    color: lightblue;
-    padding: 0 0.35em;
-    border: 1px solid lightblue;
-    border-radius: .3em;
 }
 
 .quote {
