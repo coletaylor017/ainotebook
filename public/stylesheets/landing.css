@@ -50,12 +50,19 @@
         z-index: 2001;
     }
     .main-nav-menu {
-        width: 100vw;
+        margin-top: 8px;
+        padding: 0.5em 2em 1em 2em;
         background: white;
+        border-bottom: 1px #e9ecef solid;
     }
 
     .main-nav-menu a {
         color: #212529 !important;
         border-color: #212529 !important;
+    }
+
+    .main-nav-menu a:hover {
+        color: #5fdaff !important;
+        border-color: #5fdaff !important;
     }
 }
