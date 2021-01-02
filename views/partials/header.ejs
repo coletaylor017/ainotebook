@@ -12,14 +12,12 @@
 <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top" style="z-index: 2000;">
         <a class="navbar-brand" id="site-title" href="/">AI Notebook</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#site-nav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
       
-        <div class="collapse navbar-collapse text-center" id="navbarSupportedContent" style="z-index: 2000;">
+        <div class="collapse navbar-collapse text-center" id="site-nav" style="z-index: 2000;">
             <ul class="navbar-nav ml-auto">
-
-                <%# <span class="sr-only">(current)</span> %>
                 <% if (!currentUser) { %>
                     <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
                 <% } else { %>
@@ -30,7 +28,6 @@
                         <li class="nav-item active bg-info mr-4"><a class="nav-link" href="/quotes">Quotes</a></li>
                     <% } %>
                     <li class="nav-item mr-2"><a class="nav-link" href="/home">Home</a></li>
-                    <!-- <li class="nav-item mr-2"><a class="nav-link" href="/data">Metadata</a></li> -->
                     <li class="nav-item mr-2"><a class="nav-link" href="/entries">Entries</a></li>
                     <li class="nav-item mr-2"><a class="nav-link" href="/account">Account</a></li>
                     <li class="nav-item mr-2"><a class="nav-link" href="/logout">Logout</a></li>

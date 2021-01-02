@@ -1,101 +1,84 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Write Now</title>
-    <link rel="stylesheet" href="/semantic/dist/semantic.min.css">
+    <title>AI Notebook</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/stylesheets/app.css">
     <link rel="stylesheet" type="text/css" href="/stylesheets/landing.css">
     <link href="https://fonts.googleapis.com/css?family=Cutive+Mono" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script></head>
 </head>
 <body>
-    <div class="ui basic center aligned inverted segment" id="jumbotron"> <!--Sometimes I question my choice of going with Semantic instead of Bootstrap...-->
-        <h1 class="ui header" id="site-title">AI Notebook</h1>
-        <h4 class="ui header" id="site-subtitle">Get more out of your journal.</h4>
-        <!--<h3 class="ui header">Daily stream-of-consciousness writing for a more mindful life.</h3>-->
-        <div class="ui hidden divider"></div>
-        <a href="/register" class="ui huge primary button">Sign up for free<i class="ui right arrow icon"></i></a><br>
-        <% if (!currentUser) { %>
-            <a href="/login" class="ui secondary button">Log In</a>
-        <% } else { %>
-            <a href="/home" class="ui secondary button">Log In</a>
-        <% } %>
-    </div>
-
-    <!-- <div class="ui lander-padded container"></div> -->
-
-    <!-- <div class="ui container">
-        <h1 class="ui center aligned header"></h1> -->
-        <!-- <div class="ui hidden divider"></div> -->
-        <!-- <div class="ui center aligned basic segment"> -->
-            <!-- <h2 class="ui header" id="summary">Daily meditative writing is good for the mind and the soul. Write Now helps you stay motivated and provides you with insightful analysis of your writing, so that you can start to enjoy writing every day and achieve a more mindful life.</h2> -->
-            <!-- <h2 class="ui header" id="summary">Get more out of your journal.</h2> -->
-        <!-- </div> -->
-    </div>
-
-    <!-- <div class="ui lander-padded center aligned stripe container">
-        <div class="ui hidden divider"></div>
-        <p class="landing-p"><i>Write Now</i> views writing as a daily mindfulness exercise- a form of meditation. For this reason, your entries aren't saved after you write them. This is on purpose! The focus here isn't to create something beautiful that you'll look back on- it's about using writing to vent, rant, get something off your chest, and clear your head.</p>
-        You can still look back and track metadata from past entries- things like how you were feeling and what you were thinking about.
-    </div> -->
-
-    <div class="ui lander-padded container">
-        <div class="ui basic segment">
-            <div class="ui basic hidden segment"></div>
-            <div class="ui basic hidden segment"></div>
-            <h1 class="ui center aligned header" id="site-title">The online journal built on AI.</h1>
-            <div class="ui basic hidden segment"></div>
-            <div class="ui basic hidden segment"></div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent fixed-top" style="z-index: 2000;">
+        <a class="navbar-brand" id="site-title" href="/">AI Notebook</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse text-center" id="navbarSupportedContent" style="z-index: 2000;">
+            <ul class="navbar-nav ml-auto">
+                <% if (currentUser) { %>
+                    <% if (currentUser.isAdmin) { %>
+                        <li class="nav-item navbar-light mr-2">
+                            <a class="nav-link disabled text-white text-decoration-none" href="#" tabindex="-1" aria-disabled="true">Welcome, admin user <%= currentUser.username %></a>
+                        </li>
+                        <li class="nav-item mr-2"><a class="nav-link text-white" href="/quotes">Quotes</a></li>
+                    <% } %>
+                    <li class="nav-item mr-2"><a class="nav-link text-white" href="/home">Home</a></li>
+                    <li class="nav-item mr-2"><a class="nav-link text-white" href="/entries">Entries</a></li>
+                    <li class="nav-item mr-2"><a class="nav-link text-white" href="/account">Account</a></li>
+                    <li class="nav-item mr-2"><a class="nav-link text-white" href="/logout">Logout</a></li>
+                <% } else { %>
+                    <li class="nav-item mr-2"><a class="nav-link text-white" href="/about">About</a></li>
+                    <li class="nav-item mr-2"><a class="login-btn btn btn-outline-light nav-link text-white" href="/login">Log In</a></li>
+                <% } %>
+            </ul>
         </div>
-        <div class="ui basic segment">
-            <div class="ui hidden divider"></div>
-            <div class="ui stackable very realaxed grid container">
-                <!-- <div class="row">
-                    <div class="six wide column">
-                        <h3 class="ui center aligned header"></h3>
-                    </div>
-                    <div class="ten wide column">
-                        <img src="/images/ui-showcase.png" alt="A streak" class="ui fluid image">
-                    </div>
-                </div>
-                <div class="row"><div class="spacer"></div></div> -->
-                <div class="row">
-                    <div class="six wide column">
-                        <h3 class="ui center aligned header">AI reads each journal entry and extracts data, like your mood, 
-                            attitude toward certain people and events, and activities participated in that day.
-                        </h3>
-                    </div>
-                    <div class="ten wide column">
-                        <img src="/images/metadata-showcase.png" alt="A streak" class="ui fluid image">
-                    </div>
-                </div>
-                <div class="row"><div class="spacer"></div></div>
-                <div class="row">
-                    <div class="ten wide column">
-                        <img src="/images/metadatapage-showcase.png" alt="A streak" class="ui fluid image">
-                    </div>
-                    <div class="six wide column">
-                        <h3 class="ui center aligned header">Learn about yourself through your data. 
-                            Want to see how your mood changes during different times of the year? You got it.
-                            Curious if your thoughts have been more positive since you started that yoga class? We can help with that. 
-                            Wondering what was on your mind a year ago today? Find out without reading a word.
-                            Everything is displayed in the form of beautiful, minimalist charts and graphs. 
-                        </h3>
-                    </div>
-                </div>
-                <div class="row"><div class="spacer"></div></div>
-                <div class="row">
-                    <div class="eight wide column">
-                        <img src="/images/streak-showcase.png" alt="A streak" class="ui fluid image">
-                    </div>
-                    <div class="eight wide column">
-                        <h3 class="ui center aligned header">AI Notebook also has standard features including achievements, 
-                            daily writing streaks, and tagging. We use end-to-end encryption and partner with
-                            trusted organizations for maximum security. 
-                        </h3>
-                    </div>
-                </div>
+    </nav>
+    <div class="jumbotron main-wallpaper text-light text-center">
+        <div class="container">
+            <h1 class="mb-5">Get more out of your journal.</h1>
+            <a href="/register" class="btn call-to-action-btn btn-lg mb-2">Sign up for free</a><br>
+        </div>
+    </div>
+<div class="container">
+    <h1 class="ui center aligned header" id="site-title">The online journal built on AI.</h1>
+    <div class="ui stackable very realaxed grid container">
+        <div class="row">
+            <div class="six wide column">
+                <h3 class="ui center aligned header">AI reads each journal entry and extracts data, like your mood, 
+                    attitude toward certain people and events, and activities participated in that day.
+                </h3>
+            </div>
+            <div class="ten wide column">
+                <!-- <img src="/images/metadata-showcase.png" alt="A streak" class="ui fluid image"> -->
+            </div>
+        </div>
+        <div class="row"><div class="spacer"></div></div>
+        <div class="row">
+            <div class="ten wide column">
+                <!-- <img src="/images/metadatapage-showcase.png" alt="A streak" class="ui fluid image"> -->
+            </div>
+            <div class="six wide column">
+                <h3 class="ui center aligned header">Learn about yourself through your data. 
+                    Want to see how your mood changes during different times of the year? You got it.
+                    Curious if your thoughts have been more positive since you started that yoga class? We can help with that. 
+                    Wondering what was on your mind a year ago today? Find out without reading a word.
+                    Everything is displayed in the form of beautiful, minimalist charts and graphs. 
+                </h3>
+            </div>
+        </div>
+        <div class="row"><div class="spacer"></div></div>
+        <div class="row">
+            <div class="eight wide column">
+                <!-- <img src="/images/streak-showcase.png" alt="A streak" class="ui fluid image"> -->
+            </div>
+            <div class="eight wide column">
+                <h3 class="ui center aligned header">AI Notebook also has standard features including achievements, 
+                    daily writing streaks, and tagging. We use end-to-end encryption and partner with
+                    trusted organizations for maximum security. 
+                </h3>
             </div>
         </div>
     </div>
@@ -147,6 +130,7 @@
         </div>
         <div class="ui hidden divider"></div>
     </div>
+</div>
     
     <!--Testimonials will go here, if we ever get any :P-->
     <!--<div class="ui vertical stripe quote segment">-->
