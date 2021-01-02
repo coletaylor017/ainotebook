@@ -52,7 +52,7 @@ class EntriesController {
         errorHandlers.dbError(res, err);
       }
       // get entity data
-      const entityNames = entry.metadata.nluData.entities.map(e => e.name);
+      const entityNames = (entry.metadata.nluData.entities || []).map(e => e.name);
       Entry.aggregate(
         metadataQueries.getEntities(
           req.user._id,

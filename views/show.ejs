@@ -18,43 +18,43 @@
         <a href="/entries/<%= entry._id %>/edit" class="btn btn-outline-secondary mt-2" title="Edit">Edit Entry</a>
     </div>
 
-
-    <h1 class="">Metadata</h1>
-    <div class="row">
-        <div class="col-12 col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title">Detected Entities</h3>
-                    <ul class="list-group list-group-flush">
-                        <% var decimals = 1; %>
-                        <% var entryEntities = entry.metadata.nluData.entities.sort((a, b) => { %>
-                            <% if (a.name > b.name) {return 1;} %>
-                            <% if (a.name < b.name) {return -1;} %>
-                            <% return 0; %>
-                            <% }); %>
-                        <!-- Sort alphabetically -->
-                        <% entities.sort((a, b) => { %>
-                            <% if (a._id > b._id) {return 1;} %>
-                            <% if (a._id < b._id) {return -1;} %>
-                            <% return 0; %>
-                            <% }).forEach(function(entity, index) { %>
-                            <li class="list-group-item px-0">
-                                <div class="d-flex align-items-left" id="entity-<%= index %>">
-                                    <a class="no-anchor-styles text-primary ml-2 stretched-link" data-toggle="collapse" href="#entity-<%= index %>" role="button" aria-expanded="false" aria-controls="extendedDescription">
-                                        <h6 class="text-dark m-0 dropdown-arrow">v&nbsp;</h6>
-                                    </a>
-                                    <h6 class="m-0"><strong>"<%= entity._id %>"</strong></h6>
-                                </div>
-                                <div class="collapse mt-2" id="entity-<%= index %>">
-                                    <ul class="list-group list-group-flush px-5">
-                                        <li class="list-group-item px-0"><strong>Categories:</strong> <%= entity.categories %></li>
-                                        <li class="list-group-item px-0"><strong>Entries mentioning:</strong> <%= entity.entriesMentioning %></li>
-                                        <li class="list-group-item px-0"><strong>Total mentions:</strong> <%= entity.totalMentions %></li>
-                                        <li class="list-group-item px-0"><strong>Sentiment rating:</strong> 
-                                            <%= formatWithSign(entryEntities[index].sentiment.score.toFixed(decimals)) %> (Average: <%= formatWithSign(entity.sentimentScore.toFixed(decimals)) %>)
-                                        </li>
-                                        <li class="list-group-item px-0"><strong>Emotions:</strong></li>
-                                        <ul class="list-group list-group-flush pl-5">
+    <h3 class="">Metadata</h3>
+    <% if (entry.metadata.entities) { %>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Detected Entities</h3>
+                        <ul class="list-group list-group-flush">
+                            <% var decimals = 1; %>
+                            <% var entryEntities = entry.metadata.nluData.entities.sort((a, b) => { %>
+                                <% if (a.name > b.name) {return 1;} %>
+                                <% if (a.name < b.name) {return -1;} %>
+                                <% return 0; %>
+                                <% }); %>
+                            <!-- Sort alphabetically -->
+                            <% entities.sort((a, b) => { %>
+                                <% if (a._id > b._id) {return 1;} %>
+                                <% if (a._id < b._id) {return -1;} %>
+                                <% return 0; %>
+                                <% }).forEach(function(entity, index) { %>
+                                <li class="list-group-item px-0">
+                                    <div class="d-flex align-items-left" id="entity-<%= index %>">
+                                        <a class="no-anchor-styles text-primary ml-2 stretched-link" data-toggle="collapse" href="#entity-<%= index %>" role="button" aria-expanded="false" aria-controls="extendedDescription">
+                                            <h6 class="text-dark m-0 dropdown-arrow">v&nbsp;</h6>
+                                        </a>
+                                        <h6 class="m-0"><strong>"<%= entity._id %>"</strong></h6>
+                                    </div>
+                                    <div class="collapse mt-2" id="entity-<%= index %>">
+                                        <ul class="list-group list-group-flush px-5">
+                                            <li class="list-group-item px-0"><strong>Categories:</strong> <%= entity.categories %></li>
+                                            <li class="list-group-item px-0"><strong>Entries mentioning:</strong> <%= entity.entriesMentioning %></li>
+                                            <li class="list-group-item px-0"><strong>Total mentions:</strong> <%= entity.totalMentions %></li>
+                                            <li class="list-group-item px-0"><strong>Sentiment rating:</strong> 
+                                                <%= formatWithSign(entryEntities[index].sentiment.score.toFixed(decimals)) %> (Average: <%= formatWithSign(entity.sentimentScore.toFixed(decimals)) %>)
+                                            </li>
+                                            <li class="list-group-item px-0"><strong>Emotions:</strong></li>
+                                            <ul class="list-group list-group-flush pl-5">
                                                 <li class="list-group-item px-0"><strong>Sadness:</strong> 
                                                     <%= entryEntities[index].emotion.sadness.toFixed(decimals) %> (Average: <%= entity.sadness.toFixed(decimals) %>)
                                                 </li>
@@ -70,19 +70,21 @@
                                                 <li class="list-group-item px-0"><strong>Anger:</strong> 
                                                     <%= entryEntities[index].emotion.anger.toFixed(decimals) %> (Average: <%= entity.anger.toFixed(decimals) %>)
                                                 </li>
+                                            </ul>
+                                            <li class="list-group-item px-0"><strong>Confidence index:</strong> <%= entryEntities[index].confidence %></li>
+                                            <li class="list-group-item px-0"><strong>Relevance index:</strong> <%= entryEntities[index].relevance %></li>
                                         </ul>
-                                        <li class="list-group-item px-0"><strong>Confidence index:</strong> <%= entryEntities[index].confidence %></li>
-                                        <li class="list-group-item px-0"><strong>Relevance index:</strong> <%= entryEntities[index].relevance %></li>
-                                    </ul>
-                                </div>
-                            </li>
-                        <% }); %>
-                      </ul>
+                                    </div>
+                                </li>
+                            <% }); %>
+                            </ul>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    
+    <% } else { %>
+        <p>This entry isn't long enough to show metadata.</p>
+    <% } %>
 </div>
 
 <script>

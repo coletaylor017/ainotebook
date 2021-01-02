@@ -6,11 +6,8 @@ body {
 }
 
 #entrybox {
-    font-family: monospace;
     line-height: 175%;
     height: 35em;
-    background-color: transparent;
-    color: white;
 }
 
 #site-title {
@@ -24,16 +21,11 @@ p {
 
 .timer-on, .timer-close, .modal-btn {
     display: inline-block;
-    margin-bottom: .6em;
 }
 
 .big-anchor {
     display: block;
     padding: 1em;
-}
-
-#timer-label {
-    margin: .5em;
 }
 
 #main-form {
@@ -85,16 +77,6 @@ p {
 
 .typewriter {
     font-family: 'Cutive Mono', monospace;
-}
-
-.tagbox {
-    background-color: transparent;
-    color: white;
-    border: none;
-}
-
-.filter-controls {
-    background-color: #e9ecef;
 }
 
 .bg-gray {
