@@ -13,6 +13,7 @@ router.get("/", function (req, res) {
     res.render("landing");
 });
 
+// For frontend debugging purposes only
 router.get("/dberror", function(req, res) {
     errorHandlers.dbError(res, "Error");
 });
