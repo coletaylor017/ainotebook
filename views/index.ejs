@@ -65,10 +65,10 @@
                             <% }) %>
                             <p class="py-2 m-0"><%= entry.body.substring(0,500) %>...</p>
                         </a>
-                        <a href="/entries/<%= entry._id %>" class="btn btn-outline-secondary" title="View">view</a>
-                        <a href="/entries/<%= entry._id %>/edit" class="btn btn-outline-secondary" title="Edit">edit</a>
+                        <a href="/entries/<%= entry._id %>" class="btn btn-outline-secondary" title="View">View</a>
+                        <a href="/entries/<%= entry._id %>/edit" class="btn btn-outline-secondary" title="Edit">Edit</a>
                         <form action="/entries/<%= entry._id %>?_method=DELETE" method="POST" class="d-inline">
-                            <button action="submit" class="btn btn-outline-secondary" title="Delete">delete</button>
+                            <button action="submit" class="btn btn-outline-secondary" title="Delete">Delete</button>
                         </form>
                     </div>
                 <% }); %>

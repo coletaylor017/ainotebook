@@ -9,9 +9,13 @@
             </a>
         <% }); %>
         <p class="" id="entry-body"><%= entry.body.substring(0, 2000) + (entry.body.length > 2000 ? "..." : "") %></p>
-        <a class="toggle-entry btn btn-secondary" role="button" onclick=expandEntry()>See more</a>
-        <a class="toggle-entry btn btn-secondary d-none" role="button" onclick=collapseEntry()>See less</a>
-        <a href="/entries" class="btn btn-primary"></i>All Entries</a>        
+        <% if (entry.body.length > 2000) { %>
+            <a class="toggle-entry btn btn-secondary" role="button" onclick=expandEntry()>See more</a>
+            <a class="toggle-entry btn btn-secondary d-none" role="button" onclick=collapseEntry()>See less</a>
+        <% } %>
+        <br>
+        <a href="/entries" class="btn btn-primary mt-2"></i>Back to All Entries</a>
+        <a href="/entries/<%= entry._id %>/edit" class="btn btn-outline-secondary mt-2" title="Edit">Edit Entry</a>
     </div>
 
 
