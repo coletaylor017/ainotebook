@@ -34,7 +34,7 @@ router.post("/register", function (req, res) {
             return res.redirect("back");
         }
         passport.authenticate("local")(req, res, function () {
-            req.flash("success", "Welcome to Writing Blocks, " + user.username + "! Time to start your first freewriting session!");
+            req.flash("success", "Welcome aboard, " + user.username + "!");
             res.redirect("/home");
         });
     });
