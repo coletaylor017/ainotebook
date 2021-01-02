@@ -209,7 +209,7 @@ class EntriesController {
                 req.body.tags.length > 0
                   ? JSON.parse(req.body.tags).map((t) => t.value)
                   : [],
-              metadata: { nluData: formattedData },
+              "metadata.nluData": formattedData
             },
           },
           function (err, entry) {

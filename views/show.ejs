@@ -18,13 +18,14 @@
         <a href="/entries/<%= entry._id %>/edit" class="btn btn-outline-secondary mt-2" title="Edit">Edit Entry</a>
     </div>
 
+
     <h3 class="">Metadata</h3>
-    <% if (entry.metadata.entities) { %>
-        <div class="row">
-            <div class="col-12 col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h3 class="card-title">Detected Entities</h3>
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Detected Entities</h4>
+                    <% if (entities.length > 0) { %>
                         <ul class="list-group list-group-flush">
                             <% var decimals = 1; %>
                             <% var entryEntities = entry.metadata.nluData.entities.sort((a, b) => { %>
@@ -55,21 +56,21 @@
                                             </li>
                                             <li class="list-group-item px-0"><strong>Emotions:</strong></li>
                                             <ul class="list-group list-group-flush pl-5">
-                                                <li class="list-group-item px-0"><strong>Sadness:</strong> 
-                                                    <%= entryEntities[index].emotion.sadness.toFixed(decimals) %> (Average: <%= entity.sadness.toFixed(decimals) %>)
-                                                </li>
-                                                <li class="list-group-item px-0"><strong>Joy:</strong> 
-                                                    <%= entryEntities[index].emotion.joy.toFixed(decimals) %> (Average: <%= entity.joy.toFixed(decimals) %>)
-                                                </li>
-                                                <li class="list-group-item px-0"><strong>Fear:</strong> 
-                                                    <%= entryEntities[index].emotion.fear.toFixed(decimals) %> (Average: <%= entity.fear.toFixed(decimals) %>)
-                                                </li>
-                                                <li class="list-group-item px-0"><strong>Disgust:</strong> 
-                                                    <%= entryEntities[index].emotion.disgust.toFixed(decimals) %> (Average: <%= entity.disgust.toFixed(decimals) %>)
-                                                </li>
-                                                <li class="list-group-item px-0"><strong>Anger:</strong> 
-                                                    <%= entryEntities[index].emotion.anger.toFixed(decimals) %> (Average: <%= entity.anger.toFixed(decimals) %>)
-                                                </li>
+                                                    <li class="list-group-item px-0"><strong>Sadness:</strong> 
+                                                        <%= entryEntities[index].emotion.sadness.toFixed(decimals) %> (Average: <%= entity.sadness.toFixed(decimals) %>)
+                                                    </li>
+                                                    <li class="list-group-item px-0"><strong>Joy:</strong> 
+                                                        <%= entryEntities[index].emotion.joy.toFixed(decimals) %> (Average: <%= entity.joy.toFixed(decimals) %>)
+                                                    </li>
+                                                    <li class="list-group-item px-0"><strong>Fear:</strong> 
+                                                        <%= entryEntities[index].emotion.fear.toFixed(decimals) %> (Average: <%= entity.fear.toFixed(decimals) %>)
+                                                    </li>
+                                                    <li class="list-group-item px-0"><strong>Disgust:</strong> 
+                                                        <%= entryEntities[index].emotion.disgust.toFixed(decimals) %> (Average: <%= entity.disgust.toFixed(decimals) %>)
+                                                    </li>
+                                                    <li class="list-group-item px-0"><strong>Anger:</strong> 
+                                                        <%= entryEntities[index].emotion.anger.toFixed(decimals) %> (Average: <%= entity.anger.toFixed(decimals) %>)
+                                                    </li>
                                             </ul>
                                             <li class="list-group-item px-0"><strong>Confidence index:</strong> <%= entryEntities[index].confidence %></li>
                                             <li class="list-group-item px-0"><strong>Relevance index:</strong> <%= entryEntities[index].relevance %></li>
@@ -77,14 +78,15 @@
                                     </div>
                                 </li>
                             <% }); %>
-                            </ul>
-                    </div>
+                          </ul>
+                    <% } else { %>
+                        <p>This entry isn't long enough to detect entities.</p>
+                    <% } %>
                 </div>
             </div>
         </div>
-    <% } else { %>
-        <p>This entry isn't long enough to show metadata.</p>
-    <% } %>
+    </div>
+    
 </div>
 
 <script>
