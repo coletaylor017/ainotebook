@@ -78,6 +78,11 @@ p {
     border-radius: 0 !important;
 }
 
+/* Remove shadow for button */
+.homepage-wallpaper .btn {
+    text-shadow: none;
+}
+
 /* Fix for bootstrap's dumb menu bar shadows */
 .navbar-brand,
 .navbar-nav > li > a {
