@@ -22,10 +22,6 @@ p {
     line-height: 175%;
 }
 
-a:hover {
-    cursor: pointer;
-}
-
 .timer-on, .timer-close, .modal-btn {
     display: inline-block;
     margin-bottom: .6em;
@@ -87,19 +83,6 @@ a:hover {
     color: white;
 }
 
-body {
-    background: #333333 url(/images/mountains-bg-1.jpg) no-repeat center center fixed;
-    background-size: cover;
-}
-
-a {
-    color: white;
-}
-
-a:hover {
-    color: white;
-}
-
 .typewriter {
     font-family: 'Cutive Mono', monospace;
 }
@@ -108,6 +91,10 @@ a:hover {
     background-color: transparent;
     color: white;
     border: none;
+}
+
+.filter-controls {
+    background: #e9ecef;
 }
 
 /* Fix for bootstrap's dumb menu bar shadows */
@@ -138,7 +125,7 @@ a:hover {
         top: 96px;
     }
 
-    .filter-controls .rounded {
+    .filter-controls {
         border-radius: 0 !important; /* Overrides Bootstraps .rounded class rule */
     }
 
