@@ -18,7 +18,7 @@
     <form onsubmit="finalizeDates()" action="/entries" method="POST">
         <input id="streak-date" style="display: none" name="streakDate">
         <input id="date-input" style="display: none" name="entry[date]">
-        <textarea class="form-control mb-2" id="entrybox" rows="10" name="entry[body]" placeholder="Start writing" autofocus></textarea>
+        <textarea class="form-control mb-2" id="entry-input-box" rows="10" name="entry[body]" placeholder="Start writing" autofocus></textarea>
         <div class="form-row mb-2">
             <div class="col-auto">
                 <label class="col-form-label pt-2 modal-btn-2" for="tag-box">Optional: Add tags</label>
@@ -168,7 +168,7 @@
     
     var buh = 0;
     
-    $("#entrybox").on("input", function() {
+    $("#entry-input-box").on("input", function() {
         if (buh === 0) {
             startTimer();
             buh = 1;

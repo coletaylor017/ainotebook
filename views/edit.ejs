@@ -8,7 +8,7 @@
     <form action="/entries/<%= entry._id %>?_method=PUT" method="POST" class="ui form">
         <input id="streak-date" style="display: none" name="streakDate">
         <input id="date-input" style="display: none" name="entry[date]">
-        <textarea class="form-control mb-2" id="entrybox" rows="10" name="entry[body]" placeholder="Start writing" autofocus><%= entry.body %></textarea>
+        <textarea class="form-control mb-2" id="entry-input-box" rows="10" name="entry[body]" placeholder="Start writing" autofocus><%= entry.body %></textarea>
         <div class="form-row mb-2">
             <div class="col-auto">
                 <label class="col-form-label pt-2 modal-btn-2" for="tag-box">Optional: Add tags</label>

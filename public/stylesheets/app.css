@@ -1,11 +1,16 @@
 html {
     font-size: 14px;
 }
+
 body {
     height: 100%;
 }
 
-#entrybox {
+p {
+    line-height: 175%;
+}
+
+#entry-input-box {
     line-height: 175%;
     height: 35em;
 }
@@ -15,38 +20,11 @@ body {
     font-weight: 700;
 }
 
-p {
-    line-height: 175%;
-}
-
-.timer-on, .timer-close, .modal-btn {
-    display: inline-block;
-}
-
-.big-anchor {
-    display: block;
-    padding: 1em;
-}
-
-#main-form {
-    border-radius: .5em;
-}
-
-.landing-p {
-    font-size: 1.2em;
-    line-height: 1.8;
-}
-
 .value i {
     display: inline-block;
     position: relative;
     padding-left: .2em;
     top: -.15em;
-}
-
-#no-darken:hover {
-    background-color: transparent;
-    cursor: default;
 }
 
 .quote {
