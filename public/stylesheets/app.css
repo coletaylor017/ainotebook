@@ -108,12 +108,12 @@ p {
 }
 
 .no-achor-styles {
-    color: inherit;
-    text-decoration: none;
+    color: inherit !important;
+    text-decoration: none !important;
 }
 
 .no-anchor-styles {
-    color: inherit;
+    color: inherit !important;
     text-decoration: none !important;
 }
 

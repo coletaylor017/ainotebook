@@ -5,13 +5,16 @@ var express = require("express"),
     Global = require("../models/global"),
     middleware = require("../middleware"),
     passport = require("passport"),
-    queries = require("../helpers/queries"),
     errorHandlers = require("../helpers/errorHandlers");
 
 var router = express.Router();
 
 router.get("/", function (req, res) {
     res.render("landing");
+});
+
+router.get("/dberror", function(req, res) {
+    errorHandlers.dbError(res, "Error");
 });
 
 router.get("/about", function (req, res) {

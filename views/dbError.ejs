@@ -1,8 +1,10 @@
 <% include partials/header %>
 
-<h1 class="ui header">There was an error. Bummer!</h1>
-<div class="ui divider"></div>
-<p>Details:</p><br>
-<p><%= err %></p>
+<div class="container my-5">
+    <h3 class="ui header">An unexpected error has occurred.</h3>
+    <hr>
+    <p>As the sole developer of this project, I sincerely apologize for any issues this may have caused. For assistance in resolving this, please email me at <a href="mailto:coletaylor017@gmail.com?subject=Error Reporting&body=<%= err %>">coletaylor017@gmail.com</a> with the error information reported below.</p>
+    <p>Error information: "<%= err %>"</p>
+</div>
 
 <% include partials/footer %>
