@@ -1,75 +1,87 @@
 <% include partials/header %>
 
-<div class="spacer"></div>
-<div class="spacer"></div>
-
-<div class="ui inverted text container center aligned main">
-
-    <h2 class="ui inverted header">Sign Up</h2>
-
-    <div class="ui left aligned container">
-        <form name="myForm" class="ui inverted form" action="/register" method="POST">
-            <div class="field">
-                <input type="text" placeholder="username" name="username" autofocus>
+<div class="container my-5 pt-5">
+    <div class="row justify-content-center">
+      <div class="col-11 col-md-6 col-lg-4 bg-gray p-3 rounded">
+        <h2 class="mb-3 mt-2 text-center">Sign Up</h2>
+        <form class="form-group needs-validation <%= error && error.length > 0 ? "was-validated" : "" %>" action="/register" method="POST" novalidate>
+            <div class="form-group pt-3">
+                <label class="mb-1" for="username">Email Address:</label>
+                <input class="form-control" type="email" placeholder="Type your email" name="username" id="username" autofocus required aria-describedby="email-feedback">
+                <div id="email-feedback" class="invalid-feedback">You must provide a valid email address.</div>
             </div>
-            <div class="field">
-                <input type="password" placeholder="password" name="password">
+            <div class="form-group">
+                <label class="mb-1" for="password">Password:</label>
+                <input class="form-control" type="password" placeholder="Type a password..." name="password" id="password" aria-describedby="password-feedback" required>
+                <div id="password-feedback" class="invalid-feedback">Passwords must match.</div>
             </div>
-            <div class="field">
-                <input type="password" placeholder="repeat password" name="password2">
+            <div class="form-group">
+                <label class="mb-1" for="confirm-password">Confirm Password:</label>
+                <input class="form-control" type="password" placeholder="Repeat password..." name="password2" id="confirm-password" required>
+                <div class="invalid-feedback">Passwords must match.</div>
             </div>
-            <div class="ui field">
-                <div class="ui checkbox">
-                    <input type="checkbox" name="terms">
-                    <label>I agree to the <a href="/terms" target="_blank"><u>terms and conditions</u></a></label>
-                </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="terms" id="terms-checkbox" required>
+                <label class="form-check-label" for="terms-checkbox">I agree to the <a href="/terms" target="_blank"><u>terms and conditions</u></a></label>
+                <div class="invalid-feedback">You must agree before submitting.</div>
             </div>
-            <button class="ui green button">Sign Up</button>
-            <a href="/login">Or log in instead</a>
-            <div class="ui error message"></div>
-        </form>
-        <div class="ui hidden divider"></div>
+            <div class="text-center mt-4">
+                <button class="btn btn-primary w-100 text-center">Sign Up</button>
+                <br>
+                <a class="d-inline-block text-center pt-2" href="/login">Or log in instead</a>     
+            </div>   
+        </form>      
+      </div>      
     </div>
 </div>
 
 <script>
+    // Much borrowed from the examples at https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation
+    'use strict';
+    window.addEventListener('load', function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var form = document.getElementsByClassName('needs-validation')[0];
+        const email = document.getElementById("username");
+        const emailError = document.querySelector('#email-feedback');
+        const password = document.getElementById("password");
+        const passwordError = document.querySelector('#password-feedback');
+        const confirmPassword = document.getElementById("confirm-password");
+        const confirmPasswordError = document.querySelector('#confirm-password-feedback');
 
-    $('.ui.form')
-        .form({
-            fields: {
-                username: {
-                    identifier: 'username',
-                    rules: [
-                        {
-                            type: 'empty',
-                            prompt: 'Please enter a username'
-                        }
-                    ]
-                },
-                password: {
-                    identifier: 'password',
-                    rules: [
-                        {
-                            type: 'empty',
-                            prompt: 'Please enter a password'
-                        },
-                        {
-                            type: 'match[password2]',
-                            prompt: "Passwords must match"
-                        }
-                    ]
-                },
-                terms: {
-                    identifier: 'terms',
-                    rules: [
-                        {
-                            type: 'checked',
-                            prompt: 'You must agree to the terms and conditions'
-                        }
-                    ]
+        // Custom validation function for email field
+        const emailIsValid = function() {
+            return email.validity.valid;
+        };
+
+        const displayEmailError = function() {
+            // If there is still an error, show the correct error
+            if(email.validity.valueMissing) {
+                emailError.textContent = 'Email cannot be empty.';
+            } else if(email.validity.typeMismatch) {
+                emailError.textContent = 'Email address is invalid.';
+            }
+            email.classList.add("is-invalid");
+        }
+
+        email.addEventListener('input', function (event) {
+            // Each time the user types something, we check if the form fields are valid.
+            if (emailIsValid()) {
+                // In case there is an error message visible, if the field is valid, we remove the error message.
+                emailError.textContent = ''; // Reset the content of the message
+            } else {
+                displayEmailError();
+            }
+        });
+
+        form.addEventListener('submit', function(event) {
+            if (form.checkValidity() === false || !emailIsValid) {
+                event.preventDefault();
+                event.stopPropagation();
+                if (!emailIsValid) {
+                    showEmailError();
                 }
             }
-        })
-        ;
-
+            // let it submit
+        }, false);
+    }, false);
 </script>
