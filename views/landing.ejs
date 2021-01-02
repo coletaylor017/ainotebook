@@ -10,18 +10,18 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script></head>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent fixed-top" style="z-index: 2000;">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent fixed-top main-nav" style="z-index: 2000;">
         <a class="navbar-brand" id="site-title" href="/">AI Notebook</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" id="main-nav-toggler" type="button" data-toggle="collapse" data-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
       
-        <div class="collapse navbar-collapse text-center" id="navbarSupportedContent" style="z-index: 2000;">
+        <div class="collapse navbar-collapse text-center" id="main-nav" style="z-index: 2000;">
             <ul class="navbar-nav ml-auto">
                 <% if (currentUser) { %>
                     <% if (currentUser.isAdmin) { %>
                         <li class="nav-item navbar-light mr-2">
-                            <a class="nav-link disabled text-white text-decoration-none" href="#" tabindex="-1" aria-disabled="true">Welcome, admin user <%= currentUser.username %></a>
+                            <a class="nav-link disabled text-decoration-none" href="#" tabindex="-1" aria-disabled="true">Welcome, admin user <%= currentUser.username %></a>
                         </li>
                         <li class="nav-item mr-2"><a class="nav-link text-white" href="/quotes">Quotes</a></li>
                     <% } %>
@@ -201,56 +201,7 @@
     </div>
 
 <script>
-
-//If there's a login error message, scroll down to login form
-
-$('.ui.form')
-    .form({
-        fields: {
-            username: {
-                identifier: 'username',
-                rules: [
-                    {
-                        type   : 'empty',
-                        prompt : 'Please enter a username'
-                    }
-                ]
-            },
-            password: {
-                identifier: 'password',
-                rules: [
-                    {
-                        type   : 'empty',
-                        prompt : 'Please enter a password'
-                    },
-                    {
-                        type: 'match[password2]',
-                        prompt: "Passwords must match"
-                    }
-                ]
-            },
-            terms: {
-                identifier: 'terms',
-                rules: [
-                {
-                        type   : 'checked',
-                        prompt : 'You must agree to the terms and conditions'
-                    }
-                ]
-            }
-        }
-    })
-;
-        
-$('.message .close')
-  .on('click', function() {
-    $(this)
-      .closest('.message')
-      .transition('fade')
-    ;
-  })
-;
-
-var elmnt = document.querySelector(".thing");
-elmnt.scrollIntoView();
+// if there is a signup error, scroll to the signup form
+// var elmnt = document.querySelector(".thing");
+// elmnt.scrollIntoView();
 </script>

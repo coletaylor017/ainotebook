@@ -12,7 +12,7 @@
 <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top" style="z-index: 2000;">
         <a class="navbar-brand" id="site-title" href="/">AI Notebook</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#site-nav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#site-nav" aria-controls="site-nav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
       
@@ -23,14 +23,14 @@
                 <% } else { %>
                     <% if (currentUser.isAdmin) { %>
                         <li class="nav-item navbar-light mr-2">
-                            <a class="nav-link disabled text-info text-decoration-none" href="#" tabindex="-1" aria-disabled="true">Welcome, admin user <%= currentUser.username %></a>
+                            <a class="nav-link disabled text-decoration-none" href="#" tabindex="-1" aria-disabled="true">Welcome, admin user <%= currentUser.username %></a>
                         </li>
-                        <li class="nav-item active bg-info mr-4"><a class="nav-link" href="/quotes">Quotes</a></li>
+                        <li class="nav-item active mr-2"><a class="nav-link text-white" href="/quotes">Quotes</a></li>
                     <% } %>
-                    <li class="nav-item mr-2"><a class="nav-link" href="/home">Home</a></li>
-                    <li class="nav-item mr-2"><a class="nav-link" href="/entries">Entries</a></li>
-                    <li class="nav-item mr-2"><a class="nav-link" href="/account">Account</a></li>
-                    <li class="nav-item mr-2"><a class="nav-link" href="/logout">Logout</a></li>
+                    <li class="nav-item mr-2"><a class="nav-link text-white" href="/home">Home</a></li>
+                    <li class="nav-item mr-2"><a class="nav-link text-white" href="/entries">Entries</a></li>
+                    <li class="nav-item mr-2"><a class="nav-link text-white" href="/account">Account</a></li>
+                    <li class="nav-item mr-2"><a class="nav-link text-white" href="/logout">Logout</a></li>
                 <% } %>
             </ul>
         </div>
