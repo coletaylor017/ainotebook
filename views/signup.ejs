@@ -8,22 +8,22 @@
             <div class="form-group pt-3">
                 <label class="mb-1" for="username">Email Address:</label>
                 <input class="form-control" type="email" placeholder="Type your email" name="username" id="username" autofocus required aria-describedby="email-feedback">
-                <div id="email-feedback" class="invalid-feedback">You must provide a valid email address.</div>
+                <div id="email-feedback" class="invalid-feedback"></div>
             </div>
             <div class="form-group">
                 <label class="mb-1" for="password">Password:</label>
                 <input class="form-control" type="password" placeholder="Type a password..." name="password" id="password" aria-describedby="password-feedback" required>
-                <div id="password-feedback" class="invalid-feedback">Passwords must match.</div>
+                <div id="password-feedback" class="invalid-feedback"></div>
             </div>
             <div class="form-group">
                 <label class="mb-1" for="confirm-password">Confirm Password:</label>
-                <input class="form-control" type="password" placeholder="Repeat password..." name="password2" id="confirm-password" required>
-                <div class="invalid-feedback">Passwords must match.</div>
+                <input class="form-control" type="password" placeholder="Repeat password..." name="password2" id="confirm-password" aria-describedby="confirm-password-feedback" required>
+                <div id="confirm-password-feedback" class="invalid-feedback"></div>
             </div>
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" name="terms" id="terms-checkbox" required>
-                <label class="form-check-label" for="terms-checkbox">I agree to the <a href="/terms" target="_blank"><u>terms and conditions</u></a></label>
-                <div class="invalid-feedback">You must agree before submitting.</div>
+                <label class="form-check-label" for="terms-checkbox" id="tc" aria-describedby="tc-feedback">I agree to the <a href="/terms" target="_blank"><u>terms and conditions</u></a></label>
+                <div id="tc-feedback" class="invalid-feedback"></div>
             </div>
             <div class="text-center mt-4">
                 <button class="btn btn-primary w-100 text-center">Sign Up</button>
@@ -42,35 +42,62 @@
         // Fetch all the forms we want to apply custom Bootstrap validation styles to
         var form = document.getElementsByClassName('needs-validation')[0];
         const email = document.getElementById("username");
-        const emailError = document.querySelector('#email-feedback');
+        const emailFeedback = document.getElementById("email-feedback");
         const password = document.getElementById("password");
-        const passwordError = document.querySelector('#password-feedback');
+        const passwordFeedback = document.getElementById('password-feedback');
         const confirmPassword = document.getElementById("confirm-password");
-        const confirmPasswordError = document.querySelector('#confirm-password-feedback');
+        const confirmPasswordFeedback = document.getElementById('confirm-password-feedback');
+        // You must agree before submitting.
+        const tc = document.getElementById("tc");
+        const tcError = document.getElementById('tc-feedback');
 
         // Custom validation function for email field
         const emailIsValid = function() {
             return email.validity.valid;
         };
 
-        const displayEmailError = function() {
-            // If there is still an error, show the correct error
-            if(email.validity.valueMissing) {
-                emailError.textContent = 'Email cannot be empty.';
-            } else if(email.validity.typeMismatch) {
-                emailError.textContent = 'Email address is invalid.';
+        const displayFeedback = function(element, feedbackElement, fieldName, isValid) {
+            if (isValid) {
+                element.classList.remove("is-invalid");
+                element.classList.add("is-valid");
+                feedbackElement.textContent = ''; // Reset the content of the message
+            } else {
+                // set error message based on the feedback from the browser constraint validation API and/or custom rules
+                if(element.validity.valueMissing) {
+                    feedbackElement.textContent = `${fieldName} cannot be empty.`;
+                } else if(element.validity.typeMismatch) {
+                    feedbackElement.textContent = `${fieldName} is invalid.`;
+                } else if (element.id === "confirm-password" && confirmPassword.value !== password.value) {
+                    feedbackElement.textContent = `Passwords must match.`;
+                } else {
+                    feedbackElement.textContent = `Something else.`;
+                }
+                element.classList.remove("is-valid");
+                element.classList.add("is-invalid");
             }
-            email.classList.add("is-invalid");
         }
 
         email.addEventListener('input', function (event) {
-            // Each time the user types something, we check if the form fields are valid.
-            if (emailIsValid()) {
-                // In case there is an error message visible, if the field is valid, we remove the error message.
-                emailError.textContent = ''; // Reset the content of the message
-            } else {
-                displayEmailError();
-            }
+            displayFeedback(email, emailFeedback, "Email", emailIsValid());
+        });
+
+        // Custom validation function for password field
+        const passwordIsValid = function() {
+            return password.validity.valid;
+        };
+
+        password.addEventListener('input', function (event) {
+            displayFeedback(password, passwordFeedback, "Password", passwordIsValid());
+            displayFeedback(confirmPassword, confirmPasswordFeedback, "Field", confirmPasswordIsValid());
+        });
+
+        // Custom validation function for password confirm field
+        const confirmPasswordIsValid = function() {
+            return confirmPassword.validity.valid && confirmPassword.value === password.value;
+        };
+
+        confirmPassword.addEventListener('input', function (event) {
+            displayFeedback(confirmPassword, confirmPasswordFeedback, "Field", confirmPasswordIsValid());
         });
 
         form.addEventListener('submit', function(event) {
@@ -78,6 +105,12 @@
                 event.preventDefault();
                 event.stopPropagation();
                 if (!emailIsValid) {
+                    showEmailError();
+                }
+                if (!passwordIsValid) {
+                    showEmailError();
+                }
+                if (!confirmPasswordIsValid) {
                     showEmailError();
                 }
             }
