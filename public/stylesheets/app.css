@@ -103,13 +103,4 @@ p {
         width: 100%;
         top: 49px;
     }
-
-    .filter-controls {
-        top: 96px;
-    }
-
-    .filter-controls {
-        border-radius: 0 !important; /* Overrides Bootstraps .rounded class rule */
-    }
-
 }
