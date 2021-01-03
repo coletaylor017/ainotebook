@@ -75,6 +75,7 @@ exports.getTagsWithCounts = function (userId, tagArr, keyword) {
     query = [
       {
         $match: {
+          "author.id": userId,
           tags: {
             $all: tagArr,
           },
