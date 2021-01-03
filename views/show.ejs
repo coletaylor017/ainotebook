@@ -1,151 +1,113 @@
 <% include partials/header %>
 
-<link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
-<link rel="stylesheet" type="text/css" href="/stylesheets/chartistCustom.css">
-<script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+<div class="container my-5">
+    <div class="mb-5">
+        <h4 class=""><%= moment(entry.dateCreated).format("D MMM YYYY, h:mm a") %></h4>
+        <% entry.tags.forEach(function(tag) { %>
+            <a class="badge badge-secondary p-1 mb-2" href="<%= "/entries?tags=" + encodeURIComponent(tag) %>">
+                <%= tag %>
+            </a>
+        <% }); %>
+        <p class="" id="entry-body"><%= entry.body.substring(0, 2000) + (entry.body.length > 2000 ? "..." : "") %></p>
+        <% if (entry.body.length > 2000) { %>
+            <a class="toggle-entry btn btn-secondary" role="button" onclick=expandEntry()>See more</a>
+            <a class="toggle-entry btn btn-secondary d-none" role="button" onclick=collapseEntry()>See less</a>
+        <% } %>
+        <br>
+        <a href="/entries" class="btn btn-primary mt-2"></i>Back to All Entries</a>
+        <a href="/entries/<%= entry._id %>/edit" class="btn btn-outline-secondary mt-2" title="Edit">Edit Entry</a>
+    </div>
 
-<div class="spacer"></div>
 
-<div class="ui text container center aligned main">
-    
-    <!--<h2 class="ui inverted header"></h2>-->
-    
-    <div class="ui left aligned inverted container">
-        <div class="ui horizontal list">
-            <h4 class="ui inverted item header"><%= moment(entry.date).format("D MMM YYYY, h:mm a") %></h4>
-            <% entry.tags.forEach(function(tag) { %>
-                <h4 class="ui item label" id="tags">
-                    <%= tag.name %>
-                </h4>
-            <% }); %>
+    <h3 class="">Metadata</h3>
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Detected Entities</h4>
+                    <% if (entities.length > 0) { %>
+                        <ul class="list-group list-group-flush">
+                            <% var decimals = 1; %>
+                            <% var entryEntities = entry.metadata.nluData.entities.sort((a, b) => { %>
+                                <% if (a.name > b.name) {return 1;} %>
+                                <% if (a.name < b.name) {return -1;} %>
+                                <% return 0; %>
+                                <% }); %>
+                            <!-- Sort alphabetically -->
+                            <% entities.sort((a, b) => { %>
+                                <% if (a._id > b._id) {return 1;} %>
+                                <% if (a._id < b._id) {return -1;} %>
+                                <% return 0; %>
+                                <% }).forEach(function(entity, index) { %>
+                                <li class="list-group-item px-0">
+                                    <div class="d-flex align-items-left" id="entity-<%= index %>">
+                                        <a class="no-anchor-styles text-primary ml-2 stretched-link" data-toggle="collapse" href="#entity-<%= index %>" role="button" aria-expanded="false" aria-controls="extendedDescription">
+                                            <h6 class="text-dark m-0 dropdown-arrow">v&nbsp;</h6>
+                                        </a>
+                                        <h6 class="m-0"><strong>"<%= entity._id %>"</strong></h6>
+                                    </div>
+                                    <div class="collapse mt-2" id="entity-<%= index %>">
+                                        <ul class="list-group list-group-flush px-5">
+                                            <li class="list-group-item px-0"><strong>Categories:</strong> <%= entity.categories %></li>
+                                            <li class="list-group-item px-0"><strong>Entries mentioning:</strong> <%= entity.entriesMentioning %></li>
+                                            <li class="list-group-item px-0"><strong>Total mentions:</strong> <%= entity.totalMentions %></li>
+                                            <li class="list-group-item px-0"><strong>Sentiment rating:</strong> 
+                                                <%= formatWithSign(entryEntities[index].sentiment.score.toFixed(decimals)) %> (Average: <%= formatWithSign(entity.sentimentScore.toFixed(decimals)) %>)
+                                            </li>
+                                            <li class="list-group-item px-0"><strong>Emotions:</strong></li>
+                                            <ul class="list-group list-group-flush pl-5">
+                                                    <li class="list-group-item px-0"><strong>Sadness:</strong> 
+                                                        <%= entryEntities[index].emotion.sadness.toFixed(decimals) %> (Average: <%= entity.sadness.toFixed(decimals) %>)
+                                                    </li>
+                                                    <li class="list-group-item px-0"><strong>Joy:</strong> 
+                                                        <%= entryEntities[index].emotion.joy.toFixed(decimals) %> (Average: <%= entity.joy.toFixed(decimals) %>)
+                                                    </li>
+                                                    <li class="list-group-item px-0"><strong>Fear:</strong> 
+                                                        <%= entryEntities[index].emotion.fear.toFixed(decimals) %> (Average: <%= entity.fear.toFixed(decimals) %>)
+                                                    </li>
+                                                    <li class="list-group-item px-0"><strong>Disgust:</strong> 
+                                                        <%= entryEntities[index].emotion.disgust.toFixed(decimals) %> (Average: <%= entity.disgust.toFixed(decimals) %>)
+                                                    </li>
+                                                    <li class="list-group-item px-0"><strong>Anger:</strong> 
+                                                        <%= entryEntities[index].emotion.anger.toFixed(decimals) %> (Average: <%= entity.anger.toFixed(decimals) %>)
+                                                    </li>
+                                            </ul>
+                                            <li class="list-group-item px-0"><strong>Confidence index:</strong> <%= entryEntities[index].confidence %></li>
+                                            <li class="list-group-item px-0"><strong>Relevance index:</strong> <%= entryEntities[index].relevance %></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            <% }); %>
+                          </ul>
+                    <% } else { %>
+                        <p>This entry isn't long enough to detect entities.</p>
+                    <% } %>
+                </div>
+            </div>
         </div>
-        <p class="entrybody"><%= entry.body %></p>
     </div>
     
-    <!-- <h2 class="ui inverted header">Metadata</h2>
-    <div class="ui divider"></div>
-    <div class="ui doubling stackable grid">
-        <div class="two column row">
-            <div class="chart column" style="position: relative">
-                <div class="ct-chart ct-square" id="chart1"></div>
-                <span class="chart-label"><i class="a2 ui square icon"></i>Order</span>
-                <span class="chart-label"><i class="a1 ui square icon"></i>Chaos</span>
-            </div>
-            <div class="chart column" style="position: relative">
-                <div class="ct-chart ct-square" id="chart2"></div>
-                <span class="chart-label"><i class="b1 ui square icon"></i>Sight</span>
-                <span class="chart-label"><i class="b2 ui square icon"></i>Sound</span>
-                <span class="chart-label"><i class="b3 ui square icon"></i>Smell</span>
-                <span class="chart-label"><i class="b4 ui square icon"></i>Taste</span>
-                <span class="chart-label"><i class="b5 ui square icon"></i>Touch</span>
-            </div>
-        </div>
-        <div class="two column row">
-            <div class="chart column" style="position: relative">
-                <div class="ct-chart ct-square" id="chart3"></div>
-                <span class="chart-label"><i class="c1 ui square icon"></i>Positivity</span>
-                <span class="chart-label"><i class="c2 ui square icon"></i>Anxiety</span>
-                <span class="chart-label"><i class="c3 ui square icon"></i>Sadness</span>
-                <span class="chart-label"><i class="c4 ui square icon"></i>Affection</span>
-                <span class="chart-label"><i class="c5 ui square icon"></i>Aggression</span>
-            </div>
-            <div class="chart column" style="position: relative">
-                <div class="ct-chart ct-square" id="chart4"></div>
-                <span class="chart-label"><i class="d2 ui square icon"></i>Abstract</span>
-                <span class="chart-label"><i class="d1 ui square icon"></i>Concrete</span>
-            </div>
-        </div>
-        <div class="one column row">
-            <div class="chart column" style="position: relative">
-                <div class="ct-chart ct-square" id="chart5"></div>
-                <span class="chart-label"><i class="e2 ui square icon"></i>Work</span>
-                <span class="chart-label"><i class="e1 ui square icon"></i>Social</span>
-            </div>
-        </div>
-    </div>
-    
-    <div class="spacer"></div> -->
-    
-    <a href="/home" class="ui green button" title="Home"><i class="ui home icon"></i>Home</a>
 </div>
 
 <script>
+    function expandEntry()
+    {
+        $("#entry-body").html("<%= entry.body %>");
+        $(".toggle-entry").toggleClass("d-none");
+    }
+    function collapseEntry()
+    {
+        $("#entry-body").html("<%= entry.body.substring(0, 2000) + (entry.body.length > 2000 ? '...' : '') %>");
+        $(".toggle-entry").toggleClass("d-none");
+    }
 
-var data = <%-JSON.stringify(rid)%>;
+    $('.collapse').on('show.bs.collapse', function (e) {
+        $(`#${e.target.id} .dropdown-arrow`).html("^&nbsp;");
+    });
 
-var options = {
-    labelOffset: 50,
-    labelDirection: 'explode',
-    chartPadding: 20
-}
-
-new Chartist.Pie('#chart1', {
-    labels: [
-        'chaos',
-        'order'
-    ],
-    series: [
-        data.CHAOS,
-        data.ORDER
-    ]
-}, options);
-
-new Chartist.Pie('#chart2', {
-    labels: [
-        'sight',
-        'sound',
-        'smell',
-        'taste',
-        'touch'
-    ],
-    series: [
-        data.VISION,
-        data.SOUND,
-        data.ODOR,
-        data.TASTE,
-        data.TOUCH
-    ]
-}, options);
-
-new Chartist.Pie('#chart3', {
-    labels: [
-        'positivity',
-        'anxiety',
-        'sadness',
-        'affection',
-        'aggression'
-    ],
-    series: [
-        data.POSITIVE_AFFECT,
-        data.ANXIETY,
-        data.SADNESS,
-        data.AFFECTION,
-        data.AGGRESSION
-    ]
-}, options);
-
-new Chartist.Pie('#chart4', {
-    labels: [
-        'concrete',
-        'abstract'
-    ],
-    series: [
-        data.CONCRETENESS,
-        data.ABSTRACT_THOUGHT
-    ]
-}, options);
-
-new Chartist.Pie('#chart5', {
-    labels: [
-        'social',
-        'work'
-    ],
-    series: [
-        data.SOCIAL_BEHAVIOR,
-        data.INSTRU_BEHAVIOR
-    ]
-}, options);
-
+    $('.collapse').on('hide.bs.collapse', function (e) {
+        $(`#${e.target.id} .dropdown-arrow`).html("v&nbsp;");
+    });
 </script>
 
 <% include partials/footer %>

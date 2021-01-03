@@ -1,67 +1,90 @@
 <% include partials/header %>
 
-<div class="ui inverted text container segment context" id="transparent">
-    <div class="ui left dividing rail">
-        <div class="ui right aligned container sticky theting">
-            <h1 class="ui inverted header">Past Entries</h1>
-            <form action="/entries/search" method="POST">
-                <div class="ui left labeled button">
-                    <input class="ui basic label input" type="text" name="searchterm" placeholder="Search">
-                    <button class="ui icon button" action="submit"><i class="search icon"></i></button>
-                </div>
-            </form>
-            <% if (keyword !== "") { %>
-                <p>Keyword: <%= keyword %></p>
-                <a href="/entries">clear search term</a><br>
-            <% } %>
-            <h2>Tags</h2>
-            <div class="ui list">
+<div class="container my-md-5">
+    <div class="row">
+        <nav class="navbar navbar-dark bg-light d-md-none text-center sticky-top secondary-nav">
+            <button class="btn btn-secondary mx-auto" id="filter-toggle-button" type="button" data-toggle="collapse" data-target="#filter-controls" aria-controls="filter-controls" aria-expanded="false" aria-label="Toggle search filters">
+              Show Search Filters
+            </button>
+        </nav>
+        <div class="col-12 col-md-3 collapse d-md-block p-0 pr-md-2 sticky-top bg-gray filter-controls rounded" id="filter-controls">
+            <div class="p-2">
+                <% if (keyword !== "" || queriedTags.length > 0) { %>
+                    <h2><%= entries.length %> Results</h2>
+                <% } else { %>
+                    <h2>All Entries</h2>
+                <% } %>
+                <form action="<%= "/entries/search" + (queriedTags.length > 0 ? "?tags=" + encodeURIComponent(queriedTags) : "") %>" method="POST">
+                    <div class="input-group">
+                        <input class="form-control" type="text" value="<%= keyword %>" name="searchterm" placeholder="Search by phrase..." aria-label="Search by phrase" aria-describedby="search-button">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" action="submit" id="search-button">Search</button>
+                        </div>
+                    </div>
+                </form>
+
+                <% if (keyword !== "") { %>
+                    <p class="my-2">Filtering by phrase: "<%= keyword %>"</p>
+                    <a class="mb-1 text-primary" href="<%= "/entries?tags=" + encodeURIComponent(queriedTags) %>">Clear keyword</a><br>
+                <% } %>
+
+                <% if (queriedTags.length > 0) { %>
+                    <p class="my-2">Filtering by tags:
+                        <% queriedTags.forEach(function(tag) { %>
+                            <a class="badge badge-secondary p-1" href="<%= "/entries?tags=" + encodeURIComponent(queriedTags.filter(qTag => qTag != tag)) + "&keyword=" + keyword %>"><%= tag %></a>
+                        <% }); %>
+                    </p>
+                <% } %>
+
+                <% if (keyword !== "" || queriedTags.length > 0) { %>
+                    <a class="mb-1 text-primary" href="/entries">Clear all search terms</a><br>
+                <% } %>
+
+
+                <h2 class="mt-5">Tags</h2>
                 <% tags.forEach(function(tag) { %>
-                    <a class="item">
-                        <a href="/tags/<%= tag._id %>"><%= tag.name %> (<%= tag.entries.length %>)</a>
-                    </a>
+                    <a class="badge badge-secondary p-1 my-1 mr-1" href="<%= "/entries?tags=" + (queriedTags.length > 0 ? encodeURIComponent(queriedTags) + "," : "") + encodeURIComponent(tag.name) + "&keyword=" + keyword %>"><%= tag.name %> (<%= tag.entryCount %>)</a>
                 <% }) %>
+                <br>
+                <a href="/entries/new" class="mt-5 btn btn-primary d-block mx-auto">Create new entry</a>
             </div>
         </div>
-    </div>
-    
-    <div class="main">
-        <div class="ui container">
-            <a href="/entries/new" class="ui large primary button">Create new entry</a>
-        </div>
-        <div class="ui hidden divider"></div>
-        <% if (entries.length === 0) { %>
-            <p>No entries found.</p>
-        <% } else { %>
-            <% entries.forEach(function(entry) { %>
-                <div class="ui inverted container">
-                    <a href="/entries/<%= entry._id %>">
-                        <div class="ui horizontal list">
-                            <h4 class="ui inverted item header" class="date"><%= entry.date %></h4>
-                            <!--moment(entry.date).format("D MMM YYYY, h:mm a") -->
+        
+        <div class="col-12 col-md-9 my-5 my-md-0">
+            <% if (entries.length === 0) { %>
+                <p>No entries found.</p>
+            <% } else { %>
+                <% entries.forEach(function(entry) { %>
+                    <div class="mb-5">
+                        <a href="/entries/<%= entry._id %>" class="no-anchor-styles">
+                            <% const date = new Date(entry.dateCreated) %>
+                            <% var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]; %>
+                            <p class="mb-1"><%= `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}` %></p>
                             <% entry.tags.forEach(function(tag) { %>
-                                <h4 class="ui item label" id="tags">
-                                    <%= tag.name %>
-                                </h4>
-                            <% }); %>
-                        </div>
-                        <p class="ui inverted entry-preview"><%= entry.body.substring(0,500) %></p>
-                    </a>
-                    <a href="/entries/<%= entry._id %>" class="ui basic inverted button" title="View"><i class="ui eye icon"></i>view</a>
-                    <a href="/entries/<%= entry._id %>/edit" class="ui basic inverted button" title="Edit"><i class="ui edit icon"></i>edit</a>
-                    <form action="/entries/<%= entry._id %>?_method=DELETE" method="POST" class="inline">
-                        <button action="submit" class="ui basic inverted button trash" title="Delete"><i class="ui trash icon"></i>delete</button>
-                    </form>
-                     <div class="ui hidden divider"></div>
-                </div>
-            <% }); %>
-        <% } %>
+                                <span class="badge badge-secondary p-1 mr-1 my-0"><%= tag %></span>
+                            <% }) %>
+                            <p class="py-2 m-0"><%= entry.body.substring(0,500) %>...</p>
+                        </a>
+                        <a href="/entries/<%= entry._id %>" class="btn btn-outline-secondary" title="View">View</a>
+                        <a href="/entries/<%= entry._id %>/edit" class="btn btn-outline-secondary" title="Edit">Edit</a>
+                        <form action="/entries/<%= entry._id %>?_method=DELETE" method="POST" class="d-inline">
+                            <button action="submit" class="btn btn-outline-secondary" title="Delete">Delete</button>
+                        </form>
+                    </div>
+                <% }); %>
+            <% } %>
+        </div>
     </div>
 </div>
 
 <script>
-    $('.ui.sticky')
-      .sticky({
-        context: '.context',
-      });
+    $('#filter-controls').on('show.bs.collapse', function() {
+        $('#filter-toggle-button').html("Hide Search Filters");
+    });
+
+    $('#filter-controls').on('hide.bs.collapse', function() {
+        $('#filter-toggle-button').html("Show Search Filters");
+    });
 </script>
+
+<% include partials/footer %>

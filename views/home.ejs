@@ -1,51 +1,39 @@
 <% include partials/header %>
 
-<div class="spacer"></div>
-
-<div class="ui text container center aligned" id="quote-container">
-    <div class="ui basic inverted segment">
+<div class="jumbotron homepage-wallpaper text-light">
+    <div class="container my-5 text-center">
         <p class="typewriter">Quote of the day:</p>
         <p class="quote"><em>"<%= quote.body %>"</em></p>
         <% if (quote.author) { %>
-            <div class="ui container" id="largelad">
-                <div class="authorsource">
+                <div>
                     <strong>-<%= quote.author %></strong><% if (quote.source) { %>, <%= quote.source %><% } %>
                 </div>
-            </div>
         <% } %>
     </div>
-</div>
-
-<div class="ui center aligned container" id="home-center">
-    <div class="ui huge inverted orange statistic">
-        <div class="value"><%= currentUser.streak %><i class="ui small fire icon"></i></div>
-        <div class="label">Current streak</div>
+    <div class="container mb-5 text-center">
+        <div class="mb-4">
+            Current streak: <h2><%= currentUser.streak %></h2>    
+        </div>
+        <a href="/entries/new" class="btn btn-primary btn-lg my-3">Create new entry</a>
     </div>
-    <br>
-    <a href="/entries/new" class="ui huge primary button">Create new entry</a>
 </div>
 
-
-
-    <div id="stats-container">
-        <div class="ui text container center aligned">
-            <h2 class="ui inverted header">Your Stats</h2>
-            <div class="ui inverted divider"></div>
-            <div class="ui three small statistics">
-                <div class="ui inverted statistic">
-                    <div class="value"><%= moment().diff(moment(currentUser.dateCreated), 'days') %></div>
-                    <div class="label">Days since creation</div>
-                </div>
-                <div class="ui inverted blue statistic">
-                    <div class="value"><%= entryCount %></div>
-                    <div class="label">Sessions</div>
-                </div>
-                <div class="ui inverted green statistic">
-                    <div class="value"><%= wordCount %></div>
-                    <div class="label">Total Words</div>
-                </div>
-            </div>
+<div class="container mt-5 px-5 text-center">
+    <h2 class="mb-3 mx-5 p-3 border-bottom">Your Stats</h2>
+    <div class="row">
+        <div class="col">
+            <h2><%= moment().diff(moment(currentUser.dateCreated), 'days') %></h2>
+            Days since creation
+        </div>
+        <div class="col">
+            <h2><%= entryCount %></h2>
+            Entries
+        </div>
+        <div class="col">
+            <h2><%= wordCount %></h2>
+            Words
         </div>
     </div>
+</div>
 
 <% include partials/footer %>

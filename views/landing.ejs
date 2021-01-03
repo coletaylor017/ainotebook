@@ -1,272 +1,231 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Write Now</title>
-    <link rel="stylesheet" href="/semantic/dist/semantic.min.css">
+<% var siteName = "AI Notebook" %>
+<head><%= siteName %></title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/stylesheets/app.css">
     <link rel="stylesheet" type="text/css" href="/stylesheets/landing.css">
     <link href="https://fonts.googleapis.com/css?family=Cutive+Mono" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="/semantic/dist/semantic.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script></head>
 </head>
 <body>
-    <div class="ui basic center aligned inverted segment" id="jumbotron"> <!--Sometimes I question my choice of going with Semantic instead of Bootstrap...-->
-        <h1 class="ui header" id="site-title">AI Notebook</h1>
-        <h4 class="ui header" id="site-subtitle">Get more out of your journal.</h4>
-        <!--<h3 class="ui header">Daily stream-of-consciousness writing for a more mindful life.</h3>-->
-        <div class="ui hidden divider"></div>
-        <a href="/register" class="ui huge primary button">Sign up for free<i class="ui right arrow icon"></i></a><br>
-        <% if (!currentUser) { %>
-            <a href="/login" class="ui secondary button">Log In</a>
-        <% } else { %>
-            <a href="/home" class="ui secondary button">Log In</a>
-        <% } %>
-    </div>
-
-    <!-- <div class="ui lander-padded container"></div> -->
-
-    <!-- <div class="ui container">
-        <h1 class="ui center aligned header"></h1> -->
-        <!-- <div class="ui hidden divider"></div> -->
-        <!-- <div class="ui center aligned basic segment"> -->
-            <!-- <h2 class="ui header" id="summary">Daily meditative writing is good for the mind and the soul. Write Now helps you stay motivated and provides you with insightful analysis of your writing, so that you can start to enjoy writing every day and achieve a more mindful life.</h2> -->
-            <!-- <h2 class="ui header" id="summary">Get more out of your journal.</h2> -->
-        <!-- </div> -->
-    </div>
-
-    <!-- <div class="ui lander-padded center aligned stripe container">
-        <div class="ui hidden divider"></div>
-        <p class="landing-p"><i>Write Now</i> views writing as a daily mindfulness exercise- a form of meditation. For this reason, your entries aren't saved after you write them. This is on purpose! The focus here isn't to create something beautiful that you'll look back on- it's about using writing to vent, rant, get something off your chest, and clear your head.</p>
-        You can still look back and track metadata from past entries- things like how you were feeling and what you were thinking about.
-    </div> -->
-
-    <div class="ui lander-padded container">
-        <div class="ui basic segment">
-            <div class="ui basic hidden segment"></div>
-            <div class="ui basic hidden segment"></div>
-            <h1 class="ui center aligned header" id="site-title">The online journal built on AI.</h1>
-            <div class="ui basic hidden segment"></div>
-            <div class="ui basic hidden segment"></div>
-        </div>
-        <div class="ui basic segment">
-            <div class="ui hidden divider"></div>
-            <div class="ui stackable very realaxed grid container">
-                <!-- <div class="row">
-                    <div class="six wide column">
-                        <h3 class="ui center aligned header"></h3>
-                    </div>
-                    <div class="ten wide column">
-                        <img src="/images/ui-showcase.png" alt="A streak" class="ui fluid image" id="darkborder">
-                    </div>
-                </div>
-                <div class="row"><div class="spacer"></div></div> -->
-                <div class="row">
-                    <div class="six wide column">
-                        <h3 class="ui center aligned header">AI reads each journal entry and extracts data, like your mood, 
-                            attitude toward certain people and events, and activities participated in that day.
-                        </h3>
-                    </div>
-                    <div class="ten wide column">
-                        <img src="/images/metadata-showcase.png" alt="A streak" class="ui fluid image" id="darkborder">
-                    </div>
-                </div>
-                <div class="row"><div class="spacer"></div></div>
-                <div class="row">
-                    <div class="ten wide column">
-                        <img src="/images/metadatapage-showcase.png" alt="A streak" class="ui fluid image" id="darkborder">
-                    </div>
-                    <div class="six wide column">
-                        <h3 class="ui center aligned header">Learn about yourself through your data. 
-                            Want to see how your mood changes during different times of the year? You got it.
-                            Curious if your thoughts have been more positive since you started that yoga class? We can help with that. 
-                            Wondering what was on your mind a year ago today? Find out without reading a word.
-                            Everything is displayed in the form of beautiful, minimalist charts and graphs. 
-                        </h3>
-                    </div>
-                </div>
-                <div class="row"><div class="spacer"></div></div>
-                <div class="row">
-                    <div class="eight wide column">
-                        <img src="/images/streak-showcase.png" alt="A streak" class="ui fluid image" id="darkborder">
-                    </div>
-                    <div class="eight wide column">
-                        <h3 class="ui center aligned header">AI Notebook also has standard features including achievements, 
-                            daily writing streaks, and tagging. We use end-to-end encryption and partner with
-                            trusted organizations for maximum security. 
-                        </h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="black lander-padded container">
-        <div class="ui container mission">
-            <h1 class="ui center aligned inverted header" id="mission">Writing down your thoughts in an unstructured way every day is a powerful way to find peace, happiness, and mental clarity.</h1>
-        </div>
-        
-        <div class="ui hidden divider"></div>
-        
-        <h4 class="ui horizontal green inverted header divider">
-            The Evidence
-        </h4>
-        <div class="ui lander-padded container">
-            <div class="ui three column stackable grid">
-                <div class="column">
-                    <div class="ui inverted segment">
-                        <h2 class="ui center aligned header">Expressing our emotions helps us to control them.</h2>
-                        <p class="landing-p">A 2007 UCLA study focused on the reaction of the amygdala, the brain’s alarm system, when participants were shown pictures of angry or fearful faces. Some were asked to describe each face’s emotion as it appeared, and others simply observed. Their brain activity was studied using fMRI. <strong>Participants who described what they were observing showed a decreased fear response.</strong></p>
-                        <p class="landing-p">Labelling emotions also activated a part of the brain associated with emotion processing and self-inhibition.</p>
-                        <a href="https://www.sciencedaily.com/releases/2007/06/070622090727.htm" target="_blank">University of California - Los Angeles. "Putting Feelings Into Words Produces Therapeutic Effects In The Brain." ScienceDaily. ScienceDaily, 22 June 2007. <www.sciencedaily.com/releases/2007/06/070622090727.htm>.</a>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="ui inverted segment">
-                        <h2 class="ui center aligned header">Writing can help us recover from difficult events.</h2>
-                        <p class="landing-p">
-                            In 1991, an experiment was conducted involving 41 people who were recently laid off. They were divided into three groups- one was not given special instructions; one was instructed to write about their day; and a third was asked to write about their deepest thoughts and emotions surrounding the job loss and their job search. The third group showed mich higher job placement rates compared to the other two after eight months.
-                        </p>
-                        <a href="https://www.jstor.org/stable/256708" target="_blank">Spera, Stefanie P., et al. “Expressive Writing and Coping with Job Loss.” The Academy of Management Journal, vol. 37, no. 3, 1994, pp. 722–733. JSTOR, www.jstor.org/stable/256708.</a>
-                      </div>
-                </div>
-                <div class="column">
-                    <div class="ui inverted segment">
-                        <h2 class="ui center aligned header">Writing can improve overall health.</h2>
-                        <p class="landing-p">
-                            Another experiment had participants engage in 15-minute writing sessions for three days. Those who wrote about emotional or traumatic experiences reported that although the writing may have been distressing, they considered the experience very valuable and would do it again. These participants also exhibited increases in mental and physical health.
-                        </p>
-                        <a href="http://search.ebscohost.com/login.aspx?direct=true&db=mdc&AN=11045774&site=ehost-live" target="_blank">Pennebaker, J. W., and J. D. Seagal. “Forming a Story: The Health Benefits of Narrative.” Journal Of Clinical Psychology, vol. 55, no. 10, Oct. 1999, pp. 1243–1254. EBSCOhost, search.ebscohost.com/login.aspx?direct=true&db=mdc&AN=11045774&site=ehost-live.</a>
-                    </div>
-                </div>
-            </div>
-            <div class="ui inverted center aligned segment">
-                <h3 class="ui inverted header">
-                    Numerous other studies have affirmed the ability of personal and emotional writing to improve long-term mood and even physical health. 
-                </h3>
-            </div>
-        </div>
-        <div class="ui hidden divider"></div>
-    </div>
-    
-    <!--Testimonials will go here, if we ever get any :P-->
-    <!--<div class="ui vertical stripe quote segment">-->
-    <!--    <div class="ui equal width stackable internally celled grid">-->
-    <!--      <div class="center aligned row">-->
-    <!--        <div class="ui very padded basic segment column">-->
-    <!--          <h3>"What a Company"</h3>-->
-    <!--          <p>That is what they all say about us</p>-->
-    <!--        </div>-->
-    <!--        <div class="ui very padded basic segment column">-->
-    <!--          <h3>"I shouldn't have gone with their competitor."</h3>-->
-    <!--          <p>-->
-    <!--            <img src="assets/images/avatar/nan.jpg" class="ui avatar image"> <b>Nan</b> Chief Fun Officer Acme Toys-->
-    <!--          </p>-->
-    <!--        </div>-->
-    <!--      </div>-->
-    <!--    </div>-->
-    <!--  </div>-->
-
-    <div class="ui center aligned inverted stackable middle aligned grid segment" id="ten-padded">
-        <div class="ten wide column">
-            <h2 class="ui inverted header">Start your writing journey now.</h2>
-            <p>Signing up while the app is in beta means your account is free, forever.</p>
-        </div>
-        <div class="ui six wide column inverted left aligned segment">
-            <div class="ui container">
-                <% if (success && success.length > 0) { %>
-                <div class="ui positive message thing" style="margin-top: 5em">
-                    <i class="close icon"></i>
-                    <div class="header">
-                        Success
-                    </div>
-                    <p><%= success %></p>
-                </div>
+<div class="main-wallpaper fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent main-nav fixed-top px-0">
+        <a class="navbar-brand ml-3" id="site-title" href="/"><%= siteName %></a>
+        <button class="navbar-toggler mr-3" id="main-nav-toggler" type="button" data-toggle="collapse" data-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse text-center main-nav-menu" id="main-nav">
+            <ul class="navbar-nav ml-auto">
+                <% if (currentUser) { %>
+                    <% if (currentUser.isAdmin) { %>
+                        <li class="nav-item navbar-light mr-2">
+                            <a class="nav-link disabled text-decoration-none" href="#" tabindex="-1" aria-disabled="true">Welcome, admin user <%= currentUser.username %></a>
+                        </li>
+                        <li class="nav-item mr-2"><a class="nav-link text-white" href="/quotes">Quotes</a></li>
+                    <% } %>
+                    <li class="nav-item mr-2"><a class="nav-link text-white" href="/home">Home</a></li>
+                    <li class="nav-item mr-2"><a class="nav-link text-white" href="/entries">Entries</a></li>
+                    <li class="nav-item mr-2"><a class="nav-link text-white" href="/account">Account</a></li>
+                    <li class="nav-item mr-3"><a class="nav-link text-white" href="/logout">Logout</a></li>
+                <% } else { %>
+                    <li class="nav-item mr-2"><a class="nav-link text-white" href="/about">About</a></li>
+                    <li class="nav-item mr-3"><a class="login-btn btn btn-outline-light nav-link text-white" href="/login">Log In</a></li>
                 <% } %>
-                <% if (error && error.length > 0) { %>
-                <div class="ui negative message thing" style="margin-top: 5em">
-                    <i class="close icon"></i>
-                    <div class="header">
-                        Error
+            </ul>
+        </div>
+    </nav>
+    <div class="landing-content-clipper">
+        <!-- Sits in the middle of the jumbotron-like area and scrolls with main content -->
+        <div class="container-fluid title-container text-center text-white">
+            <h1 class="mb-5">Get more out of your journal.</h1>
+            <a href="/register" class="btn call-to-action-btn btn-lg mb-2">Sign up for free</a><br>
+        </div>
+
+        <!-- Contains all white-background scrolling content -->
+        <div class="content-container bg-white">
+            <div class="container pt-5">
+                <div class="row mb-4 align-items-center justify-content-center">
+                    <div class="col-11 col-lg-8 py-5 text-center">
+                        <h2>It's time for a smarter online journal.</h2>
+                        <p class="text-secondary"><%= siteName %> is an online journal with everything you need and nothing you don't.</p>
                     </div>
-                    <p><%= error %></p>
                 </div>
-                <% } %>
-            </div>
+                <div class="row mb-5 align-items-center justify-content-center">
+                    <div class="col-11 col-md-7 order-md-12 text-center">
+                        <h2>Tagging System</h2>
+                        <p class="text-secondary">Put tags on entries to easily categorize them. Then sort by tag to group related entries.</p>
+                    </div>
+                    <div class="col-10 col-sm-8 col-md-5 order-md-1">
+                        <img class="img-fluid px-md-5 border" src="/images/tagshelp1.png" alt="">
+                    </div>
+                </div>
+                <div class="row mb-5 align-items-center justify-content-center">
+                    <div class="col-11 col-md-7 text-center">
+                        <h2>Powerful Search</h2>
+                        <p class="text-secondary">No more looking through journal entries to find what you need. <%= siteName %> allows you to search for people, places, and ideas so you can find exactly what you want, instantly.</p>
+                    </div>
+                    <div class="col-10 col-sm-8 col-md-5">
+                        <img class="img-fluid px-md-5 border" src="/images/tagshelp2.png" alt="">
+                    </div>
+                </div>
             
-            <form class="ui inverted form" id="main-form" action="/register" method="POST">
-                <div class="field">
-                    <input type="text" placeholder="username" name="username">
-                </div>
-                <div class="field">
-                    <input type="password" placeholder="password" name="password">
-                </div>
-                <div class="field">
-                    <input type="password" placeholder="repeat password" name="password2">
-                </div>
-                <div class="ui left floated field">
-                    <div class="ui checkbox">
-                        <input type="checkbox" name="terms">
-                        <label>I agree to the <a href="/terms" target="_blank"><u>terms and conditions</u></a></label>
+                <div class="jumbotron mb-5 text-center">
+                    <div class="row">
+                        <div class="col px-5 my-5">
+                            <blockquote class="blockquote"><h3>"I'm never going back to a paper journal."</h3></blockquote>
+                            <p>-Anonymous user</p>
+                        </div>
                     </div>
-                    <button class="ui right floated primary button">Sign Up</button>
                 </div>
-                <div class="ui error message"></div>
-                <div class="ui hidden divider"></div>
-            </form>
-        </div>
-    </div>
+            </div> <!-- container -->
+
+            <div class="container-fluid mt-5 bg-dark text-light">
+                <div class="row align-items-center justify-content-center">
+                    <div class="col-12 col-md-6 col-lg-5 text-center pt-4">
+                        <h3>Start your writing journey now.</h3>
+                        <p>Signing up while the app is in beta means your account is free, forever.</p>
+                    </div>
+                    <div class="col-11 col-md-6 col-lg-4 p-3 rounded">
+                        <% if (error && error.length > 0) { %>
+                            <div class="alert alert-danger mt-3 alert-dismissible fade show" id="signup-error-alert">
+                                <strong>Error: </strong>
+                                <%= error %>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        <% } %>
+                        <form class="form-group needs-validation <%= error && error.length > 0 ? "was-validated" : "" %>" action="/register" method="POST" id="signup-form" novalidate>
+                            <div class="form-group pt-3">
+                                <label class="mb-1" for="username">Username:</label>
+                                <input class="form-control" type="text" placeholder="Type your username" name="username" id="username" required aria-describedby="email-feedback">
+                                <div id="email-feedback" class="invalid-feedback"></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="mb-1" for="password">Password:</label>
+                                <input class="form-control" type="password" placeholder="Type a password..." name="password" id="password" aria-describedby="password-feedback" required>
+                                <div id="password-feedback" class="invalid-feedback"></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="mb-1" for="confirm-password">Confirm Password:</label>
+                                <input class="form-control" type="password" placeholder="Repeat password..." name="password2" id="confirm-password" aria-describedby="confirm-password-feedback" required>
+                                <div id="confirm-password-feedback" class="invalid-feedback"></div>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="terms" id="tc" required>
+                                <label class="form-check-label" for="terms-checkbox" aria-describedby="tc-feedback">I agree to the <a href="/terms" target="_blank" style="color: inherit"><u>terms and conditions</u></a></label>
+                                <div id="tc-feedback" class="invalid-feedback"></div>
+                            </div>
+                            <div class="text-center mt-4">
+                                <button class="btn btn-primary w-100 text-center">Sign Up</button>
+                                <br>
+                                <a class="d-inline-block text-center pt-2" href="/login">Or log in instead</a>     
+                            </div>   
+                        </form>      
+                    </div>      
+                </div> <!-- row -->
+            </div>
+        </div> <!-- content-container -->
+    </div> <!-- landing-content-clipper -->
+</div> <!-- main-wallpaper -->
 
 <script>
+    // Much borrowed from the examples at https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation
+    'use strict';
+    window.addEventListener('load', function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var form = document.getElementsByClassName('needs-validation')[0];
+        const email = document.getElementById("username");
+        const emailFeedback = document.getElementById("email-feedback");
+        const password = document.getElementById("password");
+        const passwordFeedback = document.getElementById('password-feedback');
+        const confirmPassword = document.getElementById("confirm-password");
+        const confirmPasswordFeedback = document.getElementById('confirm-password-feedback');
+        const tc = document.getElementById("tc");
+        const tcFeedback = document.getElementById('tc-feedback');
 
-//If there's a login error message, scroll down to login form
-
-$('.ui.form')
-    .form({
-        fields: {
-            username: {
-                identifier: 'username',
-                rules: [
-                    {
-                        type   : 'empty',
-                        prompt : 'Please enter a username'
-                    }
-                ]
-            },
-            password: {
-                identifier: 'password',
-                rules: [
-                    {
-                        type   : 'empty',
-                        prompt : 'Please enter a password'
-                    },
-                    {
-                        type: 'match[password2]',
-                        prompt: "Passwords must match"
-                    }
-                ]
-            },
-            terms: {
-                identifier: 'terms',
-                rules: [
-                {
-                        type   : 'checked',
-                        prompt : 'You must agree to the terms and conditions'
-                    }
-                ]
+        // This function doesn't show good separation of concerns but I am too tired to engineer a better solution
+        const displayFeedback = function(element, feedbackElement, fieldName, isValid) {
+            if (isValid) {
+                element.classList.remove("is-invalid");
+                element.classList.add("is-valid");
+                feedbackElement.textContent = ''; // Reset the content of the message
+            } else {
+                // set error message based on the feedback from the browser constraint validation API and/or custom rules
+                if(element.validity.valueMissing) {
+                    feedbackElement.textContent = `${fieldName} cannot be empty.`;
+                } else if(element.validity.typeMismatch) {
+                    feedbackElement.textContent = `${fieldName} is invalid.`;
+                } else if (element.id === "confirm-password" && confirmPassword.value !== password.value) {
+                    feedbackElement.textContent = `Passwords must match.`;
+                } else {
+                    feedbackElement.textContent = `Something else.`;
+                }
+                element.classList.remove("is-valid");
+                element.classList.add("is-invalid");
             }
         }
-    })
-;
-        
-$('.message .close')
-  .on('click', function() {
-    $(this)
-      .closest('.message')
-      .transition('fade')
-    ;
-  })
-;
 
-var elmnt = document.querySelector(".thing");
-elmnt.scrollIntoView();
+        // Custom validation function for email field
+        const emailIsValid = function() {
+            return email.validity.valid;
+        };
+
+        email.addEventListener('input', function (event) {
+            displayFeedback(email, emailFeedback, "Email", emailIsValid());
+        });
+
+        // Custom validation function for password field
+        const passwordIsValid = function() {
+            return password.validity.valid;
+        };
+
+        password.addEventListener('input', function (event) {
+            displayFeedback(password, passwordFeedback, "Password", passwordIsValid());
+            displayFeedback(confirmPassword, confirmPasswordFeedback, "Field", confirmPasswordIsValid());
+        });
+
+        // Custom validation function for password confirm field
+        const confirmPasswordIsValid = function() {
+            return confirmPassword.validity.valid && confirmPassword.value === password.value;
+        };
+
+        confirmPassword.addEventListener('input', function (event) {
+            displayFeedback(confirmPassword, confirmPasswordFeedback, "Field", confirmPasswordIsValid());
+        });
+
+        // Custom validation function for terms and conditions field
+        const tcIsValid = function() {
+            console.log(tc.validity.valid);
+            return tc.validity.valid;
+        };
+
+        tc.addEventListener('change', function (event) {
+            console.log("Changed.");
+            displayFeedback(tc, tcFeedback, "Field", tcIsValid());
+        });
+
+        form.addEventListener('submit', function(event) {
+            if (form.checkValidity() === false || !emailIsValid || !passwordIsValid || !confirmPasswordIsValid || !tcIsValid) {
+                event.preventDefault();
+                event.stopPropagation();
+                displayFeedback(email, emailFeedback, "Email", emailIsValid());
+                displayFeedback(password, passwordFeedback, "Password", passwordIsValid());
+                displayFeedback(confirmPassword, confirmPasswordFeedback, "Field", confirmPasswordIsValid());
+                displayFeedback(tc, tcFeedback, "Field", tcIsValid());
+            }
+            // let it submit
+        }, false);
+    }, false);
 </script>
+
+
+<%# if there is a signup error, scroll to the signup form %>
+<% if (error && error.length > 0) { %>
+    <script>
+        document.querySelector("#signup-form").scrollIntoView();
+    </script>
+<% } %>
+
