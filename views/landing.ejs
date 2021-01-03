@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>AI Notebook</title>
+<% var siteName = "AI Notebook" %>
+<head><%= siteName %></title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/stylesheets/app.css">
     <link rel="stylesheet" type="text/css" href="/stylesheets/landing.css">
@@ -12,7 +12,7 @@
 <body>
 <div class="main-wallpaper fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark bg-transparent main-nav fixed-top px-0">
-        <a class="navbar-brand ml-3" id="site-title" href="/">AI Notebook</a>
+        <a class="navbar-brand ml-3" id="site-title" href="/"><%= siteName %></a>
         <button class="navbar-toggler mr-3" id="main-nav-toggler" type="button" data-toggle="collapse" data-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -37,165 +37,136 @@
         </div>
     </nav>
     <div class="landing-content-clipper">
+        <!-- Sits in the middle of the jumbotron-like area and scrolls with main content -->
         <div class="container-fluid title-container text-center text-white">
             <h1 class="mb-5">Get more out of your journal.</h1>
             <a href="/register" class="btn call-to-action-btn btn-lg mb-2">Sign up for free</a><br>
         </div>
+
+        <!-- Contains all white-background scrolling content -->
         <div class="content-container bg-white">
-            <h1 class="ui center aligned header" id="site-title">The online journal built on AI.</h1>
-            <div class="row">
-                <div class="six wide column">
-                    <h3 class="ui center aligned header">AI reads each journal entry and extracts data, like your mood, 
-                        attitude toward certain people and events, and activities participated in that day.
-                    </h3>
+            <div class="container pt-5">
+                <div class="row align-items-center justify-content-center">
+                    <div class="col-12 col-lg-8 py-5 text-left text-md-center">
+                        <h2>It's time for a smarter online journal.</h2>
+                        <p class="text-secondary"><%= siteName %> is an online journal with everything you need and nothing you don't.</p>
+                    </div>
                 </div>
-                <div class="ten wide column">
-                    <!-- <img src="/images/metadata-showcase.png" alt="A streak" class="ui fluid image"> -->
+                <div class="row mb-5 align-items-center justify-content-center">
+                    <div class="col-12 col-md-7 order-md-12 text-left text-md-center">
+                        <h2>Tagging System</h2>
+                        <p class="text-secondary">Put tags on entries to easily categorize them. Then sort by tag to group related entries.</p>
+                    </div>
+                    <div class="col-10 col-sm-8 col-md-5 order-md-1">
+                        <img class="img-fluid px-md-5" src="/images/tagshelp1.png" alt="">
+                    </div>
                 </div>
-            </div>
-            <div class="row"><div class="spacer"></div></div>
-            <div class="row">
-                <div class="ten wide column">
-                    <!-- <img src="/images/metadatapage-showcase.png" alt="A streak" class="ui fluid image"> -->
+                <div class="row mb-5 align-items-center justify-content-center">
+                    <div class="col-12 col-md-7 text-left text-md-center">
+                        <h2>Powerful Search</h2>
+                        <p class="text-secondary">No more looking through journal entries to find what you need. Use our powerful search tools to find exactly what you want, instantly.</p>
+                    </div>
+                    <div class="col-10 col-sm-8 col-md-5">
+                        <img class="img-fluid px-md-5" src="/images/tagshelp2.png" alt="">
+                    </div>
                 </div>
-                <div class="six wide column">
-                    <h3 class="ui center aligned header">Learn about yourself through your data. 
-                        Want to see how your mood changes during different times of the year? You got it.
-                        Curious if your thoughts have been more positive since you started that yoga class? We can help with that. 
-                        Wondering what was on your mind a year ago today? Find out without reading a word.
-                        Everything is displayed in the form of beautiful, minimalist charts and graphs. 
-                    </h3>
+                
+                <h2 class="text-center">
+                    The Evidence
+                </h2>
+                <hr class="mb-3">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h2>Expressing our emotions helps us to control them.</h2>
+                        <p>A 2007 UCLA study focused on the reaction of the amygdala, the brain’s alarm system, when participants were shown pictures of angry or fearful faces. Some were asked to describe each face’s emotion as it appeared, and others simply observed. Their brain activity was studied using fMRI. <strong>Participants who described what they were observing showed a decreased fear response.</strong></p>
+                        <p class="landing-p">Labelling emotions also activated a part of the brain associated with emotion processing and self-inhibition.</p>
+                        <a href="https://www.sciencedaily.com/releases/2007/06/070622090727.htm" target="_blank">University of California - Los Angeles. "Putting Feelings Into Words Produces Therapeutic Effects In The Brain." ScienceDaily. ScienceDaily, 22 June 2007. <www.sciencedaily.com/releases/2007/06/070622090727.htm>.</a>
+                    </div>
+                    <div class="col">
+                        <h2>Writing can help us recover from difficult events.</h2>
+                        <p>
+                            In 1991, an experiment was conducted involving 41 people who were recently laid off. They were divided into three groups- one was not given special instructions; one was instructed to write about their day; and a third was asked to write about their deepest thoughts and emotions surrounding the job loss and their job search. The third group showed mich higher job placement rates compared to the other two after eight months.
+                        </p>
+                        <a href="https://www.jstor.org/stable/256708" target="_blank">Spera, Stefanie P., et al. “Expressive Writing and Coping with Job Loss.” The Academy of Management Journal, vol. 37, no. 3, 1994, pp. 722–733. JSTOR, www.jstor.org/stable/256708.</a>
+                    </div>
+                    <div class="col">
+                        <h2>Writing can improve overall health.</h2>
+                        <p>
+                            Another experiment had participants engage in 15-minute writing sessions for three days. Those who wrote about emotional or traumatic experiences reported that although the writing may have been distressing, they considered the experience very valuable and would do it again. These participants also exhibited increases in mental and physical health.
+                        </p>
+                        <a href="http://search.ebscohost.com/login.aspx?direct=true&db=mdc&AN=11045774&site=ehost-live" target="_blank">Pennebaker, J. W., and J. D. Seagal. “Forming a Story: The Health Benefits of Narrative.” Journal Of Clinical Psychology, vol. 55, no. 10, Oct. 1999, pp. 1243–1254. EBSCOhost, search.ebscohost.com/login.aspx?direct=true&db=mdc&AN=11045774&site=ehost-live.</a>
+                    </div>
                 </div>
-            </div>
-            <div class="row"><div class="spacer"></div></div>
-            <div class="row">
-                <div class="eight wide column">
-                    <!-- <img src="/images/streak-showcase.png" alt="A streak" class="ui fluid image"> -->
-                </div>
-                <div class="eight wide column">
-                    <h3 class="ui center aligned header">AI Notebook also has standard features including achievements, 
-                        daily writing streaks, and tagging. We use end-to-end encryption and partner with
-                        trusted organizations for maximum security. 
-                    </h3>
-                </div>
-            </div>
-    
-            <div class="ui container mission">
-                <h1 class="ui center aligned inverted header" id="mission">Writing down your thoughts in an unstructured way every day is a powerful way to find peace, happiness, and mental clarity.</h1>
-            </div>
-            
-            <div class="ui hidden divider"></div>
-            
-            <h4 class="ui horizontal green inverted header divider">
-                The Evidence
-            </h4>
-            <div class="ui lander-padded container">
-                <div class="ui three column stackable grid">
-                    <div class="column">
-                        <div class="ui inverted segment">
-                            <h2 class="ui center aligned header">Expressing our emotions helps us to control them.</h2>
-                            <p class="landing-p">A 2007 UCLA study focused on the reaction of the amygdala, the brain’s alarm system, when participants were shown pictures of angry or fearful faces. Some were asked to describe each face’s emotion as it appeared, and others simply observed. Their brain activity was studied using fMRI. <strong>Participants who described what they were observing showed a decreased fear response.</strong></p>
-                            <p class="landing-p">Labelling emotions also activated a part of the brain associated with emotion processing and self-inhibition.</p>
-                            <a href="https://www.sciencedaily.com/releases/2007/06/070622090727.htm" target="_blank">University of California - Los Angeles. "Putting Feelings Into Words Produces Therapeutic Effects In The Brain." ScienceDaily. ScienceDaily, 22 June 2007. <www.sciencedaily.com/releases/2007/06/070622090727.htm>.</a>
+                <div class="jumbotron text-center">
+                    <div class="row">
+                        <div class="col-12 col-md-6 px-5">
+                            <h3>"What a Company"</h3>
+                            <p>That is what they all say about us</p>
                         </div>
-                    </div>
-                    <div class="column">
-                        <div class="ui inverted segment">
-                            <h2 class="ui center aligned header">Writing can help us recover from difficult events.</h2>
-                            <p class="landing-p">
-                                In 1991, an experiment was conducted involving 41 people who were recently laid off. They were divided into three groups- one was not given special instructions; one was instructed to write about their day; and a third was asked to write about their deepest thoughts and emotions surrounding the job loss and their job search. The third group showed mich higher job placement rates compared to the other two after eight months.
+                        <div class="col-12 col-md-6 px-5">
+                            <h3>"I shouldn't have gone with their competitor."</h3>
+                            <p>
+                            <b>Nan</b> Chief Fun Officer, Acme Toys
                             </p>
-                            <a href="https://www.jstor.org/stable/256708" target="_blank">Spera, Stefanie P., et al. “Expressive Writing and Coping with Job Loss.” The Academy of Management Journal, vol. 37, no. 3, 1994, pp. 722–733. JSTOR, www.jstor.org/stable/256708.</a>
-                          </div>
-                    </div>
-                    <div class="column">
-                        <div class="ui inverted segment">
-                            <h2 class="ui center aligned header">Writing can improve overall health.</h2>
-                            <p class="landing-p">
-                                Another experiment had participants engage in 15-minute writing sessions for three days. Those who wrote about emotional or traumatic experiences reported that although the writing may have been distressing, they considered the experience very valuable and would do it again. These participants also exhibited increases in mental and physical health.
-                            </p>
-                            <a href="http://search.ebscohost.com/login.aspx?direct=true&db=mdc&AN=11045774&site=ehost-live" target="_blank">Pennebaker, J. W., and J. D. Seagal. “Forming a Story: The Health Benefits of Narrative.” Journal Of Clinical Psychology, vol. 55, no. 10, Oct. 1999, pp. 1243–1254. EBSCOhost, search.ebscohost.com/login.aspx?direct=true&db=mdc&AN=11045774&site=ehost-live.</a>
                         </div>
                     </div>
                 </div>
-                <div class="ui inverted center aligned segment">
-                    <h3 class="ui inverted header">
-                        Numerous other studies have affirmed the ability of personal and emotional writing to improve long-term mood and even physical health. 
-                    </h3>
+            </div> <!-- container -->
+
+            <div class="ui center aligned inverted stackable middle aligned grid segment" id="ten-padded">
+                <div class="ten wide column">
+                    <h2 class="ui inverted header">Start your writing journey now.</h2>
+                    <p>Signing up while the app is in beta means your account is free, forever.</p>
+                </div>
+                <div class="ui six wide column inverted left aligned segment">
+                    <div class="ui container">
+                        <% if (success && success.length > 0) { %>
+                        <div class="ui positive message thing" style="margin-top: 5em">
+                            <i class="close icon"></i>
+                            <div class="header">
+                                Success
+                            </div>
+                            <p><%= success %></p>
+                        </div>
+                        <% } %>
+                        <% if (error && error.length > 0) { %>
+                        <div class="ui negative message thing" style="margin-top: 5em">
+                            <i class="close icon"></i>
+                            <div class="header">
+                                Error
+                            </div>
+                            <p><%= error %></p>
+                        </div>
+                        <% } %>
+                    </div>
+                    
+                    <form class="ui inverted form" id="main-form" action="/register" method="POST">
+                        <div class="field">
+                            <input type="text" placeholder="username" name="username">
+                        </div>
+                        <div class="field">
+                            <input type="password" placeholder="password" name="password">
+                        </div>
+                        <div class="field">
+                            <input type="password" placeholder="repeat password" name="password2">
+                        </div>
+                        <div class="ui left floated field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="terms">
+                                <label>I agree to the <a href="/terms" target="_blank"><u>terms and conditions</u></a></label>
+                            </div>
+                            <button class="ui right floated primary button">Sign Up</button>
+                        </div>
+                        <div class="ui error message"></div>
+                        <div class="ui hidden divider"></div>
+                    </form>
                 </div>
             </div>
-            <div class="ui hidden divider"></div>
-        </div>
+        </div> <!-- content-container -->
     </div>
 </div>
-    
-    <!--Testimonials will go here, if we ever get any :P-->
-    <!--<div class="ui vertical stripe quote segment">-->
-    <!--    <div class="ui equal width stackable internally celled grid">-->
-    <!--      <div class="center aligned row">-->
-    <!--        <div class="ui very padded basic segment column">-->
-    <!--          <h3>"What a Company"</h3>-->
-    <!--          <p>That is what they all say about us</p>-->
-    <!--        </div>-->
-    <!--        <div class="ui very padded basic segment column">-->
-    <!--          <h3>"I shouldn't have gone with their competitor."</h3>-->
-    <!--          <p>-->
-    <!--            <img src="assets/images/avatar/nan.jpg" class="ui avatar image"> <b>Nan</b> Chief Fun Officer Acme Toys-->
-    <!--          </p>-->
-    <!--        </div>-->
-    <!--      </div>-->
-    <!--    </div>-->
-    <!--  </div>-->
 
-    <div class="ui center aligned inverted stackable middle aligned grid segment" id="ten-padded">
-        <div class="ten wide column">
-            <h2 class="ui inverted header">Start your writing journey now.</h2>
-            <p>Signing up while the app is in beta means your account is free, forever.</p>
-        </div>
-        <div class="ui six wide column inverted left aligned segment">
-            <div class="ui container">
-                <% if (success && success.length > 0) { %>
-                <div class="ui positive message thing" style="margin-top: 5em">
-                    <i class="close icon"></i>
-                    <div class="header">
-                        Success
-                    </div>
-                    <p><%= success %></p>
-                </div>
-                <% } %>
-                <% if (error && error.length > 0) { %>
-                <div class="ui negative message thing" style="margin-top: 5em">
-                    <i class="close icon"></i>
-                    <div class="header">
-                        Error
-                    </div>
-                    <p><%= error %></p>
-                </div>
-                <% } %>
-            </div>
-            
-            <form class="ui inverted form" id="main-form" action="/register" method="POST">
-                <div class="field">
-                    <input type="text" placeholder="username" name="username">
-                </div>
-                <div class="field">
-                    <input type="password" placeholder="password" name="password">
-                </div>
-                <div class="field">
-                    <input type="password" placeholder="repeat password" name="password2">
-                </div>
-                <div class="ui left floated field">
-                    <div class="ui checkbox">
-                        <input type="checkbox" name="terms">
-                        <label>I agree to the <a href="/terms" target="_blank"><u>terms and conditions</u></a></label>
-                    </div>
-                    <button class="ui right floated primary button">Sign Up</button>
-                </div>
-                <div class="ui error message"></div>
-                <div class="ui hidden divider"></div>
-            </form>
-        </div>
-    </div>
+
 
 <script>
 // if there is a signup error, scroll to the signup form
