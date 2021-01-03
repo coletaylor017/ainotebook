@@ -1,60 +1,35 @@
 <% include partials/header %>
-
 <script src="https://cdn.jsdelivr.net/npm/moment@2.23.0/moment.min.js"></script>
 <script src="/tagify.min.js"></script>
 <link rel="stylesheet" href="/stylesheets/tagify.css">
 
-<div class="ui container center aligned main">
-    <h2 class="ui inverted header"></h2>
-    
-    <a class="modal-btn">Instructions</a>
-    
-    <br>
-    
-    <div class="timer-on" style="display:none"><a onclick='toggleTimer()'>Show timer</a></div>
+<div class="container my-5 text-center">
+    <h3 class="mb-3"></h3>
+    <a class="timer-on mb-2 w-auto" style="display:none" role="button" onclick='toggleTimer()'>Show timer</a>
 
-    <div class="timer">
-        <button id="play" class="ui basic inverted icon button"><i class="ui play icon"></i></button>
-        <button id="pause" class="ui basic inverted icon button" style="display: none"><i class="ui pause icon"></i></button>
-        <div class="ui input" style="width: 3.5em">
-            <input type="text" id="minutes" value="20" maxlength="2">
-        </div>:
-        <div class="ui input" style="width: 3.5em">
-            </input><input type="text" id="seconds" value="00" maxlength="2"></input>
-        </div>
-        <div><a class="timer-close" onclick='toggleTimer()'>Hide timer</a></div>
+    <div class="timer mb-2">
+        <button id="play" class="btn btn-outline-secondary mb-2">Play</button>
+        <button id="pause" class="btn btn-outline-secondary mb-2" style="display: none">Pause</button>
+        <input class="form-control d-inline" style="width: 3em" type="text" id="minutes" value="20" maxlength="2"></input> :
+        <input class="form-control d-inline" style="width: 3em" type="text" id="seconds" value="00" maxlength="2"></input>
+        <a class="timer-close" role="button" onclick='toggleTimer()'>Hide timer</a>
     </div>
     
-    <form onsubmit="finalizeDates()" action="/entries" method="POST" class="ui form">
+    <form onsubmit="finalizeDates()" action="/entries" method="POST">
         <input id="streak-date" style="display: none" name="streakDate">
         <input id="date-input" style="display: none" name="entry[date]">
-        <div class="ui field">
-            <textarea id="entrybox" rows="10" name="entry[body]" placeholder="Start writing" id="transparent" autofocus></textarea>
-        </div>
-        <div class="ui field">
-            <div class="ui labeled input" id="tagbox">
-                <label class="ui label" id="tagbox"><i class="ui question circle outline link icon modal-btn-2"></i>Optional: Add tags</label>
-                <input type="text" name="tags" placeholder="Write some tags. '#' is not necessary" class="ui inverted" id="transparent">
+        <textarea class="form-control mb-2" id="entry-input-box" rows="10" name="entry[body]" placeholder="Start writing" autofocus></textarea>
+        <div class="form-row mb-2">
+            <div class="col-auto">
+                <label class="col-form-label pt-2 modal-btn-2" for="tag-box">Optional: Add tags</label>
+            </div>
+            <div class="col">
+                <input type="text" name="tags" placeholder="Write some tags. '#' is not necessary" id="tag-box">
             </div>
         </div>
-        <a href="/home" class="ui icon button" title="Cancel"><!--<i class="ui left arrow icon">-->Cancel</i></a>
-        <button class="ui green button" type="submit" title="Save!"><i class="ui check icon"></i>Done</button>
+        <a href="javascript:history.back()" class="btn btn-outline-secondary" title="Cancel">Cancel</a>
+        <button class="btn btn-primary" type="submit" title="Save!">Done</button>
     </form>
-    
-<div class="ui large modal 1">
-    <div class="header">Help</div>
-    <div class="ui content">
-        <div class="ui bulleted list">
-            <!--<div class="item">After submitting, your entry will disappear. This is on purpose! Freewriting isn't something to treasure and look back on; rather, it's all about writing for the sake of writing.</div>-->
-            <div class="item">Write whatever comes to mind. It doesn't have to make any sense!</div>
-            <div class="item">Pick a time, ideally 20-30 minutes, and don't stop or pause before the time is up</div>
-            <div class="item">If you don't know what to write, write "I don't know what to write" until you do.</div>
-        </div>
-    </div>
-    <div class="actions">
-        <div class="ui close button 1">Got it</div>
-    </div>
-</div>
 </div>
 
 <div class="ui large modal 2">
@@ -98,7 +73,7 @@
 
 <script>
     
-    var tagArr = <%- JSON.stringify(tags) %>;
+    var tagArr = <%- JSON.stringify(tags.map(t => t.name)) %>;
     var input = document.querySelector("input[name=tags]");
     // init Tagify script on the above inputs
     tagify = new Tagify(input, {
@@ -106,22 +81,10 @@
         keepInvalidTags     : false,  // do not remove invalid tags (but keep them marked as invalid)
         whitelist: tagArr,
         dropdown : {
-            enabled: 3,
+            enabled: 1,
             maxItems: 5
         }
     });
-    
-    var btn = document.querySelector(".modal-btn");
-    btn.onclick = function() {
-        $('.ui.modal.1').modal({
-            onShow: function(){
-                console.log('shown');
-            },
-            onHide: function(){
-                console.log('hidden');
-            }
-        }).modal('show');
-    }
     
     var btn2 = document.querySelector(".modal-btn-2");
     btn2.onclick = function() {
@@ -134,17 +97,9 @@
             }
         }).modal('show');
     }
-
-    //workaround for a Semantic UI bug where modal buttons don't close the modal. Credit: GitHub user hammy2899, Source: https://github.com/Semantic-Org/Semantic-UI/issues/6540
-    $('.ui.modal.1')
-      .modal('attach events', '.close.button.1')
-    ;  
-    $('.ui.modal.2')
-      .modal('attach events', '.close.button.2')
-    ;
     
     //display client date time at top of page
-    document.querySelector("h2").innerHTML = moment().format("MMMM Do, YYYY");
+    document.querySelector("h3").innerHTML = moment().format("MMMM Do, YYYY");
     
     var finalizeDates = function() {
         var e = moment().format("D MMM YYYY, h:mm a");
@@ -167,7 +122,7 @@
         var timer = document.querySelector(".timer");
          if (timer.style.display !== "none") {
             timer.style.display = "none";
-            document.querySelector(".timer-on").style.display = "inline";
+            document.querySelector(".timer-on").style.display = "inline-block";
          } else {
             timer.style.display = "block";
             document.querySelector(".timer-on").style.display = "none";
@@ -213,7 +168,7 @@
     
     var buh = 0;
     
-    $("#entrybox").on("input", function() {
+    $("#entry-input-box").on("input", function() {
         if (buh === 0) {
             startTimer();
             buh = 1;

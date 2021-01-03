@@ -2,30 +2,70 @@ var mongoose = require("mongoose");
 
 //mongoose schema setup
 var entrySchema = new mongoose.Schema({
-    tags: [
+  tags: [
+    String
+  ],
+  title: String,
+  body: String,
+  date: String,
+  dateCreated: Date,
+  author: {
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    username: String,
+  },
+  metadata: {
+    containsNLUData: Boolean,
+    nluData: {
+      entities: [
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Tag"
-        }
-    ],
-    body: String,
-    date: String,
-    hidden: {
-        type: Boolean,
-        default: 0
-    },
-    author: {
-        id: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User"
+          category: String,
+          name: String,
+          sentiment: {
+            score: Number,
+            label: String,
+          },
+          relevance: Number,
+          confidence: Number,
+          emotion: {
+            sadness: Number,
+            joy: Number,
+            fear: Number,
+            disgust: Number,
+            anger: Number,
+          },
+          count: Number,
         },
-        username: String
+      ],
+      concepts: [
+        {
+          text: String,
+          relevance: Number,
+          infoURL: String,
+        },
+      ],
+      keywords: [
+        {
+          text: String,
+          relevance: Number,
+          count: Number,
+        },
+      ],
+      sentiment: {
+        score: Number,
+        label: String,
+      },
+      emotion: {
+        sadness: Number,
+        joy: Number,
+        fear: Number,
+        disgust: Number,
+        anger: Number,
+      },
     },
-    metadata: {
-        mood: String,
-        weather: String,
-        ri: {}
-    }
+  },
 });
 
 module.exports = mongoose.model("Entry", entrySchema);

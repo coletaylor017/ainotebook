@@ -1,74 +1,68 @@
-body {
-    background: none;
-    background-color: white;
+.main-wallpaper {
+    background: rgb(255,26,196);
+    background: linear-gradient(151deg, rgba(255,26,196,1) 0%, rgba(182,85,255,1) 49%, rgba(0,212,255,1) 100%);
+    border-radius: 0 !important;
+    height: calc(70vh + 50px);
 }
 
-.lander-text {
-    font-size: 1.3em;
+.title-container {
+    margin-top: 0;
+    padding-top: 0;
+    position: absolute;
+    top: 35vh;
+    transform: translateY(-50%);
 }
 
-.message.lander-padded, .lander-padded {
-    padding-top: 4em;
-    padding-bottom: 4em;
+.call-to-action-btn {
+    background: #5fdaff;
+    color: white !important;
+    text-shadow: 0px 0px 1em #317185;
+    padding: 0.5em 2em;
 }
 
-#mission {
-    font-weight: 300;
+.call-to-action-btn:hover, .login-btn:hover {
+    background: white;
+    text-shadow: none;
+    color: #5fdaff !important;
 }
 
-.mission.container {
-    padding: 5em;
-}
-
-.ui.horizontal.header.divider {
-    font-size: 1.5em;
-}
-
-.black {
-    background-color: #1b1c1d;
-}
-
-.column > .header {
-   position: relative;
-   top: 50%;
-   transform: translate(0, -50%);
-}
-
-#jumbotron #site-title {
-    font-weight: 500;
-    font-size: 3.3em;
-    /* margin: 0; */
-}
-
-#site-subtitle {
+.landing-content-clipper {
+    z-index: 2000;
+    position: fixed;
+    top: 50px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    width: 100%;
+    height: calc(100% - 50px);
+    padding: 0;
     margin: 0;
 }
 
-#jumbotron {
-    padding: 15em;
-    margin: 0;
-    border-radius: 0;
-    background: url(/images/stock-typing2.jpeg) no-repeat center center fixed;
-    background-size: cover;
+.content-container {
+    margin: 70vh 0 0 0;
+    padding: 0;
+    width: 100% !important;
 }
 
-#jumbotron .ui {
-    z-index: 5;
-}
+/* matches bootstrap xs-md but not lg or xl */
+@media only screen and (max-width: 991px) {
+    .main-nav {
+        z-index: 2001;
+    }
+    .main-nav-menu {
+        margin-top: 8px;
+        padding: 0.5em 2em 1em 2em;
+        background: white;
+        border-bottom: 1px #e9ecef solid;
+    }
 
-#ten-padded {
-    padding: 10rem;
-    margin: 0;
-}
+    .main-nav-menu a {
+        color: #212529 !important;
+        border-color: #212529 !important;
+    }
 
-.column .segment a {
-    font-size: .8em;
-}
-
-#thiccy {
-    font-size: 2.6em;
-}
-
-#summary {
-    line-height: 1.5;
+    .main-nav-menu a:hover {
+        color: #5fdaff !important;
+        border-color: #5fdaff !important;
+    }
 }

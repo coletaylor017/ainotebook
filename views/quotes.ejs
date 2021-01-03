@@ -1,38 +1,39 @@
 <% include partials/header %>
 
-<div class="ui basic text container segment context" id="noborder">
-    <div class="main">
-        <div class="ui horizontal list">
-            <div class="item">
-                <a href="/quotes/new" class="ui blue button">New Quote</a><br>
-            </div>
-            <div class="item">
-                <form action="/quotes/reset" method="POST" style="display: inline">
-                    <button action="submit" class="ui inverted basic blue button item" title="Reset">Reset Indicies</button>
-                </form>
-            </div>
+<div class="container my-5">
+    <h3 class="mb-3">Quotes</h3>
+    <p>Manage site-wide quotes here. The main site quote is the same for all users and is chosen randomly once every 24 hours. Indices represent how many times a particular quote has been chosen. If a quote's index is lower than the others, it gets priority when choosing a new random quote. This ensures even distribution. The 'reset indices' button resets all indices to zero, making all quotes equally likely to be chosen. Take care when doing this as quotes that have appeared recently may then be chosen again.</p>
+    <form action="/quotes/reset" method="POST">
+        <div class="form-row pl-1">
+            <a class="btn btn-info mr-2" href="/quotes/new">New Quote</a><br>
+            <button class="btn btn-warning" action="submit" title="Reset">Reset Indices</button>
         </div>
-        <div class="ui divider"></div>
+    </form>
+    <hr>
+    <div class="row">
         <% if (quotes.length === 0) { %>
             <p>No quotes to show.</p>
         <% } else { %>
             <% quotes.forEach(function(quote) { %>
-                <div class="ui inverted segment">
-                    <p class="quote"><em>"<%= quote.body %>"</em></p>
-                    <div class="ui container">
-                        <form action="/quotes/<%= quote._id %>?_method=DELETE" method="POST" style="display: inline">
-                            <button action="submit" class="ui basic inverted icon button" title="Delete"><i class="ui trash icon"></i></button>
-                        </form>
-                        <div class="authorsource">
-                        <% if (quote.author) { %>
-                            <strong>-<%= quote.author %></strong>
-                            <% if (quote.source) { %>
-                                , <%= quote.source %>
-                            <% } %>
-                        <% } %>
-                        <span class="index"><%= quote.index %></span>
+                <div class="col-12 col-md-6 col-lg-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <span class="badge badge-info mb-2">Index: <%= quote.index %></span>
+                            <p class="mb-2"><em>"<%= quote.body %>"</em></p>
+                            <p class="mb-2">
+                                <% if (quote.author) { %>
+                                    -<%= quote.author %>
+                                <% } %>
+                                <%= quote.author && quote.source ? "," : "" %>
+                                <% if (quote.source) { %>
+                                    <%= quote.source %>
+                                <% } %>
+                            </p>
+                            <form action="/quotes/<%= quote._id %>?_method=DELETE" method="POST">
+                                <button action="submit" class="btn btn-outline-danger" title="Delete">Delete</button>
+                            </form>
                         </div>
-                    </div>
+                    </div>                    
                 </div>
             <% }); %>
         <% } %>

@@ -1,21 +1,46 @@
 <% include partials/header %>
 
-<div class="spacer"></div><div class="spacer"></div>
-
-<div class="ui text container center aligned main">
-    
-    <h2 class="ui inverted header">Log In</h2>
-    
-    <div class="ui left aligned container">
-       <form class="ui form" action="/login" method="POST">
-          <div class="field">
-            <input type="text" placeholder="username" name="username" autofocus>
+<div class="container my-5 pt-5">
+    <div class="row justify-content-center">
+      <div class="col-11 col-md-6 col-lg-4 p-3 rounded standalone-login-form shadow text-white">
+        <h2 class="mb-4 mt-2 text-center">Log In</h2>
+        <form class="form-group" action="/login" method="POST">
+          <div class="form-group pt-3">
+              <label class="mb-1" for="username">Username:</label>
+              <input class="form-control" type="text" placeholder="Type your username" name="username" id="username" autofocus>
           </div>
-          <div class="field">
-            <input type="password" placeholder="password" name="password">
+          <div class="form-group">
+              <label class="mb-1" for="password">Password:</label>
+              <input class="form-control" type="password" placeholder="Type your password" name="password" id="password">
           </div>
-          <button class="ui green button">Log In</button>
-          <a href="/register">Or sign up instead</a>
-       </form>
+          <div class="text-center mt-5">
+              <button class="btn colorful-button w-100 text-center">Log In</button>
+              <br>
+              <a class="d-inline-block text-center pt-2 text-white" href="/register">Or sign up instead</a>     
+          </div>   
+        </form>      
+      </div>      
     </div>
 </div>
+
+<script>
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  (function() {
+    'use strict';
+    window.addEventListener('load', function() {
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.getElementsByClassName('needs-validation');
+      // Loop over them and prevent submission
+      var validation = Array.prototype.filter.call(forms, function(form) {
+        form.addEventListener('submit', function(event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+  })();
+</script>
+  
