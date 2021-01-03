@@ -1,8 +1,6 @@
 .main-wallpaper {
-    background: #333333 url(/images/stock-typing2.jpeg) no-repeat center center fixed;
-    background-size: cover;
     background: rgb(255,26,196);
-    background: linear-gradient(151deg, rgba(255,26,196,1) 0%, rgba(182,85,255,1) 49%, rgba(0,212,255,1) 100%); 
+    background: linear-gradient(151deg, rgba(255,26,196,1) 0%, rgba(182,85,255,1) 49%, rgba(0,212,255,1) 100%);
     border-radius: 0 !important;
     height: calc(70vh + 50px);
 }

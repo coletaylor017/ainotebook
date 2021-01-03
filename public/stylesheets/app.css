@@ -10,6 +10,25 @@ p {
     line-height: 175%;
 }
 
+.standalone-login-form {
+    background: rgb(255,26,196);
+    background: linear-gradient(135deg, rgb(255, 102, 217) 0%, rgba(182,85,255,1) 40%, rgba(0,212,255,1) 100%);
+    text-shadow: 0px 0px 1em #317185;
+}
+
+.colorful-button {
+    background: #5fdaff;
+    color: white !important;
+    text-shadow: 0px 0px 1em #000;
+    padding: 0.5em 2em;
+}
+
+.colorful-button:hover {
+    background: white;
+    text-shadow: none;
+    color: #5fdaff !important;
+}
+
 #entry-input-box {
     line-height: 175%;
     height: 35em;
