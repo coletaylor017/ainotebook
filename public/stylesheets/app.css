@@ -92,6 +92,12 @@ p {
     text-decoration: none !important;
 }
 
+/* .search-dropdown {
+    position: relative !important;
+    left: 10px !important;
+    top: 10px !important;
+} */
+
 /* Bootstrap breaks for tablet on min-width: 768 (inclusive) so we assign a max of 767 (also inclusive) to target smaller than tablet */
 @media only screen and (max-width: 767px) {
 

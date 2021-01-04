@@ -9,23 +9,35 @@
         </nav>
         <div class="col-12 col-md-3 collapse d-md-block p-0 pr-md-2 sticky-top bg-gray filter-controls rounded" id="filter-controls">
             <div class="p-2">
-                <% if (keyword !== "" || queriedTags.length > 0) { %>
+                <% if (keyword !== "" || queriedTags.length > 0 || entityKeyword !== "") { %>
                     <h2><%= entries.length %> Results</h2>
                 <% } else { %>
                     <h2>All Entries</h2>
                 <% } %>
                 <form action="<%= "/entries/search" + (queriedTags.length > 0 ? "?tags=" + encodeURIComponent(queriedTags) : "") %>" method="POST">
                     <div class="input-group">
-                        <input class="form-control" type="text" value="<%= keyword %>" name="searchterm" placeholder="Search by phrase..." aria-label="Search by phrase" aria-describedby="search-button">
+                        <input class="form-control" autocomplete="off" id="filter-box" type="text" value="<%= keyword %>" name="searchterm" placeholder="Search by phrase..." aria-label="Search by phrase" aria-describedby="search-button">
                         <div class="input-group-append">
                             <button class="btn btn-primary" action="submit" id="search-button">Search</button>
+                        </div>
+                        <button class="d-none" id="dropdown-button" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Dropdown trigger
+                        </button>
+                        <div class="w-100">
+                            <div class="dropdown-menu dropdown-menu-right search-dropdown" id="entity-suggestions-container">
+                            </div>
                         </div>
                     </div>
                 </form>
 
                 <% if (keyword !== "") { %>
                     <p class="my-2">Filtering by phrase: "<%= keyword %>"</p>
-                    <a class="mb-1 text-primary" href="<%= "/entries?tags=" + encodeURIComponent(queriedTags) %>">Clear keyword</a><br>
+                    <a class="mb-1 text-primary" href="<%= "/entries?tags=" + encodeURIComponent(queriedTags) + "&entity=" + entityKeyword %>">Clear keyword</a><br>
+                <% } %>
+
+                <% if (entityKeyword !== "") { %>
+                    <p class="my-2">Filtering by entity name: "<%= entityKeyword %>"</p>
+                    <a class="mb-1 text-primary" href="<%= "/entries?tags=" + encodeURIComponent(queriedTags) + "&keyword=" + keyword %>">Clear entity filter</a><br>
                 <% } %>
 
                 <% if (queriedTags.length > 0) { %>
@@ -87,6 +99,56 @@
 
     $('#filter-controls').on('hide.bs.collapse', function() {
         $('#filter-toggle-button').html("Show Search Filters");
+    });
+</script>
+
+<script>
+    var entities = <%- JSON.stringify(allEntities) %>; // get list data from EJS
+
+    // performs a case-insensitive search on list names and populates the container element with the results
+    function populateListMatches(searchTerm) {
+        // get matching list names, case insensitive
+        var filteredEntities = entities.filter(function(entity) {
+            return entity._id.toLowerCase().includes(searchTerm.toLowerCase());
+        }).slice(0, 6);
+
+        console.log(filteredEntities);
+
+        // clear the container element
+        $("#entity-suggestions-container").empty();
+
+        // populate container with filtered lists
+        filteredEntities.forEach(function(entity) {
+            $("#entity-suggestions-container").append(`
+                <li class="dropdown-item">
+                    <a href="<%= "/entries?tags=" + encodeURIComponent(queriedTags) + "&keyword=" + keyword + "&entity=" %>${entity._id}" class="no-anchor-styles">
+                        ${entity._id}
+                    </a>
+                </li>
+            `);
+        });
+    }
+
+    $(document).ready(function() {
+        let dropdownIsShowing = false;
+        $("#filter-box").val(""); // clear the box
+
+        $("#filter-box").on({
+            input: function(e){
+                populateListMatches($("#filter-box").val());
+                if (!dropdownIsShowing) {
+                    $("#dropdown-button").dropdown('toggle');
+                    dropdownIsShowing = true;
+                    $("#filter-box").focus();
+                }
+            },
+            focusout: function(e){
+                if (dropdownIsShowing) {
+                    $("#dropdown-button").dropdown('toggle');
+                    dropdownIsShowing = false;
+                }
+            }
+        });
     });
 </script>
 
