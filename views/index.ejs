@@ -20,15 +20,17 @@
                         <div class="input-group-append">
                             <button class="btn btn-primary" action="submit" id="search-button">Search</button>
                         </div>
-                        <button class="d-none" id="dropdown-button" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Dropdown trigger
-                        </button>
-                        <div class="w-100">
-                            <div class="dropdown-menu dropdown-menu-right search-dropdown" id="entity-suggestions-container">
-                            </div>
-                        </div>
                     </div>
                 </form>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <button class="d-none dropdown-toggle" id="dropdown-button" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Dropdown trigger
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right search-dropdown" style="right: 0; left: 0;" id="entity-suggestions-container">
+                        </div>
+                    </li>
+                  </ul>
 
                 <% if (keyword !== "") { %>
                     <p class="my-2">Filtering by phrase: "<%= keyword %>"</p>
