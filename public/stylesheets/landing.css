@@ -2,7 +2,7 @@
     background: rgb(255,26,196);
     background: linear-gradient(151deg, rgba(255,26,196,1) 0%, rgba(182,85,255,1) 49%, rgba(0,212,255,1) 100%);
     border-radius: 0 !important;
-    height: calc(70vh + 50px);
+    height: calc(70vh + 60px);
 }
 
 .title-container {
@@ -29,11 +29,11 @@
 .landing-content-clipper {
     z-index: 2000;
     position: fixed;
-    top: 50px;
+    top: 60px;
     overflow-x: hidden;
     overflow-y: scroll;
     width: 100%;
-    height: calc(100% - 50px);
+    height: calc(100% - 60px);
     padding: 0;
     margin: 0;
 }
