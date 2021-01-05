@@ -92,6 +92,22 @@ p {
     text-decoration: none !important;
 }
 
+.search-dropdown {
+    position: absolute;
+    display: none;
+    background-color: white;
+    top: 3em;
+    left: 0;
+}
+
+.search-dropdown a {
+    display: block;
+}
+
+.search-dropdown a:hover {
+    background-color: #eee;
+}
+
 /* .search-dropdown {
     position: relative !important;
     left: 10px !important;

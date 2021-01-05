@@ -15,22 +15,20 @@
                     <h2>All Entries</h2>
                 <% } %>
                 <form action="<%= "/entries/search" + (queriedTags.length > 0 ? "?tags=" + encodeURIComponent(queriedTags) : "") %>" method="POST">
-                    <div class="input-group">
+                    <div class="input-group search-container">
                         <input class="form-control" autocomplete="off" id="filter-box" type="text" value="<%= keyword %>" name="searchterm" placeholder="Search by phrase..." aria-label="Search by phrase" aria-describedby="search-button">
+                        <div class="search-dropdown rounded pb-1" id="entity-suggestions-container">
+                            <h6 class="p-2 m-0"><i class="far fa-lightbulb mr-2"></i><strong>Smart suggestions:</strong></h6>
+                            <hr class="m-0">
+                            <div class="dropdown-list-container">
+                                <!-- populated by jquery -->
+                            </div>
+                        </div>
                         <div class="input-group-append">
                             <button class="btn btn-primary" action="submit" id="search-button">Search</button>
                         </div>
                     </div>
                 </form>
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <button class="d-none dropdown-toggle" id="dropdown-button" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Dropdown trigger
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right search-dropdown" style="right: 0; left: 0;" id="entity-suggestions-container">
-                        </div>
-                    </li>
-                  </ul>
 
                 <% if (keyword !== "") { %>
                     <p class="my-2">Filtering by phrase: "<%= keyword %>"</p>
@@ -38,7 +36,7 @@
                 <% } %>
 
                 <% if (entityKeyword !== "") { %>
-                    <p class="my-2">Filtering by entity name: "<%= entityKeyword %>"</p>
+                    <p class="my-2">Filtering by subject: "<%= entityKeyword %>"</p>
                     <a class="mb-1 text-primary" href="<%= "/entries?tags=" + encodeURIComponent(queriedTags) + "&keyword=" + keyword %>">Clear entity filter</a><br>
                 <% } %>
 
@@ -53,7 +51,7 @@
                     </p>
                 <% } %>
 
-                <% if (keyword !== "" || queriedTags.length > 0) { %>
+                <% if (keyword !== "" || queriedTags.length > 0 || entityKeyword !== "") { %>
                     <a class="mb-1 text-primary" href="/entries">Clear all search terms</a><br>
                 <% } %>
 
@@ -109,48 +107,55 @@
 
     // performs a case-insensitive search on list names and populates the container element with the results
     function populateListMatches(searchTerm) {
-        // get matching list names, case insensitive
+        // get matching list names, case insensitive, excluding current search term, if any
         var filteredEntities = entities.filter(function(entity) {
-            return entity._id.toLowerCase().includes(searchTerm.toLowerCase());
+            return entity._id.toLowerCase().includes(searchTerm.toLowerCase()) && entity._id.toLowerCase() !== "<%= entityKeyword %>".toLowerCase();
         }).slice(0, 6);
 
         console.log(filteredEntities);
 
         // clear the container element
-        $("#entity-suggestions-container").empty();
+        $("#entity-suggestions-container .dropdown-list-container").empty();
 
-        // populate container with filtered lists
-        filteredEntities.forEach(function(entity) {
-            $("#entity-suggestions-container").append(`
-                <li class="dropdown-item">
-                    <a href="<%= "/entries?tags=" + encodeURIComponent(queriedTags) + "&keyword=" + keyword + "&entity=" %>${entity._id}" class="no-anchor-styles">
+        if (filteredEntities.length > 0) {
+            // populate container with filtered lists
+            filteredEntities.forEach(function(entity) {
+                $("#entity-suggestions-container .dropdown-list-container").append(`
+                    <a class="px-2 py-1 no-anchor-styles" href="<%= "/entries?tags=" + encodeURIComponent(queriedTags) + "&keyword=" + keyword + "&entity=" %>${entity._id}">
                         ${entity._id}
                     </a>
-                </li>
+                `);
+            });            
+        }
+        else {
+            $("#entity-suggestions-container .dropdown-list-container").append(`
+                <a class="px-2 py-1 no-anchor-styles"><em>No suggestions found</em></a>
             `);
-        });
+        }
     }
 
     $(document).ready(function() {
-        let dropdownIsShowing = false;
         $("#filter-box").val(""); // clear the box
 
-        $("#filter-box").on({
-            input: function(e){
+        $("#filter-box").on('input focus', function(e) {
+            if ($("#filter-box").val() == "") {
+                $('#entity-suggestions-container').hide();
+            } else {
                 populateListMatches($("#filter-box").val());
-                if (!dropdownIsShowing) {
-                    $("#dropdown-button").dropdown('toggle');
-                    dropdownIsShowing = true;
-                    $("#filter-box").focus();
-                }
-            },
-            focusout: function(e){
-                if (dropdownIsShowing) {
-                    $("#dropdown-button").dropdown('toggle');
-                    dropdownIsShowing = false;
-                }
+                $("#entity-suggestions-container").show();
+                $(document).bind('mousedown', function(e2) {
+                    if (! $(e2.target).closest('.search-container').length) {
+                        $("#entity-suggestions-container").hide();
+                        $(document).unbind('mousedown', arguments.callee);
+                    }
+                })
             }
         });
+
+        // $("#filter-box").on('blur', function(e) {
+        //     $('#entity-suggestions-container').hide();
+        // });
+
     });
 </script>
 
