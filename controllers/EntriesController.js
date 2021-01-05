@@ -23,6 +23,10 @@ class EntriesController {
     if (req.query.keyword) {
       entryQuery["$text"] = { $search: req.query.keyword };
     }
+    // if the user has entered an entity name, search for entries containing that entity
+    if (req.query.entity) {
+      entryQuery["metadata.nluData.entities.name"] = req.query.entity;
+    }
 
     Entry.find(entryQuery, function (err, entries) {
       if (err) {
@@ -35,12 +39,29 @@ class EntriesController {
           if (aggErr) {
             errorHandlers.dbError(res, aggErr);
           }
-          res.render("index", {
-            queriedTags: tagsArr, // [String]
-            tags: tags.sort((a, b) => b.entryCount - a.entryCount), // [{name: String, entryCount: Number}]
-            entries: entries.reverse(),
-            keyword: req.query.keyword ? req.query.keyword : "",
-          });
+          Entry.aggregate(
+            metadataQueries.getAllEntitiesSorted(
+              req.user._id,
+              0.5,
+              null,
+              null
+              // new Date(Date.now() - 12096e5), // two weeks ago
+              // new Date()
+            ),
+            function (aggErr2, entities) {
+              if (aggErr2) {
+                errorHandlers.dbError(res, aggErr);
+              }
+              res.render("index", {
+                queriedTags: tagsArr, // [String]
+                tags: tags.sort((a, b) => b.entryCount - a.entryCount), // [{name: String, entryCount: Number}]
+                entries: entries.reverse(),
+                keyword: req.query.keyword ? req.query.keyword : "",
+                entityKeyword: req.query.entity ? req.query.entity : "",
+                allEntities: entities
+              });
+            }
+          );
         }
       );
     });
