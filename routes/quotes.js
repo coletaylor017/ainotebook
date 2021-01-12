@@ -1,7 +1,8 @@
 var express    = require("express"),
     middleware = require("../middleware"),
     Quote      = require("../models/quote"),
-    errorHandlers = require("../helpers/errorHandlers");
+    errorHandlers = require("../helpers/errorHandlers"),
+    Global      = require("../models/global");
 
 var router = express.Router();
 
