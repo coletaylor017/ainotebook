@@ -36,7 +36,57 @@ router.delete("/:id", middleware.isLoggedIn, middleware.isAdmin, function(req, r
         if (err) {
             errorHandlers.dbError(res, err);
         }
-        res.redirect("/quotes");
+        Global.findOne({}, { currentQuote: 1 }, function (globalErr, global) {
+            if (globalErr) {
+                errorHandlers.dbError(res, globalErr);
+            }
+            if (global.currentQuote._id == req.params.id) {
+                // re-determine current quote of the day
+                Global.findOne({}, function(err, globalBoi) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log("updating immediately");
+                        Quote.find({}, {index: 1, _id: 0}, function(err, quotes) {
+                            if (err) {
+                                console.log(err);
+                            } else {
+                                var min = quotes[0].index;
+                                for (var i = 1; i < quotes.length; i++) {
+                                    if (quotes[i].index < min) {
+                                        min = quotes[i].index;
+                                    }
+                                }
+                                
+                                Quote.find({index: min}, function(err, candidates) {
+                                    if (err) {
+                                        console.log(err);
+                                    } else {
+                                        var luckyWinner = Math.floor(Math.random()*candidates.length);
+                                        var winnerId = candidates[luckyWinner]._id;
+                                        Quote.findById(winnerId, function(err, quote) {
+                                            if (err) {
+                                                console.log(err);
+                                            } else {
+                                                quote.index++;
+                                                quote.save();
+                                                Global.update({}, { currentQuote: quote, lastUpdate: Date.now() }, function(err, global) { // There should only ever be one
+                                                    if (err) {
+                                                        console.log(err);
+                                                    } else {
+                                                        res.redirect("/quotes");
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
     });
 });
 
