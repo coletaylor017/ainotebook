@@ -30,6 +30,10 @@ p {
     height: 35em;
 }
 
+.entry-body {
+    white-space: pre-wrap;
+}
+
 #site-title {
     font-family: 'Cutive Mono', monospace;
     font-weight: 700;

@@ -8,7 +8,7 @@
                 <%= tag %>
             </a>
         <% }); %>
-        <p class="" id="entry-body"><%= entry.body.substring(0, 2000) + (entry.body.length > 2000 ? "..." : "") %></p>
+        <p class="entry-body" id="entry-body"><%= entry.body.substring(0, 2000) + (entry.body.length > 2000 ? "..." : "") %></p>
         <% if (entry.body.length > 2000) { %>
             <a class="toggle-entry btn btn-secondary" role="button" onclick=expandEntry()>See more</a>
             <a class="toggle-entry btn btn-secondary d-none" role="button" onclick=collapseEntry()>See less</a>
