@@ -18,9 +18,10 @@
     </div>
 </div>
 
-<div class="container mt-5 px-5 text-center">
-    <h2 class="mb-3 mx-5 p-3 border-bottom">Your Stats</h2>
-    <div class="row">
+<div class="container px-5 py-4 text-center">
+    <h3>Your Stats</h3>
+    <hr>
+    <div class="row py-4">
         <div class="col">
             <h2><%= moment().diff(moment(currentUser.dateCreated), 'days') %></h2>
             Days since creation
@@ -32,6 +33,16 @@
         <div class="col">
             <h2><%= wordCount %></h2>
             Words
+        </div>
+    </div>
+    <hr>
+    <div class="row my-5">
+        <div class="col-12 col-lg-6">
+            <%- include('partials/entityGraphCard.ejs', {
+                cardTitle: "Entities over time",
+                uniqueKey: 0,
+                dataSets: []
+            }) %>
         </div>
     </div>
 </div>
