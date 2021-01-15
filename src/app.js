@@ -6,7 +6,8 @@ var methodOverride = require("method-override"),
     User = require("./models/user"),
     passport = require("passport"),
     LocalStrategy = require("passport-local"),
-    env = process.env.NODE_ENV || 'development';
+    env = process.env.NODE_ENV || 'development',
+    path = require('path');
 
 console.log("environment: ", env);
 
@@ -19,6 +20,8 @@ mongoose.connect(url, { useNewUrlParser: true });
 
 var app = express();
 app.set("view engine", "ejs");
+app.set('views', path.join(__dirname, './views'));
+app.use(express.static(path.join(__dirname, './public')));
 
 app.locals.moment = require('moment');
 
