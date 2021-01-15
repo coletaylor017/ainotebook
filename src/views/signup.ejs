@@ -1,0 +1,126 @@
+<% include partials/header %>
+
+<div class="container my-5 pt-5">
+    <div class="row justify-content-center">
+      <div class="col-11 col-md-6 col-lg-4 p-3 rounded standalone-login-form shadow text-light">
+        <h2 class="mb-3 mt-2 text-center">Sign Up</h2>
+        <form class="form-group needs-validation <%= error && error.length > 0 ? "was-validated" : "" %>" action="/register" method="POST" novalidate>
+            <div class="form-group pt-3">
+                <label class="mb-1" for="username">Username:</label>
+                <input class="form-control" type="text" placeholder="Type your username" name="username" id="username" autofocus required aria-describedby="email-feedback">
+                <div id="email-feedback" class="invalid-feedback"></div>
+            </div>
+            <div class="form-group">
+                <label class="mb-1" for="password">Password:</label>
+                <input class="form-control" type="password" placeholder="Type a password..." name="password" id="password" aria-describedby="password-feedback" required>
+                <div id="password-feedback" class="invalid-feedback"></div>
+            </div>
+            <div class="form-group">
+                <label class="mb-1" for="confirm-password">Confirm Password:</label>
+                <input class="form-control" type="password" placeholder="Repeat password..." name="password2" id="confirm-password" aria-describedby="confirm-password-feedback" required>
+                <div id="confirm-password-feedback" class="invalid-feedback"></div>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="terms" id="tc" required>
+                <label class="form-check-label" for="terms-checkbox" aria-describedby="tc-feedback">I agree to the <a href="/terms" target="_blank" style="color: inherit"><u>terms and conditions</u></a></label>
+                <div id="tc-feedback" class="invalid-feedback"></div>
+            </div>
+            <div class="text-center mt-4">
+                <button class="btn colorful-button w-100 text-center">Sign Up</button>
+                <br>
+                <a class="d-inline-block text-center text-white pt-2" href="/login">Or log in instead</a>     
+            </div>   
+        </form>      
+      </div>      
+    </div>
+</div>
+
+<script>
+    // Much borrowed from the examples at https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation
+    'use strict';
+    window.addEventListener('load', function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var form = document.getElementsByClassName('needs-validation')[0];
+        const email = document.getElementById("username");
+        const emailFeedback = document.getElementById("email-feedback");
+        const password = document.getElementById("password");
+        const passwordFeedback = document.getElementById('password-feedback');
+        const confirmPassword = document.getElementById("confirm-password");
+        const confirmPasswordFeedback = document.getElementById('confirm-password-feedback');
+        const tc = document.getElementById("tc");
+        const tcFeedback = document.getElementById('tc-feedback');
+
+        // This function doesn't show good separation of concerns but I am too tired to engineer a better solution
+        const displayFeedback = function(element, feedbackElement, fieldName, isValid) {
+            if (isValid) {
+                element.classList.remove("is-invalid");
+                element.classList.add("is-valid");
+                feedbackElement.textContent = ''; // Reset the content of the message
+            } else {
+                // set error message based on the feedback from the browser constraint validation API and/or custom rules
+                if(element.validity.valueMissing) {
+                    feedbackElement.textContent = `${fieldName} cannot be empty.`;
+                } else if(element.validity.typeMismatch) {
+                    feedbackElement.textContent = `${fieldName} is invalid.`;
+                } else if (element.id === "confirm-password" && confirmPassword.value !== password.value) {
+                    feedbackElement.textContent = `Passwords must match.`;
+                } else {
+                    feedbackElement.textContent = `Something else.`;
+                }
+                element.classList.remove("is-valid");
+                element.classList.add("is-invalid");
+            }
+        }
+
+        // Custom validation function for email field
+        const emailIsValid = function() {
+            return email.validity.valid;
+        };
+
+        email.addEventListener('input', function (event) {
+            displayFeedback(email, emailFeedback, "Email", emailIsValid());
+        });
+
+        // Custom validation function for password field
+        const passwordIsValid = function() {
+            return password.validity.valid;
+        };
+
+        password.addEventListener('input', function (event) {
+            displayFeedback(password, passwordFeedback, "Password", passwordIsValid());
+            displayFeedback(confirmPassword, confirmPasswordFeedback, "Field", confirmPasswordIsValid());
+        });
+
+        // Custom validation function for password confirm field
+        const confirmPasswordIsValid = function() {
+            return confirmPassword.validity.valid && confirmPassword.value === password.value;
+        };
+
+        confirmPassword.addEventListener('input', function (event) {
+            displayFeedback(confirmPassword, confirmPasswordFeedback, "Field", confirmPasswordIsValid());
+        });
+
+        // Custom validation function for terms and conditions field
+        const tcIsValid = function() {
+            console.log(tc.validity.valid);
+            return tc.validity.valid;
+        };
+
+        tc.addEventListener('change', function (event) {
+            console.log("Changed.");
+            displayFeedback(tc, tcFeedback, "Field", tcIsValid());
+        });
+
+        form.addEventListener('submit', function(event) {
+            if (form.checkValidity() === false || !emailIsValid || !passwordIsValid || !confirmPasswordIsValid || !tcIsValid) {
+                event.preventDefault();
+                event.stopPropagation();
+                displayFeedback(email, emailFeedback, "Email", emailIsValid());
+                displayFeedback(password, passwordFeedback, "Password", passwordIsValid());
+                displayFeedback(confirmPassword, confirmPasswordFeedback, "Field", confirmPasswordIsValid());
+                displayFeedback(tc, tcFeedback, "Field", tcIsValid());
+            }
+            // let it submit
+        }, false);
+    }, false);
+</script>

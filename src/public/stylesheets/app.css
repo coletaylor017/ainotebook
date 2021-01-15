@@ -1,0 +1,128 @@
+body {
+    height: 100%;
+}
+
+p {
+    line-height: 175%;
+}
+
+.standalone-login-form {
+    background: rgb(255,26,196);
+    background: linear-gradient(135deg, rgb(255, 102, 217) 0%, rgba(182,85,255,1) 40%, rgba(0,212,255,1) 100%);
+    text-shadow: 0px 0px 1em #317185;
+}
+
+.colorful-button {
+    background: #5fdaff;
+    color: white !important;
+    text-shadow: 0px 0px 1em #000;
+    padding: 0.5em 2em;
+}
+
+.colorful-button:hover {
+    background: white;
+    text-shadow: none;
+    color: #5fdaff !important;
+}
+
+#entry-input-box {
+    line-height: 175%;
+    height: 35em;
+}
+
+.entry-body {
+    white-space: pre-wrap;
+}
+
+#site-title {
+    font-family: 'Cutive Mono', monospace;
+    font-weight: 700;
+}
+
+.value i {
+    display: inline-block;
+    position: relative;
+    padding-left: .2em;
+    top: -.15em;
+}
+
+.quote {
+    font-size: 1.5em;
+}
+
+.chart.column {
+    height: 12em;
+}
+
+.chart-label {
+    display: inline-block;
+    padding: 0.2em;
+    color: white;
+}
+
+.typewriter {
+    font-family: 'Cutive Mono', monospace;
+}
+
+.bg-gray {
+    background-color: #e9ecef
+}
+
+.homepage-wallpaper {
+    background: #333333 url(/images/mountains-bg-1.jpg) no-repeat center center fixed;
+    background-size: cover;
+    text-shadow: 0px 0px 0.2em #000000, 0px 0px 1em #000000;
+    border-radius: 0 !important;
+}
+
+/* Remove shadow for button */
+.homepage-wallpaper .btn {
+    text-shadow: none;
+}
+
+/* Fix for bootstrap's dumb menu bar shadows */
+.navbar-brand,
+.navbar-nav > li > a {
+  text-shadow: 0 0 0 rgba(255,255,255,.25);
+}
+
+.no-achor-styles {
+    color: inherit !important;
+    text-decoration: none !important;
+}
+
+.no-anchor-styles {
+    color: inherit !important;
+    text-decoration: none !important;
+}
+
+.search-dropdown {
+    position: absolute;
+    display: none;
+    background-color: white;
+    top: 3em;
+    left: 0;
+}
+
+.search-dropdown a {
+    display: block;
+}
+
+.search-dropdown a:hover {
+    background-color: #eee;
+}
+
+/* .search-dropdown {
+    position: relative !important;
+    left: 10px !important;
+    top: 10px !important;
+} */
+
+/* Bootstrap breaks for tablet on min-width: 768 (inclusive) so we assign a max of 767 (also inclusive) to target smaller than tablet */
+@media only screen and (max-width: 767px) {
+
+    .secondary-nav {
+        width: 100%;
+        top: 56px;
+    }
+}

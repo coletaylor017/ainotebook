@@ -1,0 +1,40 @@
+<% include partials/header %>
+<script src="/tagify.min.js"></script>
+<link rel="stylesheet" href="/stylesheets/tagify.css">
+
+<div class="container my-5 text-center">
+    <h3 class="mb-3"><%= moment(entry.dateCreated).format("D MMM YYYY, h:mm a") %></h3>
+    
+    <form action="/entries/<%= entry._id %>?_method=PUT" method="POST" class="ui form">
+        <input id="streak-date" style="display: none" name="streakDate">
+        <input id="date-input" style="display: none" name="entry[date]">
+        <textarea class="form-control mb-2" id="entry-input-box" rows="10" name="entry[body]" placeholder="Start writing" autofocus><%= entry.body %></textarea>
+        <div class="form-row mb-2">
+            <div class="col-auto">
+                <label class="col-form-label pt-2 modal-btn-2" for="tag-box">Optional: Add tags</label>
+            </div>
+            <div class="col">
+                <input type="text" name="tags" placeholder="Write some tags. '#' is not necessary" id="tag-box" value="<%= entry.tags %>">
+            </div>
+        </div>
+        <a href="javascript:history.back()" class="btn btn-outline-secondary" title="Cancel">Cancel</a>
+        <button class="btn btn-primary" type="submit" title="Save!">Done</button>
+    </form>
+</div>
+
+<script>
+    var tagArr = <%- JSON.stringify(tags.map(t => t.name)) %>;
+    var input = document.querySelector("input[name=tags]");
+    new Tagify(input, {
+        delimiters          : ",| ",  // add new tags when a comma or a space character
+        keepInvalidTags     : false,  // do not remove invalid tags (but keep them marked as invalid)
+        whitelist: tagArr,
+        dropdown : {
+            enabled: 1,
+            maxItems: 5
+        }
+    });
+
+</script>
+
+<% include partials/footer %>
