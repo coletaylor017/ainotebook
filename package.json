@@ -5,8 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "debug": "PORT='8080' DATABASEURL='mongodb://localhost:27017/writenow' node --trace-warnings app.js",
-    "start": "node app.js"
+    "debug": "PORT='8080' DATABASEURL='mongodb://localhost:27017/writenow' node --trace-warnings src/app.js",
+    "start": "node src/app.js"
   },
   "author": "Cole Taylor",
   "license": "ISC",
