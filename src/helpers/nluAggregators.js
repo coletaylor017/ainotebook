@@ -1,3 +1,126 @@
+exports.getEntitiesWithHistories = function(
+	userId,
+  confidenceThreshold,
+  namesToMatch,
+  dateStart,
+  dateEnd
+) {
+  const query = [
+    {
+      '$match': {
+        'author.id': userId, 
+        'metadata.nluData.entities.confidence': {
+          '$gte': confidenceThreshold
+        }
+      }
+    }, {
+      '$unwind': {
+        'path': '$metadata.nluData.entities', 
+        'includeArrayIndex': 'string', 
+        'preserveNullAndEmptyArrays': false
+      }
+    }, {
+      '$match': {
+        'metadata.nluData.entities.name': {
+          '$in': [
+            namesToMatch
+          ]
+        }
+      }
+    }, {
+      '$project': {
+        'entryId': '$_id', 
+        'data': '$metadata.nluData.entities', 
+        'dateCreated': 1,
+        'name': '$metadata.nluData.entities.name'
+      }
+    }, {
+      '$group': {
+        '_id': '$name', 
+        'mentions': {
+          '$push': {
+            'data': '$data', 
+            'date': '$dateCreated', 
+            'entryId': '$entryId'
+          }
+        }, 
+        'entriesMentioning': {
+          '$sum': 1
+        }, 
+        'totalMentions': {
+          '$sum': '$data.count'
+        }, 
+        'confidence': {
+          '$avg': '$data.confidence'
+        }, 
+        'relevance': {
+          '$avg': '$data.relevance'
+        }, 
+        'sentimentScore': {
+          '$avg': {
+            '$multiply': [
+              '$data.sentiment.score', '$data.confidence'
+            ]
+          }
+        }, 
+        'sadness': {
+          '$avg': {
+            '$multiply': [
+              '$data.emotion.sadness', '$data.confidence'
+            ]
+          }
+        }, 
+        'joy': {
+          '$avg': {
+            '$multiply': [
+              '$data.emotion.joy', '$data.confidence'
+            ]
+          }
+        }, 
+        'fear': {
+          '$avg': {
+            '$multiply': [
+              '$data.emotion.fear', '$data.confidence'
+            ]
+          }
+        }, 
+        'disgust': {
+          '$avg': {
+            '$multiply': [
+              '$data.emotion.disgust', '$data.confidence'
+            ]
+          }
+        }, 
+        'anger': {
+          '$avg': {
+            '$multiply': [
+              '$data.emotion.anger', '$data.confidence'
+            ]
+          }
+        }
+      }
+    }
+  ];
+
+  // if filtering by entity names, add the corresponding query into the match stage
+  if (namesToMatch != null) {
+    query[0]["$match"]["metadata.nluData.entities.name"] = {
+      $in: namesToMatch,
+    };
+  }
+  
+  // if filtering by date, add the corresponding query into the match stage
+  if (dateStart != null && dateEnd != null) {
+    query[0]["$match"]["dateCreated"] = 
+    {
+      $gte: dateStart, 
+      $lte: dateEnd
+    }
+  }
+
+  return query;
+}
+
 exports.getEntities = function (
 	userId,
   confidenceThreshold,
@@ -9,9 +132,9 @@ exports.getEntities = function (
     {
       $match: {
 				"author.id": userId,
-        "metadata.nluData.entities.confidence": {
-          $gte: confidenceThreshold,
-        },
+        // "metadata.nluData.entities.confidence": {
+        //   $gte: confidenceThreshold,
+        // },
       },
     },
     {
@@ -32,11 +155,12 @@ exports.getEntities = function (
       $project: { // just for convenenience
         _id: 0,
         data: "$metadata.nluData.entities",
+        'name': '$metadata.nluData.entities.name'
       },
     },
     {
       $group: {
-        _id: "$data.name",
+        _id: "$name",
         categories: {
           $addToSet: "$data.category",
 				},
@@ -80,7 +204,7 @@ exports.getEntities = function (
     },
   ];
 
-  // if filtering by tag names, add the corresponding query into the match stage
+  // if filtering by entity names, add the corresponding query into the match stage
   if (namesToMatch != null) {
     query[0]["$match"]["metadata.nluData.entities.name"] = {
       $in: namesToMatch,
@@ -99,6 +223,13 @@ exports.getEntities = function (
   return query;
 };
 
+/**
+ * Return all entities for the given user, threshold, and time period, sorted by mentions then relevance
+ * @param {*} userId 
+ * @param {*} confidenceThreshold 
+ * @param {*} dateStart 
+ * @param {*} dateEnd 
+ */
 exports.getAllEntitiesSorted = function(
   userId,
   confidenceThreshold,
@@ -108,9 +239,10 @@ exports.getAllEntitiesSorted = function(
   return [
     {
       '$match': {
-        'metadata.nluData.entities.confidence': {
-          '$gte': 0.5
-        }
+        "author.id": userId,
+        // 'metadata.nluData.entities.confidence': {
+        //   '$gte': confidenceThreshold
+        // }
       }
     }, {
       '$unwind': {
@@ -121,11 +253,12 @@ exports.getAllEntitiesSorted = function(
     }, {
       '$project': {
         '_id': 0, 
-        'data': '$metadata.nluData.entities'
+        'data': '$metadata.nluData.entities',
+        'name': '$metadata.nluData.entities.name'
       }
     }, {
       '$group': {
-        '_id': '$data.name', 
+        '_id': '$name', 
         'categories': {
           '$addToSet': '$data.category'
         }, 

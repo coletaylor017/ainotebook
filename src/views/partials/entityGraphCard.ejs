@@ -1,6 +1,3 @@
-<link rel="stylesheet" type="text/css" href="/stylesheets/chartistCustom.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-
 <div class="card">
     <div class="card-body">
         <h4 class="card-title"><%= cardTitle %></h4>
@@ -9,31 +6,41 @@
 </div>
 
 <script>
-    
-    var dataSets = <%- JSON.stringify(dataSets) %>;
-    var dataSetLabels = dataSets.map(set => set);
-    var graphDataSets = [];
+    var entries = <%- JSON.stringify(entityDataPoints) %>; // each data point is an entry that mentions the entity
+    var entityNames = <%- JSON.stringify(entityNames) %>;
+    var graphDataSets = entityNames.map(entityName => {
+        return {
+            label: entityName,
+            data: entries.map(entry => {
+                const entityMatches = entry.metadata.nluData.entities.filter(
+                    entity => entity.name == entityName
+                );
+                if (entityMatches.length > 0) {
+                    return entityMatches[0].sentiment.score;
+                }
+                return null;
+            }),
+            backgroundColor: 'transparent',
+            borderColor: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 1)`,
+            borderCapStyle: "round",
+            borderJoinStyle: "round",
+            pointHoverRadius: 2,
+            spanGaps: false,
+            yAxisID: 'y-axis-1'
+        }
+    });
 
-    for (var i = 0; i < dataSets.length; i++)
-    {
-        graphDataSets.push(
-            {
-                label: dataSetLabels[i],
-                data: dataSets[i],
-                backgroundColor: 'transparent',
-                borderCapStyle: "round",
-                borderJoinStyle: "round",
-                pointHoverRadius: 2,
-                spanGaps: false,
-                yAxisID: 'y-axis-1'
-            }
-        );
-    }
+    console.log(graphDataSets[0].data)
 
     var ctx = document.getElementById("canvas-<%= uniqueKey %>").getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
+            labels: entries.map(entry => {
+                const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+                const date = new Date(entry.dateCreated);
+                return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
+            }),
             datasets: graphDataSets
         },
         options: {
@@ -45,10 +52,12 @@
                 yAxes: [{
                     type: 'linear',
                     ticks: {
-                        beginAtZero: false
+                        beginAtZero: false,
+                        suggestedMin: -1,
+                    suggestedMax: 1
                     },
                     position: 'left',
-                    id: 'y-axis-1'
+                    id: 'y-axis-1',
                 }]
             },
             tooltips: {

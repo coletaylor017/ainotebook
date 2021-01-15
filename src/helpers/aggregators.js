@@ -1,3 +1,7 @@
+/**
+ * Return tags for the specified user with names only.
+ * @param {*} userId the user id to filter by.
+ */
 exports.getTagNames = function(userId) 
 {
   return [

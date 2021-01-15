@@ -1,4 +1,5 @@
 <% include partials/header %>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
 <div class="jumbotron homepage-wallpaper text-light">
     <div class="container my-5 text-center">
@@ -37,13 +38,16 @@
     </div>
     <hr>
     <div class="row my-5">
+        <% if (entityNames && entityDataPoints) { %>
         <div class="col-12 col-lg-6">
             <%- include('partials/entityGraphCard.ejs', {
                 cardTitle: "Entities over time",
                 uniqueKey: 0,
-                dataSets: []
+                entries: entityDataPoints,
+                entityNames: entityNames
             }) %>
         </div>
+        <% } %>
     </div>
 </div>
 

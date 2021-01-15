@@ -1,8 +1,8 @@
 const Entry = require("../models/entry"),
   nlu = require("../helpers/nlu"),
   User = require("../models/user"),
-  queries = require("../helpers/queries"),
-  metadataQueries = require("../helpers/metadataQueries"),
+  queries = require("../helpers/aggregators"),
+  metadataQueries = require("../helpers/nluAggregators"),
   errorHandlers = require("../helpers/errorHandlers");
 
 class EntriesController {
@@ -50,7 +50,7 @@ class EntriesController {
             ),
             function (aggErr2, entities) {
               if (aggErr2) {
-                errorHandlers.dbError(res, aggErr);
+                errorHandlers.dbError(res, aggErr2);
               }
               res.render("index", {
                 queriedTags: tagsArr, // [String]

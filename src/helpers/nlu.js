@@ -34,6 +34,7 @@ exports.getNluData = function (textToAnalyze) {
       },
       sentiment: {},
       emotion: {},
+      mentions: true
     },
   };
 
@@ -61,6 +62,7 @@ exports.getNluData = function (textToAnalyze) {
               anger: entity.emotion.anger,
             },
             count: entity.count,
+            textLocations: entity.mentions
           };
         }),
         concepts: data.concepts.map(function (concept) {
