@@ -94,41 +94,57 @@ router.get(
             if (quoteErr) {
               errorHandlers.dbError(res, quoteErr);
             }
-            if (req.query.entitynames) {
-              let entityNames = req.query.entitynames.split(",");
-
-              Entry.find(
-                {
-                  "author.id": req.user._id,
-                  "metadata.nluData.entities.name": {
-                    $in: entityNames,
-                  },
-                },
-                {
-                  "tags": 0
-                },
-                function (entityErr, entries2) {
-                  if (entityErr) {
-                    errorHandlers.dbError(res, entityErr);
-                  }
+            Entry.aggregate(
+              metadataQueries.getAllEntitiesSorted(
+                req.user._id,
+                0.5,
+                null,
+                null
+                // new Date(Date.now() - 12096e5), // two weeks ago
+                // new Date()
+              ),
+              function (aggErr2, entities) {
+                if (aggErr2) {
+                  errorHandlers.dbError(res, aggErr2);
+                }
+                if (req.query.entitynames) {
+                  let entityNames = req.query.entitynames.split(",");
+                  Entry.find(
+                    {
+                      "author.id": req.user._id,
+                      "metadata.nluData.entities.name": {
+                        $in: entityNames,
+                      },
+                    },
+                    {
+                      "tags": 0
+                    },
+                    function (entityErr, entries2) {
+                      if (entityErr) {
+                        errorHandlers.dbError(res, entityErr);
+                      }
+                      res.render("home", {
+                        quote: quote,
+                        entryCount: entryCount,
+                        wordCount: wordCount,
+                        entityDataPoints: entries2,
+                        entityNames: entityNames,
+                        allEntities: entities
+                      });
+                    }
+                  );
+                } else {
                   res.render("home", {
                     quote: quote,
                     entryCount: entryCount,
                     wordCount: wordCount,
-                    entityDataPoints: entries2,
-                    entityNames: entityNames
+                    entityDataPoints: [],
+                    entityNames: [],
+                    allEntities: entities
                   });
                 }
-              );
-            } else {
-              res.render("home", {
-                quote: quote,
-                entryCount: entryCount,
-                wordCount: wordCount,
-                entityDataPoints: null,
-                entityNames: null
-              });
-            }
+              }
+            );
           });
         });
       }

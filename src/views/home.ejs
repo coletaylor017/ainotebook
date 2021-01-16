@@ -20,25 +20,63 @@
 </div>
 
 <div class="container px-5 py-4 text-center">
-    <h3>Your Stats</h3>
-    <hr>
-    <div class="row py-4">
-        <div class="col">
-            <h2><%= moment().diff(moment(currentUser.dateCreated), 'days') %></h2>
-            Days since creation
-        </div>
-        <div class="col">
-            <h2><%= entryCount %></h2>
-            Entries
-        </div>
-        <div class="col">
-            <h2><%= wordCount %></h2>
-            Words
+    <h3 class="pb-3">Your Stats</h3>
+    <div class="row">
+        <div class="col py-0">
+            <form class="bg-white px-4 rounded shadow">
+                <div class="form-group pt-3 row align-items-center my-1 justify-content-start">
+                    <div class="col col-auto mb-3 text-left font-weight-bold">
+                        <p class="mb-1 p-0">Add a New Graph:</p>
+                    </div>
+                    <div class="col mb-3">
+                        <select class="custom-select" id="cardTypeSelector">
+                            <option selected>Select a graph type...</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+                    <div class="col mb-3">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="dropdownCheck2">
+                            <label class="form-check-label" for="dropdownCheck2">
+                            Remember me
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col col-auto ml-auto mb-3">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-plus-circle pr-1"></i> Add</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-    <hr>
     <div class="row my-5">
-        <% if (entityNames && entityDataPoints) { %>
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card border-0 shadow">
+                <div class="card-body text-left">
+                    <div class="p-3 d-flex align-items-center">
+                        <h2 class="d-inline p-0 pr-2 m-0"><%= moment().diff(moment(currentUser.dateCreated), 'days') %></h2>
+                        <span class="text-right ml-auto">
+                            Days on AI Notebook
+                        </span>
+                    </div>
+                    <div class="p-3 d-flex align-items-center">
+                        <h2 class="d-inline p-0 pr-2 m-0"><%= wordCount %></h2>
+                        <span class="text-right ml-auto">
+                            Words
+                        </span>
+                    </div>
+                    <div class="p-3 d-flex align-items-center">
+                        <h2 class="d-inline p-0 pr-2 m-0"><%= entryCount %></h2>
+                        <span class="text-right ml-auto">
+                            Entries
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%# if (entityNames && entityDataPoints) { %>
         <div class="col-12 col-lg-6">
             <%- include('partials/entityGraphCard.ejs', {
                 cardTitle: "Entities over time",
@@ -47,7 +85,10 @@
                 entityNames: entityNames
             }) %>
         </div>
-        <% } %>
+        <%# } else { %>
+            <!-- Lazy spacer element -->
+            <!-- <div class="jumbotron bg-transparent"></div> -->
+        <%# } %>
     </div>
 </div>
 
