@@ -37,6 +37,13 @@ var entrySchema = new mongoose.Schema({
             anger: Number,
           },
           count: Number,
+          locations: [
+            {
+              confidence: String,
+              location: [Number],
+              text: String
+            }
+          ]
         },
       ],
       concepts: [

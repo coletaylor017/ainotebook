@@ -25,6 +25,7 @@ exports.getNluData = function (textToAnalyze) {
       entities: {
         sentiment: true,
         emotion: true,
+        mentions: true,
       },
       keywords: {
         limit: 5,
@@ -34,14 +35,12 @@ exports.getNluData = function (textToAnalyze) {
       },
       sentiment: {},
       emotion: {},
-      mentions: true
     },
   };
 
   return nlu
     .analyze(analyzeParams)
     .then(function (returnedNluData) {
-      console.log(JSON.stringify(returnedNluData));
       const data = returnedNluData.result;
       return {
         entities: data.entities.map(function (entity) {
@@ -62,7 +61,13 @@ exports.getNluData = function (textToAnalyze) {
               anger: entity.emotion.anger,
             },
             count: entity.count,
-            textLocations: entity.mentions
+            locations: entity.mentions.map(function(mention) {
+              return {
+                confidence: mention.confidence,
+                location: mention.location,
+                text: mention.text
+              }
+            })
           };
         }),
         concepts: data.concepts.map(function (concept) {
