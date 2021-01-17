@@ -32,10 +32,11 @@
 
     var entries = <%- JSON.stringify(entityDataPoints) %>; // each data point is an entry that mentions the entity
     var entityNames = <%- JSON.stringify(entityNames) %>;
-    var graphDataSets = entityNames.map(entityName => {
+    var altNames = ["Alex", "Jamie"];
+    var graphDataSets = entityNames.map((entityName, index) => {
         var datasetColor = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 1)`;
         return {
-            label: entityName,
+            label: altNames[index],
             data: entries.map(entry => {
                 const entityMatches = entry.metadata.nluData.entities.filter(
                     entity => entity.name == entityName
