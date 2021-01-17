@@ -16,18 +16,53 @@
         <br>
         <a href="/entries" class="btn btn-primary mt-2"></i>Back to All Entries</a>
         <a href="/entries/<%= entry._id %>/edit" class="btn btn-outline-secondary mt-2" title="Edit">Edit Entry</a>
+        <form action="/entries/<%= entry._id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this entry?');">
+            <button action="submit" class="btn btn-outline-danger mt-2" title="Delete">Delete</button>
+        </form>
     </div>
 
 
-    <h3 class="">Metadata</h3>
+    <h3>Metadata</h3>
+    <% var decimals = 1; %>
+    <hr class="pb-3">
     <div class="row mb-5 pb-5">
-        <div class="col-12 col-md-6">
-            <div class="card">
+        <div class="col-12 col-md-6 mb-4">
+            <div class="card border-0 shadow">
+                <div class="card-body">
+                    <h4 class="card-title">Sentiment & Emotion</h4>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item px-0"><strong>Overall Sentiment Score:</strong> 
+                            <%= entry.metadata.nluData.sentiment.score.toFixed(decimals) %>
+                            (Label: "<%= entry.metadata.nluData.sentiment.label %>")
+                        </li>
+                        <li class="list-group-item px-0"><strong>Emotions:</strong></li>
+                        <ul class="list-group list-group-flush pl-5">
+                            <li class="list-group-item px-0"><strong>Sadness:</strong> 
+                                <%= entry.metadata.nluData.emotion.sadness.toFixed(decimals) %>
+                            </li>
+                            <li class="list-group-item px-0"><strong>Joy:</strong> 
+                                <%= entry.metadata.nluData.emotion.joy.toFixed(decimals) %>
+                            </li>
+                            <li class="list-group-item px-0"><strong>Fear:</strong> 
+                                <%= entry.metadata.nluData.emotion.fear.toFixed(decimals) %>
+                            </li>
+                            <li class="list-group-item px-0"><strong>Disgust:</strong> 
+                                <%= entry.metadata.nluData.emotion.disgust.toFixed(decimals) %>
+                            </li>
+                            <li class="list-group-item px-0"><strong>Anger:</strong> 
+                                <%= entry.metadata.nluData.emotion.anger.toFixed(decimals) %>
+                            </li>                            
+                        </ul>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 mb-4">
+            <div class="card border-0 shadow">
                 <div class="card-body pb-0">
                     <h4 class="card-title">Detected Entities</h4>
                     <% if (entities.length > 0) { %>
                         <ul class="list-group list-group-flush">
-                            <% var decimals = 1; %>
                             <% var entryEntities = entry.metadata.nluData.entities.sort((a, b) => { %>
                                 <% if (a.name > b.name) {return 1;} %>
                                 <% if (a.name < b.name) {return -1;} %>
@@ -81,38 +116,75 @@
                             <% }); %>
                           </ul>
                     <% } else { %>
-                        <p>There was a problem running natural language understanding on this entry, probably because it was too short.</p>
+                        <p><em>No entities to show.</em></p>
                     <% } %>
                 </div>
             </div>
         </div>
-        <div class="col-12 col-md-6">
-            <div class="card">
+        <div class="col-12 col-md-6 mb-4">
+            <div class="card border-0 shadow">
                 <div class="card-body pb-0">
                     <h4 class="card-title">Concepts</h4>
                     <ul class="list-group list-group-flush">
-                        <% var decimals = 1; %>
                         <% var concepts = entry.metadata.nluData.concepts.sort((a, b) => { %>
                             <% if (a.text > b.text) {return 1;} %>
                             <% if (a.text < b.text) {return -1;} %>
                             <% return 0; %>
                         <% }); %>
-                        <% concepts.forEach(function(concept, index) { %>
-                            <li class="list-group-item p-0">
-                                <div class="d-flex align-items-left" id="entity-<%= index %>">
-                                    <a class="d-block py-3 no-anchor-styles text-primary ml-2 w-100" data-toggle="collapse" href="#concept-<%= index %>" role="button" aria-expanded="false" aria-controls="extendedDescription">
-                                        <h6 class="d-inline text-dark m-0 dropdown-arrow"><i class="fas fa-angle-down mr-1"></i></h6>
-                                        <h6 class="d-inline m-0"><strong>"<%= concept.text %>"</strong></h6>
-                                    </a>
-                                </div>
-                                <div class="collapse mt-2" id="concept-<%= index %>">
-                                    <ul class="list-group list-group-flush px-5">
-                                        <li class="list-group-item px-0"><strong>Info URL:</strong> <a href="<%= concept.infoURL %>">"<%= concept.infoURL %></a></li>
-                                        <li class="list-group-item px-0"><strong>Relevance index:</strong> <%= concept.relevance %></li>
-                                    </ul>
-                                </div>
-                            </li>
+                        <% if (concepts.length > 0) { %>
+                            <% concepts.forEach(function(concept, index) { %>
+                                <li class="list-group-item p-0">
+                                    <div class="d-flex align-items-left" id="entity-<%= index %>">
+                                        <a class="d-block py-3 no-anchor-styles text-primary ml-2 w-100" data-toggle="collapse" href="#concept-<%= index %>" role="button" aria-expanded="false" aria-controls="extendedDescription">
+                                            <h6 class="d-inline text-dark m-0 dropdown-arrow"><i class="fas fa-angle-down mr-1"></i></h6>
+                                            <h6 class="d-inline m-0"><strong>"<%= concept.text %>"</strong></h6>
+                                        </a>
+                                    </div>
+                                    <div class="collapse mt-2" id="concept-<%= index %>">
+                                        <ul class="list-group list-group-flush px-5">
+                                            <li class="list-group-item px-0"><strong>Info URL:</strong> <a href="<%= concept.infoURL %>"><%= concept.infoURL %></a></li>
+                                            <li class="list-group-item px-0"><strong>Relevance index:</strong> <%= concept.relevance %></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            <% }); %>
+                        <% } else { %>
+                            <p><em>No concepts to show.</em></p>
+                        <% } %>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 mb-4">
+            <div class="card border-0 shadow">
+                <div class="card-body pb-0">
+                    <h4 class="card-title">Keywords</h4>
+                    <ul class="list-group list-group-flush">
+                        <% var keywords = entry.metadata.nluData.keywords.sort((a, b) => { %>
+                            <% if (a.text > b.text) {return 1;} %>
+                            <% if (a.text < b.text) {return -1;} %>
+                            <% return 0; %>
                         <% }); %>
+                        <% if (keywords.length > 0) { %>
+                            <% keywords.forEach(function(keyword, index) { %>
+                                <li class="list-group-item p-0">
+                                    <div class="d-flex align-items-left" id="keyword-<%= index %>">
+                                        <a class="d-block py-3 no-anchor-styles text-primary ml-2 w-100" data-toggle="collapse" href="#keyword-<%= index %>" role="button" aria-expanded="false" aria-controls="extendedDescription">
+                                            <h6 class="d-inline text-dark m-0 dropdown-arrow"><i class="fas fa-angle-down mr-1"></i></h6>
+                                            <h6 class="d-inline m-0"><strong>"<%= keyword.text %>"</strong></h6>
+                                        </a>
+                                    </div>
+                                    <div class="collapse mt-2" id="keyword-<%= index %>">
+                                        <ul class="list-group list-group-flush px-5">
+                                            <li class="list-group-item px-0"><strong>Count:</strong><%= keyword.count %></li>
+                                            <li class="list-group-item px-0"><strong>Relevance index:</strong> <%= keyword.relevance %></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            <% }); %>
+                        <% } else { %>
+                            <p><em>No keywords to show.</em></p>
+                        <% } %>
                     </ul>
                 </div>
             </div>
