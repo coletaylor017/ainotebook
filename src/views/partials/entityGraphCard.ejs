@@ -1,26 +1,27 @@
 <div class="card shadow border-0">
     <div class="card-body">
-        <h4 class="card-title"><%= cardTitle %></h4>
+        <h4 class="card-title mb-0">Entities</h4>
+        <p class="text-muted mb-2"><em>How you felt about people, places, and things over time</em></p>
         <canvas id="canvas-<%= uniqueKey %>" width="600" height="300"></canvas>
+        <form class="bg-white px-4 rounded">
+            <div class="form-group row align-items-center my-1 justify-content-start">
+                <div class="col col-auto text-left font-weight-bold">
+                    <p class="mb-1 p-0">Add Entity:</p>
+                </div>
+                <div class="col">
+                    <select class="custom-select" name="entityNameSelector" id="entityNameSelector">
+                        <option value="...">Select an entity to track...</option>
+                        <% allEntities.forEach(function(entity) { %>
+                        <option value="<%= entity._id %>"><%= entity._id %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                <div class="col col-auto ml-auto">
+                    <button type="submit" id="entityFormSubmitButton" class="btn btn-outline-secondary"><i class="fas fa-plus-circle pr-1"></i> Add</button>
+                </div>
+            </div>
+        </form>
     </div>
-    <form class="bg-white pt-1 mb-3 px-4 rounded">
-        <div class="form-group row align-items-center my-1 justify-content-start">
-            <div class="col col-auto text-left font-weight-bold">
-                <p class="mb-1 p-0">Add Entity:</p>
-            </div>
-            <div class="col">
-                <select class="custom-select" name="entityNameSelector" id="entityNameSelector">
-                    <option value="...">Select an entity to track...</option>
-                    <% allEntities.forEach(function(entity) { %>
-                    <option value="<%= entity._id %>"><%= entity._id %></option>
-                    <% }) %>
-                </select>
-            </div>
-            <div class="col col-auto ml-auto">
-                <button type="submit" id="entityFormSubmitButton" class="btn btn-outline-secondary"><i class="fas fa-plus-circle pr-1"></i> Add</button>
-            </div>
-        </div>
-    </form>
 </div>
 
 <script>
@@ -32,6 +33,7 @@
     var entries = <%- JSON.stringify(entityDataPoints) %>; // each data point is an entry that mentions the entity
     var entityNames = <%- JSON.stringify(entityNames) %>;
     var graphDataSets = entityNames.map(entityName => {
+        var datasetColor = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 1)`;
         return {
             label: entityName,
             data: entries.map(entry => {
@@ -39,16 +41,21 @@
                     entity => entity.name == entityName
                 );
                 if (entityMatches.length > 0) {
-                    return entityMatches[0].sentiment.score;
+                    return entityMatches[0].sentiment.score * -1;
                 }
                 return null;
             }),
-            backgroundColor: 'transparent',
-            borderColor: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 1)`,
+            fill: false,
+            backgroundColor: datasetColor,
+            pointBackgroundColor: datasetColor,
+            borderColor: datasetColor,
             borderCapStyle: "round",
             borderJoinStyle: "round",
-            pointHoverRadius: 2,
-            spanGaps: false,
+            spanGaps: true,
+            responsive: true,
+            pointRadius: 4,
+            pointHitRadius: 8,
+            pointHoverRadius: 6,
             yAxisID: 'y-axis-1'
         }
     });
@@ -60,17 +67,26 @@
         type: 'line',
         data: {
             labels: entries.map(entry => {
-                const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
                 const date = new Date(entry.dateCreated);
-                return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
+                return `${date.getDate()} ${months[date.getMonth()]} '${date.getFullYear().toString().substring(2, 4)}`
             }),
             datasets: graphDataSets
         },
         options: {
+            legend: {
+                labels: {
+                    padding: 12,
+                    fontColor: '#212529' // bootstrap default text color
+                }
+            },
+            hover: {
+                mode: 'point'
+            },
             responsive: true,
             scales: {
                 xAxes: [{
-                    display: false
+                    display: true
                 }],
                 yAxes: [{
                     type: 'linear',
@@ -87,9 +103,10 @@
                 // Disable the on-canvas tooltip
                 enabled: false,
 
-                mode: 'index',
-                intersect: false,
+                mode: 'point',
+                intersect: true,
 
+                // taken from Chart.js docs with modifications
                 custom: function(tooltipModel) {
                     // Tooltip Element
                     var tooltipEl = document.getElementById('chartjs-tooltip');
