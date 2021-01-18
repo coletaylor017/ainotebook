@@ -1,0 +1,185 @@
+<div class="card shadow border-0">
+    <div class="card-body">
+        <h4 class="card-title mb-0">Entities</h4>
+        <p class="text-muted mb-2"><em>How you felt about people, places, and things over time</em></p>
+        <canvas id="canvas-<%= uniqueKey %>" width="600" height="300"></canvas>
+        <form class="bg-white px-4 rounded">
+            <div class="form-group row align-items-center my-1 justify-content-start">
+                <div class="col col-auto text-left font-weight-bold">
+                    <p class="mb-1 p-0">Add Entity:</p>
+                </div>
+                <div class="col">
+                    <select class="custom-select" name="entityNameSelector" id="entityNameSelector">
+                        <option value="...">Select an entity to track...</option>
+                        <% allEntities.forEach(function(entity) { %>
+                        <option value="<%= entity._id %>"><%= entity._id %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                <div class="col col-auto ml-auto">
+                    <button type="submit" id="entityFormSubmitButton" class="btn btn-outline-secondary"><i class="fas fa-plus-circle pr-1"></i> Add</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById("entityFormSubmitButton").addEventListener("click", function(e){
+        e.preventDefault();
+        window.location.href = "/home?entitynames=<%= (entityNames.length > 0 ? encodeURIComponent(entityNames) + ',' : '') %>" + encodeURIComponent($("#entityNameSelector").val());
+    });
+
+    var entries = <%- JSON.stringify(entityDataPoints) %>; // each data point is an entry that mentions the entity
+    var entityNames = <%- JSON.stringify(entityNames) %>;
+    var altNames = ["Alex", "Jamie"];
+    var graphDataSets = entityNames.map((entityName, index) => {
+        var datasetColor = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 1)`;
+        return {
+            label: altNames[index],
+            data: entries.map(entry => {
+                const entityMatches = entry.metadata.nluData.entities.filter(
+                    entity => entity.name == entityName
+                );
+                if (entityMatches.length > 0) {
+                    return entityMatches[0].sentiment.score * -1;
+                }
+                return null;
+            }),
+            fill: false,
+            backgroundColor: datasetColor,
+            pointBackgroundColor: datasetColor,
+            borderColor: datasetColor,
+            borderCapStyle: "round",
+            borderJoinStyle: "round",
+            spanGaps: true,
+            responsive: true,
+            pointRadius: 4,
+            pointHitRadius: 8,
+            pointHoverRadius: 6,
+            yAxisID: 'y-axis-1'
+        }
+    });
+
+    console.log(graphDataSets[0].data)
+
+    var ctx = document.getElementById("canvas-<%= uniqueKey %>").getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: entries.map(entry => {
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                const date = new Date(entry.dateCreated);
+                return `${date.getDate()} ${months[date.getMonth()]} '${date.getFullYear().toString().substring(2, 4)}`
+            }),
+            datasets: graphDataSets
+        },
+        options: {
+            legend: {
+                labels: {
+                    padding: 12,
+                    fontColor: '#212529' // bootstrap default text color
+                }
+            },
+            hover: {
+                mode: 'point'
+            },
+            responsive: true,
+            scales: {
+                xAxes: [{
+                    display: true
+                }],
+                yAxes: [{
+                    type: 'linear',
+                    ticks: {
+                        beginAtZero: false,
+                        suggestedMin: -1,
+                    suggestedMax: 1
+                    },
+                    position: 'left',
+                    id: 'y-axis-1',
+                }]
+            },
+            tooltips: {
+                // Disable the on-canvas tooltip
+                enabled: false,
+
+                mode: 'point',
+                intersect: true,
+
+                // taken from Chart.js docs with modifications
+                custom: function(tooltipModel) {
+                    // Tooltip Element
+                    var tooltipEl = document.getElementById('chartjs-tooltip');
+
+                    // Create element on first render
+                    if (!tooltipEl) {
+                        tooltipEl = document.createElement('div');
+                        tooltipEl.id = 'chartjs-tooltip';
+                        tooltipEl.innerHTML = '<table></table>';
+                        document.body.appendChild(tooltipEl);
+                    }
+
+                    // Hide if no tooltip
+                    if (tooltipModel.opacity === 0) {
+                        tooltipEl.style.opacity = 0;
+                        return;
+                    }
+
+                    // Set caret Position
+                    tooltipEl.classList.remove('above', 'below', 'no-transform');
+                    if (tooltipModel.yAlign) {
+                        tooltipEl.classList.add(tooltipModel.yAlign);
+                    } else {
+                        tooltipEl.classList.add('no-transform');
+                    }
+
+                    function getBody(bodyItem) {
+                        return bodyItem.lines;
+                    }
+
+                    // Set Text
+                    if (tooltipModel.body) {
+                        var titleLines = tooltipModel.title || [];
+                        var bodyLines = tooltipModel.body.map(getBody);
+
+                        var innerHtml = '<thead>';
+
+                        titleLines.forEach(function(title) {
+                            innerHtml += '<tr><th><a href="/entries">' + title + '</a></th></tr>';
+                        });
+                        innerHtml += '</thead><tbody>';
+
+                        bodyLines.forEach(function(body, i) {
+                            var colors = tooltipModel.labelColors[i];
+                            var style = 'background:' + colors.backgroundColor;
+                            style += '; border-color:' + colors.borderColor;
+                            style += '; border-width: 2px';
+                            var span = '<span style="' + style + '"></span>';
+                            innerHtml += '<tr><td>' + span + body + '</td></tr>';
+                        });
+                        innerHtml += '</tbody>';
+
+                        var tableRoot = tooltipEl.querySelector('table');
+                        tableRoot.innerHTML = innerHtml;
+                    }
+
+                    // `this` will be the overall tooltip
+                    var position = this._chart.canvas.getBoundingClientRect();
+
+                    // Display, position, and set styles for font
+                    tooltipEl.style.opacity = 1;
+                    tooltipEl.style.position = 'absolute';
+                    tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + 'px';
+                    tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 'px';
+                    tooltipEl.style.fontFamily = tooltipModel._bodyFontFamily;
+                    tooltipEl.style.fontSize = tooltipModel.bodyFontSize + 'px';
+                    tooltipEl.style.fontStyle = tooltipModel._bodyFontStyle;
+                    tooltipEl.style.padding = tooltipModel.yPadding + 'px ' + tooltipModel.xPadding + 'px';
+                    tooltipEl.style.pointerEvents = 'none';
+                }
+            }
+        }
+    });
+    
+    </script>
