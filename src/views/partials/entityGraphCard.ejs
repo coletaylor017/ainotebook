@@ -32,17 +32,17 @@
 
     var entries = <%- JSON.stringify(entityDataPoints) %>; // each data point is an entry that mentions the entity
     var entityNames = <%- JSON.stringify(entityNames) %>;
-    var altNames = ["Alex", "Jamie"];
+    // var altNames = ["Alex", "Jamie"];
     var graphDataSets = entityNames.map((entityName, index) => {
         var datasetColor = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 1)`;
         return {
-            label: altNames[index],
+            label: entityName,
             data: entries.map(entry => {
                 const entityMatches = entry.metadata.nluData.entities.filter(
                     entity => entity.name == entityName
                 );
                 if (entityMatches.length > 0) {
-                    return entityMatches[0].sentiment.score * -1;
+                    return entityMatches[0].sentiment.score;
                 }
                 return null;
             }),
