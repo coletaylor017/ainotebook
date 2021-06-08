@@ -15,7 +15,7 @@ var entryRoutes = require("./routes/entries"),
     quoteRoutes = require("./routes/quotes"),
     indexRoutes = require("./routes/index");
 
-var url = process.env.DATABASE_URL;
+var url = process.env.DATABASEURL;
 mongoose.connect(url, { useNewUrlParser: true });
 
 var app = express();
