@@ -13,7 +13,7 @@
     </div>
     <div class="container mb-5 text-center">
         <div class="mb-4">
-            Current streak: <h2><%= currentUser.streak %></h2>    
+            Current streak: <h2><%= currentUser.streak %></h2>
         </div>
         <a href="/entries/new" class="btn btn-primary btn-lg my-3">Create new entry</a>
     </div>
@@ -22,6 +22,22 @@
 <div class="container px-2 px-md-5 py-4 text-center">
     <h3 class="pb-3">Your Stats</h3>
     <div class="row my-5">
+        <div class="col-12 mb-3">
+            <%- include('partials/entityGraphCard.ejs', {
+                cardTitle: "Entities over time",
+                uniqueKey: 0,
+                entries: entityDataPoints,
+                entityNames: entityNames
+            }) %>
+        </div>
+        <div class="col-12 col-lg-6 mb-3">
+            <%- include('partials/emotionGraphCard.ejs', {
+                cardTitle: "Emotions over time",
+                uniqueKey: 0,
+                entries: entityDataPoints,
+                entityNames: entityNames
+            }) %>
+        </div>
         <div class="col-12 col-md-6 col-lg-4 mb-4">
             <div class="card border-0 shadow">
                 <div class="card-body text-left">
@@ -45,22 +61,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-12 col-lg-6 mb-3">
-            <%- include('partials/entityGraphCard.ejs', {
-                cardTitle: "Entities over time",
-                uniqueKey: 0,
-                entries: entityDataPoints,
-                entityNames: entityNames
-            }) %>
-        </div>
-        <div class="col-12 col-lg-6 mb-3">
-            <%- include('partials/emotionGraphCard.ejs', {
-                cardTitle: "Emotions over time",
-                uniqueKey: 0,
-                entries: entityDataPoints,
-                entityNames: entityNames
-            }) %>
         </div>
     </div>
 </div>
