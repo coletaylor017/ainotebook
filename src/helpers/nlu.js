@@ -78,10 +78,17 @@ exports.getNluData = function (textToAnalyze) {
           };
         }),
         keywords: data.keywords.map(function (keyword) {
+          let hits = [];
+          let currentHitIndex = 0;
+          while(currentHitIndex = textToAnalyze.substring(currentHitIndex, textToAnalyze.length).search(keyword.text))
+          {
+            hits.push(currentHitIndex);
+          }
           return {
             text: keyword.text,
             relevance: keyword.relevance,
             count: keyword.count,
+            locations: hits
           };
         }),
         sentiment: {
