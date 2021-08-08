@@ -7,8 +7,8 @@
               Show Search Filters
             </button>
         </nav>
-        <div class="col-12 col-md-3 collapse d-md-block p-0 pr-md-2 sticky-top bg-gray filter-controls rounded" id="filter-controls">
-            <div class="p-2">
+        <div class="col-12 col-md-3 collapse d-md-block p-0 pr-md-2 sticky-top filter-controls rounded" id="filter-controls">
+            <div class="px-2 pt-0">
                 <% if (keyword !== "" || queriedTags.length > 0 || entityKeyword !== "") { %>
                     <h2><%= entries.length %> Results</h2>
                 <% } else { %>
@@ -17,8 +17,8 @@
                 <form action="<%= "/entries/search" + (queriedTags.length > 0 ? "?tags=" + encodeURIComponent(queriedTags) : "") %>" method="POST">
                     <div class="input-group search-container">
                         <input class="form-control" autocomplete="off" id="filter-box" type="text" value="<%= keyword %>" name="searchterm" placeholder="Search by phrase..." aria-label="Search by phrase" aria-describedby="search-button">
-                        <div class="search-dropdown rounded pb-1" id="entity-suggestions-container">
-                            <h6 class="p-2 m-0"><i class="far fa-lightbulb mr-2"></i><strong>Smart suggestions:</strong></h6>
+                        <div class="search-dropdown shadow rounded pb-1 w-100" id="entity-suggestions-container">
+                            <h6 class="p-2 m-0"><i class="far fa-lightbulb mr-2"></i><strong>Suggestions</strong></h6>
                             <hr class="m-0">
                             <div class="dropdown-list-container">
                                 <!-- populated by jquery -->
@@ -56,7 +56,7 @@
                 <% } %>
 
 
-                <h2 class="mt-5">Tags</h2>
+                <h6 class="mt-5">Filter by tag:</h6>
                 <% tags.forEach(function(tag) { %>
                     <a class="badge badge-secondary p-1 my-1 mr-1" href="<%= "/entries?tags=" + (queriedTags.length > 0 ? encodeURIComponent(queriedTags) + "," : "") + encodeURIComponent(tag.name) + "&keyword=" + keyword %>"><%= tag.name %> (<%= tag.entryCount %>)</a>
                 <% }) %>
@@ -67,14 +67,17 @@
         
         <div class="col-12 col-md-9 my-5 my-md-0">
             <!-- Control bar above entry feed -->
-            <div class="w-100 bg-secondary">
-                <div class="float-right">
-                    <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="entrySummarySwitch">
-                            <label class="custom-control-label" for="entrySummarySwitch">Show keyword summary</label>
+            <div class="w-100 bg-gray">
+                <div class="float-right form-horizontal">
+                    <div class="form-group">
+                        <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="entrySummarySwitch">
+                                <label class="custom-control-label" for="entrySummarySwitch">Summarize entries</label>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div class="clearfix"></div>
             <% if (entries.length === 0) { %>
                 <p>No entries found.</p>
             <% } else { %>
