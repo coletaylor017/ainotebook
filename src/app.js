@@ -46,6 +46,7 @@ if (env === 'production') {
 app.use(methodOverride("_method"));
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(flash());
 
 app.use(require("express-session")({

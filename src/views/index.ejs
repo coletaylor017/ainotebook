@@ -144,6 +144,8 @@
         }
     }
 
+    // axios.defaults.headers.post['Content-Type'] = 'application/json';
+
     $(document).ready(function() {
 
         // populate the switch with the value received on page load
@@ -154,7 +156,7 @@
 
             // request to change the user's setting based on the value of the checkbox
             axios.post('/api/userSettings/showSummaries', {
-                showEntrySummaries: this.checked,
+                "showEntrySummaries": this.checked,
             })
             .then(function (response) {
                 console.log(response);
