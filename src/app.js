@@ -13,7 +13,8 @@ console.log("environment: ", env);
 
 var entryRoutes = require("./routes/entries"),
     quoteRoutes = require("./routes/quotes"),
-    indexRoutes = require("./routes/index");
+    indexRoutes = require("./routes/index"),
+    apiRoutes = require("./routes/api");
 
 var url = process.env.DATABASEURL;
 mongoose.connect(url, { useNewUrlParser: true });
@@ -72,6 +73,7 @@ app.use(function (req, res, next) {
 app.use(indexRoutes);
 app.use("/entries", entryRoutes);
 app.use("/quotes", quoteRoutes);
+app.use("/api", apiRoutes);
 
 app.locals.formatWithSign = function(num) {
     return (num > 0 ? "+" : "") + num;

@@ -58,7 +58,8 @@ class EntriesController {
                 entries: entries.reverse(),
                 keyword: req.query.keyword ? req.query.keyword : "",
                 entityKeyword: req.query.entity ? req.query.entity : "",
-                allEntities: entities
+                allEntities: entities,
+                showEntrySummaries: req.user.settings.showEntrySummaries
               });
             }
           );
@@ -233,7 +234,7 @@ class EntriesController {
               "metadata.nluData": formattedData
             },
           },
-          function (err, entry) {
+          function (err) {
             if (err) {
               errorHandlers.dbError(res, err);
             }

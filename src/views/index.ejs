@@ -66,6 +66,15 @@
         </div>
         
         <div class="col-12 col-md-9 my-5 my-md-0">
+            <!-- Control bar above entry feed -->
+            <div class="w-100 bg-secondary">
+                <div class="float-right">
+                    <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="entrySummarySwitch">
+                            <label class="custom-control-label" for="entrySummarySwitch">Show keyword summary</label>
+                    </div>
+                </div>
+            </div>
             <% if (entries.length === 0) { %>
                 <p>No entries found.</p>
             <% } else { %>
@@ -103,6 +112,7 @@
 </script>
 
 <script>
+
     var entities = <%- JSON.stringify(allEntities) %>; // get list data from EJS
 
     // performs a case-insensitive search on list names and populates the container element with the results
@@ -135,6 +145,25 @@
     }
 
     $(document).ready(function() {
+
+        // populate the switch with the value received on page load
+        $('#entrySummarySwitch').val(<%= showEntrySummaries ?? false %>);
+
+        $('#entrySummarySwitch').change(function() {
+            console.log("Toggle value was changed");
+
+            // request to change the user's setting based on the value of the checkbox
+            axios.post('/api/userSettings/showSummaries', {
+                showEntrySummaries: this.checked,
+            })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        }); 
+
         $("#filter-box").val(""); // clear the box
 
         $("#filter-box").on('input focus', function(e) {
@@ -151,11 +180,6 @@
                 })
             }
         });
-
-        // $("#filter-box").on('blur', function(e) {
-        //     $('#entity-suggestions-container').hide();
-        // });
-
     });
 </script>
 
