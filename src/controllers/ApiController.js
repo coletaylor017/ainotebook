@@ -37,24 +37,34 @@ class ApiController {
       errorMessage = "Request body was missing or improperly formatted";
     }
 
-    User.findByIdAndUpdate(
-      req.user.id, {
+    let result = await User.findOneAndUpdate(
+      {_id: req.user.id},
+      {
         $set: {
           "settings.showEntrySummaries": req.body.showEntrySummaries
         }
-      }, function (err, userResult) {
-        // let the client know if the request was completed successfuly or not
-        if (err) {
-          wasSuccessful = false;
-          errorMessage = "Internal server error while reading or writing to database";
-        }
-
-        res.json({
-          wasSuccessful: wasSuccessful,
-          showEntrySummaries: userResult.settings.showEntrySummaries
-        })
+      },
+      { 
+        new: true,
+        rawResult: true 
       }
     );
+
+    // let the client know if the request was completed successfuly or not
+    if (!result.ok) {
+      wasSuccessful = false;
+      errorMessage = "Internal server error while reading or writing to database";
+    }
+
+    if (result.lastErrorObject.n != 1) {
+      wasSuccessful = false;
+      errorMessage = "No database obiject was updated";
+    }
+
+    res.json({
+      wasSuccessful: wasSuccessful,
+      showEntrySummaries: result.value.settings.showEntrySummaries
+    })
   }
 
 }
