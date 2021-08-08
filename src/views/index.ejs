@@ -149,13 +149,13 @@
     $(document).ready(function() {
 
         // populate the switch with the value received on page load
-        $('#entrySummarySwitch').val(<%= showEntrySummaries ?? false %>);
-
+        $('#entrySummarySwitch').prop('checked', <%= showEntrySummaries ?? false %>);
+        
         $('#entrySummarySwitch').change(function() {
             console.log("Toggle value was changed");
 
             // request to change the user's setting based on the value of the checkbox
-            axios.post('/api/userSettings/showSummaries', {
+            axios.post("/api/userSettings/showSummaries", {
                 "showEntrySummaries": this.checked,
             })
             .then(function (response) {
