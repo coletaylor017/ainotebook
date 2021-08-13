@@ -71,13 +71,14 @@
                 <div class="float-right form-horizontal">
                     <div class="form-group">
                         <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="entrySummarySwitch">
-                                <label class="custom-control-label" for="entrySummarySwitch">Summarize entries</label>
+                            <input type="checkbox" class="custom-control-input" id="entrySummarySwitch">
+                            <label class="custom-control-label" for="entrySummarySwitch">Summarize entries</label>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="clearfix"></div>
+            <div class="entries-container"></div>
             <% if (entries.length === 0) { %>
                 <p>No entries found.</p>
             <% } else { %>
@@ -90,7 +91,7 @@
                             <% entry.tags.forEach(function(tag) { %>
                                 <span class="badge badge-secondary p-1 mr-1 my-0"><%= tag %></span>
                             <% }) %>
-                            <p class="py-2 m-0"><%= entry.body.substring(0,500) %>...</p>
+                            <p class="py-2 m-0 entry-body-preview"><%= entry.body.substring(0,500) %>...</p>
                         </a>
                         <a href="/entries/<%= entry._id %>" class="btn btn-outline-secondary" title="View">View</a>
                         <a href="/entries/<%= entry._id %>/edit" class="btn btn-outline-secondary" title="Edit">Edit</a>
@@ -116,6 +117,27 @@
 
 <script>
 
+    populateEntryPreviews();
+
+    /**
+     * Populate each entry text preview in the main list of entries by showing either the first 500 words or an keyword summary
+     *  
+     *      boolean showSummaries: If true, will show the keyword summary. Otherwise, shows the first 500 chars
+     */
+    function populateEntryPreviews(showSummaries) {
+        axios.get("/api/entries/0")
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+        $('.entry-body-preview').each(function(index, entryBody) {
+
+        });
+    }
+
     var entities = <%- JSON.stringify(allEntities) %>; // get list data from EJS
 
     // performs a case-insensitive search on list names and populates the container element with the results
@@ -125,7 +147,7 @@
             return entity._id.toLowerCase().includes(searchTerm.toLowerCase()) && entity._id.toLowerCase() !== "<%= entityKeyword %>".toLowerCase();
         }).slice(0, 6);
 
-        console.log(filteredEntities);
+        // console.log(filteredEntities);
 
         // clear the container element
         $("#entity-suggestions-container .dropdown-list-container").empty();
@@ -163,6 +185,8 @@
             })
             .then(function (response) {
                 console.log(response);
+                // tell entries to display summaries instead of first n chars
+
             })
             .catch(function (error) {
                 console.log(error);

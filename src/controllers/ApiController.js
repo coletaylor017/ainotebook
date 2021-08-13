@@ -1,7 +1,16 @@
+const { EntryOptionPlugin } = require("webpack");
 const 
-  User = require("../models/user")
+  User = require("../models/user"),
+  Entry = require("../models/entry");
 
+/**
+ * Contains methods for handling API requests.
+ */
 class ApiController {
+
+  constructor() {
+    this.generalDbErrorMessage = "Internal server error while performing database operation";
+  }
 
   /**
    * Sets the user's showSummaries based on value in the request.
@@ -32,7 +41,7 @@ class ApiController {
    * @param {Request} req 
    * @param {Response} res 
    */
-  static async setEntrySummaries(req, res) {
+  async setEntrySummaries(req, res) {
     let wasSuccessful = true;
     let error = {};
 
@@ -60,7 +69,7 @@ class ApiController {
     if (!result.ok) {
       wasSuccessful = false;
       error = {
-        message: "Internal server error while reading or writing to database"
+        message: this.generalDbErrorMessage
       }
     }
 
@@ -76,6 +85,52 @@ class ApiController {
       showEntrySummaries: result.value.settings.showEntrySummaries,
       error: error
     })
+  }
+
+  /**
+   * 
+   * Returns entries for the currently authenticated user, paginated based on the request parameter 'page'.
+   * 
+   * @param {Request} req 
+   * @param {Response} res 
+   * @param {number} page the page of entries that you want to get. Starts at zero and returns 20 entries per page.
+   */
+  async getEntries(req, res, page) {
+    let wasSuccessful = true;
+    let error = {};
+    const pageSize = 20;
+
+    if (req.body.page == null) {
+      wasSuccessful = false;
+      error = {
+        message: "Request body was missing or improperly formatted"
+      }
+    }
+
+    let result = await Entry.find(
+      {"author.id": req.user.id},
+      null,
+      { 
+        new: true,
+        rawResult: true,
+        skip: page * pageSize,
+        limit: pageSize
+      },
+      function(err, docs) {
+        if (err) {
+          wasSuccessful = false;
+          error = {
+            message: this.generalDbErrorMessage
+          }
+        }
+      }
+    );
+
+    res.json({
+      wasSuccessful: wasSuccessful,
+      entries: result,
+      error: error
+    });
   }
 
 }
