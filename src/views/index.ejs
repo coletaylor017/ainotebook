@@ -117,7 +117,6 @@
 
 <script>
 
-    populateEntryPreviews();
 
     /**
      * Populate each entry text preview in the main list of entries by showing either the first 500 words or an keyword summary
@@ -128,14 +127,23 @@
         axios.get("/api/entries/0")
         .then(function (response) {
             console.log(response);
+            $('.entry-body-preview').each(function(index) {
+                let entry = response.data.entries[index];
+                if (showSummaries) {
+                    $(this).html(
+                        "<strong>"
+                        + entry.metadata.nluData.entities.map((entity) => entity.name)
+                        + " </strong><br>"
+                    );
+                } else {
+                    $(this).html(entry.body.substring(0, 500) + (entry.body.length > 500 ? "..." : ""));
+                }
+            });
         })
         .catch(function (error) {
             console.log(error);
         });
 
-        $('.entry-body-preview').each(function(index, entryBody) {
-
-        });
     }
 
     var entities = <%- JSON.stringify(allEntities) %>; // get list data from EJS
@@ -145,6 +153,7 @@
         // get matching list names, case insensitive, excluding current search term, if any
         var filteredEntities = entities.filter(function(entity) {
             return entity._id.toLowerCase().includes(searchTerm.toLowerCase()) && entity._id.toLowerCase() !== "<%= entityKeyword %>".toLowerCase();
+
         }).slice(0, 6);
 
         // console.log(filteredEntities);
@@ -173,6 +182,8 @@
 
     $(document).ready(function() {
 
+        populateEntryPreviews(<%= showEntrySummaries %>);
+
         // populate the switch with the value received on page load
         $('#entrySummarySwitch').prop('checked', <%= showEntrySummaries ?? false %>);
         
@@ -185,8 +196,7 @@
             })
             .then(function (response) {
                 console.log(response);
-                // tell entries to display summaries instead of first n chars
-
+                populateEntryPreviews(response.data.showEntrySummaries);
             })
             .catch(function (error) {
                 console.log(error);
