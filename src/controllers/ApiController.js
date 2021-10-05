@@ -100,7 +100,7 @@ class ApiController {
     let error = {};
     const pageSize = 20;
 
-    if (req.body.page == null) {
+    if (page == null) {
       wasSuccessful = false;
       error = {
         message: "Request body was missing or improperly formatted"
@@ -114,7 +114,10 @@ class ApiController {
         new: true,
         rawResult: true,
         skip: page * pageSize,
-        limit: pageSize
+        limit: pageSize,
+        sort: {
+          "dateCreated": -1
+        }
       },
       function(err, docs) {
         if (err) {
