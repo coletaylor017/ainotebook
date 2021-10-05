@@ -35,8 +35,8 @@
                     <h4 class="card-title">Sentiment & Emotion</h4>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item px-0"><strong>Overall Sentiment Score:</strong> 
-                            <%= entry.metadata.nluData.sentiment.score.toFixed(decimals) %>
-                            (Label: "<%= entry.metadata.nluData.sentiment.label %>")
+                            <%= entry.metadata.nluData?.sentiment?.score?.toFixed(decimals) %>
+                            (Label: "<%= entry.metadata?.nluData?.sentiment?.label %>")
                         </li>
                         <li class="list-group-item px-0"><strong>Emotions:</strong></li>
                         <ul class="list-group list-group-flush pl-5">

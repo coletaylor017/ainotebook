@@ -134,7 +134,15 @@
                         "<strong>"
                         + entry.metadata.nluData.entities.map((entity) => entity.name)
                         + " </strong><br>"
+                        + entry.metadata.nluData.keywords.map((kwObj) =>
+                            "thing: " + 
+                            kwObj.locations.map((loc) => {
+                                return "..." + entry.substring(loc - 10, loc + kwObj.text.length + 10) + "...";
+                            })
+                        )
                     );
+                } else if (showSummaries) {
+                    $(this).html("No entry metadata available");
                 } else {
                     $(this).html(entry.body.substring(0, 500) + (entry.body.length > 500 ? "..." : ""));
                 }

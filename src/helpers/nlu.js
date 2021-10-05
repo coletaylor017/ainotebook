@@ -105,6 +105,7 @@ exports.getNluData = function (textToAnalyze) {
       };
     })
     .catch(function (err) {
+      
       if (err.code != null && err.code != 422) {
         console.log("An unusual text analysis error occurred:");
         console.log(err);

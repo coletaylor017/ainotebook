@@ -142,6 +142,7 @@ class EntriesController {
           },
           metadata: {
             nluData: formattedData,
+            containsNLUData: formattedData === null ? false : true
           },
         };
 
