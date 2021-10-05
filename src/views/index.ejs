@@ -131,15 +131,50 @@
                 let entry = response.data.entries[index];
                 if (showSummaries) {
                     $(this).html(
-                        "<strong>"
-                        + entry.metadata.nluData.entities.map((entity) => entity.name)
-                        + " </strong><br>"
-                        + entry.metadata.nluData.keywords.map((kwObj) =>
-                            "thing: " + 
-                            kwObj.locations.map((loc) => {
-                                return "..." + entry.substring(loc - 10, loc + kwObj.text.length + 10) + "...";
+                        `<strong>Key topics: <span style="text-transform: capitalize"> `
+                            // add entities, capitalized an separated by commas
+                        + entry.metadata.nluData.entities.map((entity) => entity.name).join(", ")
+                        + "</span></strong><br>..."
+                        + entry.metadata.nluData.keywords.map((kwObj) => {
+
+                            const keywordPadding = 6; // include 3 words on either side of each keyword
+
+                            return kwObj.locations.map((loc) => {
+                                // find (n) preceding words, n = keywordPadding
+                                let letterCounterBefore = 0;
+                                let wordCounter = 0;
+
+                                while (true) {
+                                    let currChar = entry.body.charAt(loc - letterCounterBefore);
+                                    if (currChar == ' ') {
+                                        wordCounter++; // if we detect a space, increment word counter
+                                    }
+                                    // find either n words or 8n chars. Avg length of english word is ~5.
+                                    if (wordCounter == keywordPadding || letterCounterBefore == keywordPadding * 8) {
+                                        break;
+                                    }
+                                    letterCounterBefore++;
+                                }
+
+                                // repeat process, suffixing keyword
+                                let letterCounterAfter = 0;
+                                wordCounter = 0;
+
+                                while (true) {
+                                    let currChar = entry.body.charAt(loc + kwObj.text.length + letterCounterAfter);
+                                    if (currChar == ' ') {
+                                        wordCounter++; // if we detect a space, increment word counter
+                                    }
+                                    // find either n words or 8n chars. Avg length of english word is ~5.
+                                    if (wordCounter == keywordPadding || letterCounterAfter == keywordPadding * 8) {
+                                        break;
+                                    }
+                                    letterCounterAfter++;
+                                }
+
+                                return entry.body.substring(loc - letterCounterBefore, loc + kwObj.text.length + letterCounterAfter) + "...";
                             })
-                        )
+                        }).join('') // get rid of default .map() commas
                     );
                 } else if (showSummaries) {
                     $(this).html("No entry metadata available");
