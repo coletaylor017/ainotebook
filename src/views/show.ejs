@@ -35,8 +35,8 @@
                     <h4 class="card-title">Sentiment & Emotion</h4>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item px-0"><strong>Overall Sentiment Score:</strong> 
-                            <%= entry.metadata.nluData.sentiment.score.toFixed(decimals) %>
-                            (Label: "<%= entry.metadata.nluData.sentiment.label %>")
+                            <%= entry.metadata.nluData?.sentiment?.score?.toFixed(decimals) %>
+                            (Label: "<%= entry.metadata?.nluData?.sentiment?.label %>")
                         </li>
                         <li class="list-group-item px-0"><strong>Emotions:</strong></li>
                         <ul class="list-group list-group-flush pl-5">
@@ -113,6 +113,7 @@
                                             <li class="list-group-item px-0"><strong>Confidence index:</strong> <%= entryEntities[index].confidence %></li>
                                             <li class="list-group-item px-0"><strong>Relevance index:</strong> <%= entryEntities[index].relevance %></li>
                                             <li class="list-group-item px-0"><strong>Text locations:</strong> <%= JSON.stringify(entryEntities[index].locations) %></li>
+                                            <li class="list-group-item px-0"><strong>Location 1 context:</strong><%= entry.body.substring(entryEntities[index]?.locations[0].location[0] - 10, entryEntities[index]?.locations[0].location[1] + 10) %></li>
                                         </ul>
                                     </div>
                                 </li>
@@ -180,6 +181,8 @@
                                     <div class="collapse mt-2" id="keyword-<%= index %>">
                                         <ul class="list-group list-group-flush px-5">
                                             <li class="list-group-item px-0"><strong>Count:</strong><%= keyword.count %></li>
+                                            <li class="list-group-item px-0"><strong>Locations:</strong><%= keyword.locations %></li>
+                                            <li class="list-group-item px-0"><strong>Location 1 context:</strong><%= entry.body.substring(keyword.locations[0] - 10, keyword.locations[0] + keyword.text.length + 10) %></li>
                                             <li class="list-group-item px-0"><strong>Relevance index:</strong> <%= keyword.relevance %></li>
                                         </ul>
                                     </div>

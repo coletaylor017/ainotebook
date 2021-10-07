@@ -58,7 +58,8 @@ class EntriesController {
                 entries: entries.reverse(),
                 keyword: req.query.keyword ? req.query.keyword : "",
                 entityKeyword: req.query.entity ? req.query.entity : "",
-                allEntities: entities
+                allEntities: entities,
+                showEntrySummaries: req.user.settings.showEntrySummaries
               });
             }
           );
@@ -141,6 +142,7 @@ class EntriesController {
           },
           metadata: {
             nluData: formattedData,
+            containsNLUData: formattedData === null ? false : true
           },
         };
 
@@ -238,7 +240,7 @@ class EntriesController {
               errorHandlers.dbError(res, err);
             }
 
-            res.redirect("/entries/" + entry._id);
+            res.redirect("/entries");
           }
         );
       })

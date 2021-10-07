@@ -7,8 +7,8 @@
               Show Search Filters
             </button>
         </nav>
-        <div class="col-12 col-md-3 collapse d-md-block p-0 pr-md-2 sticky-top bg-gray filter-controls rounded" id="filter-controls">
-            <div class="p-2">
+        <div class="col-12 col-md-3 collapse d-md-block p-0 pr-md-2 sticky-top filter-controls rounded" id="filter-controls">
+            <div class="px-2 pt-0">
                 <% if (keyword !== "" || queriedTags.length > 0 || entityKeyword !== "") { %>
                     <h2><%= entries.length %> Results</h2>
                 <% } else { %>
@@ -17,8 +17,8 @@
                 <form action="<%= "/entries/search" + (queriedTags.length > 0 ? "?tags=" + encodeURIComponent(queriedTags) : "") %>" method="POST">
                     <div class="input-group search-container">
                         <input class="form-control" autocomplete="off" id="filter-box" type="text" value="<%= keyword %>" name="searchterm" placeholder="Search by phrase..." aria-label="Search by phrase" aria-describedby="search-button">
-                        <div class="search-dropdown rounded pb-1" id="entity-suggestions-container">
-                            <h6 class="p-2 m-0"><i class="far fa-lightbulb mr-2"></i><strong>Smart suggestions:</strong></h6>
+                        <div class="search-dropdown shadow rounded pb-1 w-100" id="entity-suggestions-container">
+                            <h6 class="p-2 m-0"><i class="far fa-lightbulb mr-2"></i><strong>Suggestions</strong></h6>
                             <hr class="m-0">
                             <div class="dropdown-list-container">
                                 <!-- populated by jquery -->
@@ -56,7 +56,7 @@
                 <% } %>
 
 
-                <h2 class="mt-5">Tags</h2>
+                <h6 class="mt-5">Filter by tag:</h6>
                 <% tags.forEach(function(tag) { %>
                     <a class="badge badge-secondary p-1 my-1 mr-1" href="<%= "/entries?tags=" + (queriedTags.length > 0 ? encodeURIComponent(queriedTags) + "," : "") + encodeURIComponent(tag.name) + "&keyword=" + keyword %>"><%= tag.name %> (<%= tag.entryCount %>)</a>
                 <% }) %>
@@ -66,6 +66,19 @@
         </div>
         
         <div class="col-12 col-md-9 my-5 my-md-0">
+            <!-- Control bar above entry feed -->
+            <div class="w-100 bg-gray">
+                <div class="float-right form-horizontal">
+                    <div class="form-group">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="entrySummarySwitch">
+                            <label class="custom-control-label" for="entrySummarySwitch">Summarize entries</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="entries-container"></div>
             <% if (entries.length === 0) { %>
                 <p>No entries found.</p>
             <% } else { %>
@@ -78,7 +91,7 @@
                             <% entry.tags.forEach(function(tag) { %>
                                 <span class="badge badge-secondary p-1 mr-1 my-0"><%= tag %></span>
                             <% }) %>
-                            <p class="py-2 m-0"><%= entry.body.substring(0,500) %>...</p>
+                            <p class="py-2 m-0 entry-body-preview"><%= entry.body.substring(0,500) %>...</p>
                         </a>
                         <a href="/entries/<%= entry._id %>" class="btn btn-outline-secondary" title="View">View</a>
                         <a href="/entries/<%= entry._id %>/edit" class="btn btn-outline-secondary" title="Edit">Edit</a>
@@ -103,6 +116,79 @@
 </script>
 
 <script>
+
+
+    /**
+     * Populate each entry text preview in the main list of entries by showing either the first 500 words or an keyword summary
+     *  
+     *      boolean showSummaries: If true, will show the keyword summary. Otherwise, shows the first 500 chars
+     */
+    function populateEntryPreviews(showSummaries) {
+        axios.get("/api/entries/0")
+        .then(function (response) {
+            console.log(response);
+            $('.entry-body-preview').each(function(index) {
+                let entry = response.data.entries[index];
+                if (showSummaries) {
+                    $(this).html(
+                        `<strong>Key topics: <span style="text-transform: capitalize"> `
+                            // add entities, capitalized an separated by commas
+                        + entry.metadata.nluData.entities.map((entity) => entity.name).join(", ")
+                        + "</span></strong><br>..."
+                        + entry.metadata.nluData.keywords.map((kwObj) => {
+
+                            const keywordPadding = 6; // include 3 words on either side of each keyword
+
+                            return kwObj.locations.map((loc) => {
+                                // find (n) preceding words, n = keywordPadding
+                                let letterCounterBefore = 0;
+                                let wordCounter = 0;
+
+                                while (true) {
+                                    let currChar = entry.body.charAt(loc - letterCounterBefore);
+                                    if (currChar == ' ') {
+                                        wordCounter++; // if we detect a space, increment word counter
+                                    }
+                                    // find either n words or 8n chars. Avg length of english word is ~5.
+                                    if (wordCounter == keywordPadding || letterCounterBefore == keywordPadding * 8) {
+                                        break;
+                                    }
+                                    letterCounterBefore++;
+                                }
+
+                                // repeat process, suffixing keyword
+                                let letterCounterAfter = 0;
+                                wordCounter = 0;
+
+                                while (true) {
+                                    let currChar = entry.body.charAt(loc + kwObj.text.length + letterCounterAfter);
+                                    if (currChar == ' ') {
+                                        wordCounter++; // if we detect a space, increment word counter
+                                    }
+                                    // find either n words or 8n chars. Avg length of english word is ~5.
+                                    if (wordCounter == keywordPadding || letterCounterAfter == keywordPadding * 8) {
+                                        break;
+                                    }
+                                    letterCounterAfter++;
+                                }
+
+                                return entry.body.substring(loc - letterCounterBefore, loc + kwObj.text.length + letterCounterAfter) + "...";
+                            })
+                        }).join('') // get rid of default .map() commas
+                    );
+                } else if (showSummaries) {
+                    $(this).html("No entry metadata available");
+                } else {
+                    $(this).html(entry.body.substring(0, 500) + (entry.body.length > 500 ? "..." : ""));
+                }
+            });
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+    }
+
     var entities = <%- JSON.stringify(allEntities) %>; // get list data from EJS
 
     // performs a case-insensitive search on list names and populates the container element with the results
@@ -110,9 +196,10 @@
         // get matching list names, case insensitive, excluding current search term, if any
         var filteredEntities = entities.filter(function(entity) {
             return entity._id.toLowerCase().includes(searchTerm.toLowerCase()) && entity._id.toLowerCase() !== "<%= entityKeyword %>".toLowerCase();
+
         }).slice(0, 6);
 
-        console.log(filteredEntities);
+        // console.log(filteredEntities);
 
         // clear the container element
         $("#entity-suggestions-container .dropdown-list-container").empty();
@@ -134,7 +221,31 @@
         }
     }
 
+    // axios.defaults.headers.post['Content-Type'] = 'application/json';
+
     $(document).ready(function() {
+
+        populateEntryPreviews(<%= showEntrySummaries %>);
+
+        // populate the switch with the value received on page load
+        $('#entrySummarySwitch').prop('checked', <%= showEntrySummaries ?? false %>);
+        
+        $('#entrySummarySwitch').change(function() {
+            console.log("Toggle value was changed");
+
+            // request to change the user's setting based on the value of the checkbox
+            axios.post("/api/userSettings/showSummaries", {
+                "showEntrySummaries": this.checked,
+            })
+            .then(function (response) {
+                console.log(response);
+                populateEntryPreviews(response.data.showEntrySummaries);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        }); 
+
         $("#filter-box").val(""); // clear the box
 
         $("#filter-box").on('input focus', function(e) {
@@ -151,11 +262,6 @@
                 })
             }
         });
-
-        // $("#filter-box").on('blur', function(e) {
-        //     $('#entity-suggestions-container').hide();
-        // });
-
     });
 </script>
 

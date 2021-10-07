@@ -40,6 +40,8 @@ var userSchema = new mongoose.Schema({
             type: String,
             default: "default"
         },
+        // if true, indicates that the user wants the app to try to summarize entries on the "all entries" page using detected keywords and entities
+        showEntrySummaries: Boolean,
         dashboardConfig: {
             statDisplays: [
                 {
