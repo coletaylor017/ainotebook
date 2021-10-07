@@ -240,7 +240,7 @@ class EntriesController {
               errorHandlers.dbError(res, err);
             }
 
-            res.redirect("/entries/" + entry._id);
+            res.redirect("/entries");
           }
         );
       })
