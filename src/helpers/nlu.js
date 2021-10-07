@@ -28,7 +28,7 @@ exports.getNluData = function (textToAnalyze) {
         mentions: true,
       },
       keywords: {
-        limit: 5,
+        limit: 15,
       },
       concepts: {
         limit: 5,
