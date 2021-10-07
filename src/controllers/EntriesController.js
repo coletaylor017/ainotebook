@@ -235,7 +235,7 @@ class EntriesController {
               "metadata.nluData": formattedData
             },
           },
-          function (err entry) {
+          function (err, entry) {
             if (err) {
               errorHandlers.dbError(res, err);
             }
