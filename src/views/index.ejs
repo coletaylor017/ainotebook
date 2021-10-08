@@ -122,7 +122,7 @@
 
             let entryBody= "";
 
-            if (showSummaries && entry.metadata.containsNLUData) {
+            if (showSummaries) {
                 entryBody = generateEntrySummary(entry);
             } else if (showSummaries) {
                 entryBody = "No entry metadata available";
