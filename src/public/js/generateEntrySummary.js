@@ -9,15 +9,19 @@ function generateEntrySummary(entry) {
 
     let charCounter = 0; // will use this later
 
-    return `Mentions: <span style="text-transform: capitalize"> `
+    return (entry.metadata.nluData.entities.length > 0 ? (
+        `Mentions: <span style="text-transform: capitalize"> `
         // add entities, capitalized an separated by commas
-    + entry.metadata.nluData.entities.sort((a, b) =>
-        b.relevance - a.relevance
-    ).slice(0, 5).map((entity) => entity.name).join(", ")
-    + `</span><br style="margin-bottom: 0.8em">...`
+        + entry.metadata.nluData.entities.sort((a, b) =>
+            b.relevance - a.relevance
+        ).slice(0, 5).map((entity) => entity.name).join(", ")
+        + `</span><br style="margin-bottom: 0.8em">...`
+    ) : '')
 
     // the following reduction makes a single array with one element for every mention of a keyword
-    + entry.metadata.nluData.keywords.reduce((prev, curr) => {
+    + entry.metadata.nluData.keywords.sort((a, b) => b.relevance - a.relevance) // sort by relevance
+    .slice(0, Math.min(10, entry.metadata.nluData.keywords.length)) // select first 15, or all if it is too small
+    .reduce((prev, curr) => {
         // for every location of this keyword, add a new array element
         curr.locations.forEach((loc) =>
             prev.push(
