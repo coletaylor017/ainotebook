@@ -39,6 +39,27 @@ var userSchema = new mongoose.Schema({
         theme: {
             type: String,
             default: "default"
+        },
+        // if true, indicates that the user wants the app to try to summarize entries on the "all entries" page using detected keywords and entities
+        showEntrySummaries: Boolean,
+        dashboardConfig: {
+            statDisplays: [
+                {
+                    // stat type can be "overview" (main overview card, takes no data, standard between users), "entities", "memories", or any number of
+                    // other heretofore undecided standard card types. Order matters and affects the order in which they are displayed
+                    dataDisplayType: String,
+
+                    // the list of user's chosen entities to display, in the case of an entity data display
+                    entities: [
+                        {
+                            name: String
+                        }
+                    ],
+                    // starDate and endDate indicate the range of dates to display
+                    startDate: Date,
+                    endDate: Date
+                }
+            ]
         }
     },
     timezone: {

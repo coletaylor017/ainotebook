@@ -28,7 +28,7 @@ exports.getNluData = function (textToAnalyze) {
         mentions: true,
       },
       keywords: {
-        limit: 5,
+        limit: 15,
       },
       concepts: {
         limit: 5,
@@ -78,10 +78,17 @@ exports.getNluData = function (textToAnalyze) {
           };
         }),
         keywords: data.keywords.map(function (keyword) {
+          let hits = [];
+          let currentHitIndex = 0;
+          while(currentHitIndex = textToAnalyze.substring(currentHitIndex, textToAnalyze.length).search(keyword.text))
+          {
+            hits.push(currentHitIndex);
+          }
           return {
             text: keyword.text,
             relevance: keyword.relevance,
             count: keyword.count,
+            locations: hits
           };
         }),
         sentiment: {
@@ -98,6 +105,7 @@ exports.getNluData = function (textToAnalyze) {
       };
     })
     .catch(function (err) {
+      
       if (err.code != null && err.code != 422) {
         console.log("An unusual text analysis error occurred:");
         console.log(err);

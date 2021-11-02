@@ -1,5 +1,7 @@
 <% include partials/header %>
 
+<script src="/js/generateEntrySummary.js"></script>
+
 <div class="container my-md-5">
     <div class="row">
         <nav class="navbar navbar-dark bg-light d-md-none text-center sticky-top secondary-nav">
@@ -7,8 +9,8 @@
               Show Search Filters
             </button>
         </nav>
-        <div class="col-12 col-md-3 collapse d-md-block p-0 pr-md-2 sticky-top bg-gray filter-controls rounded" id="filter-controls">
-            <div class="p-2">
+        <div class="col-12 col-md-3 collapse d-md-block p-0 pr-md-2 sticky-top filter-controls rounded" id="filter-controls">
+            <div class="px-2 pt-0">
                 <% if (keyword !== "" || queriedTags.length > 0 || entityKeyword !== "") { %>
                     <h2><%= entries.length %> Results</h2>
                 <% } else { %>
@@ -17,8 +19,8 @@
                 <form action="<%= "/entries/search" + (queriedTags.length > 0 ? "?tags=" + encodeURIComponent(queriedTags) : "") %>" method="POST">
                     <div class="input-group search-container">
                         <input class="form-control" autocomplete="off" id="filter-box" type="text" value="<%= keyword %>" name="searchterm" placeholder="Search by phrase..." aria-label="Search by phrase" aria-describedby="search-button">
-                        <div class="search-dropdown rounded pb-1" id="entity-suggestions-container">
-                            <h6 class="p-2 m-0"><i class="far fa-lightbulb mr-2"></i><strong>Smart suggestions:</strong></h6>
+                        <div class="search-dropdown shadow rounded pb-1 w-100" id="entity-suggestions-container">
+                            <h6 class="p-2 m-0"><i class="far fa-lightbulb mr-2"></i><strong>Suggestions</strong></h6>
                             <hr class="m-0">
                             <div class="dropdown-list-container">
                                 <!-- populated by jquery -->
@@ -56,38 +58,31 @@
                 <% } %>
 
 
-                <h2 class="mt-5">Tags</h2>
+                <h6 class="mt-5">Filter by tag:</h6>
                 <% tags.forEach(function(tag) { %>
                     <a class="badge badge-secondary p-1 my-1 mr-1" href="<%= "/entries?tags=" + (queriedTags.length > 0 ? encodeURIComponent(queriedTags) + "," : "") + encodeURIComponent(tag.name) + "&keyword=" + keyword %>"><%= tag.name %> (<%= tag.entryCount %>)</a>
                 <% }) %>
                 <br>
-                <a href="/entries/new" class="mt-5 btn btn-primary d-block mx-auto">Create new entry</a>
+                <a href="/entries/new" class="mt-5 btn btn-primary d-block mx-auto">Create New Entry</a>
             </div>
         </div>
         
         <div class="col-12 col-md-9 my-5 my-md-0">
-            <% if (entries.length === 0) { %>
-                <p>No entries found.</p>
-            <% } else { %>
-                <% entries.forEach(function(entry) { %>
-                    <div class="mb-5">
-                        <a href="/entries/<%= entry._id %>" class="no-anchor-styles">
-                            <% const date = new Date(entry.dateCreated) %>
-                            <% var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]; %>
-                            <p class="mb-1"><%= `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}` %></p>
-                            <% entry.tags.forEach(function(tag) { %>
-                                <span class="badge badge-secondary p-1 mr-1 my-0"><%= tag %></span>
-                            <% }) %>
-                            <p class="py-2 m-0"><%= entry.body.substring(0,500) %>...</p>
-                        </a>
-                        <a href="/entries/<%= entry._id %>" class="btn btn-outline-secondary" title="View">View</a>
-                        <a href="/entries/<%= entry._id %>/edit" class="btn btn-outline-secondary" title="Edit">Edit</a>
-                        <form action="/entries/<%= entry._id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this entry?');">
-                            <button action="submit" class="btn btn-outline-danger" title="Delete">Delete</button>
-                        </form>
+            <!-- Control bar above entry feed -->
+            <div class="w-100 bg-gray">
+                <div class="float-right form-horizontal">
+                    <div class="form-group mb-3">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="entrySummarySwitch">
+                            <label class="custom-control-label" for="entrySummarySwitch">Summarize entries</label>
+                        </div>
                     </div>
-                <% }); %>
-            <% } %>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="entries-container border-top pt-4">
+                <!-- Gets populated by javascript -->
+            </div>
         </div>
     </div>
 </div>
@@ -103,16 +98,76 @@
 </script>
 
 <script>
+
+
+    /**
+     * Populate each entry text preview in the main list of entries by showing either the first 500 words or an keyword summary
+     *  
+     *      object entries: Array of Entry objects as specified in the MongoDB schema.
+     *      boolean showSummaries: If true, will show the keyword summary. Otherwise, shows the first 500 chars
+     */
+    function populateEntryPreviews(entries, showSummaries) {
+
+        let entryContainer = $(".entries-container");
+        entryContainer.html(""); // clear the container
+
+        if (entries.length === 0) {
+            entryContainer.append("No entries found.");
+            return;
+        }
+
+        entries.forEach((entry) => {
+            const date = new Date(entry.dateCreated);
+            var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+            let entryBody= "";
+
+            if (showSummaries) {
+                entryBody = generateEntrySummary(entry);
+            } else if (showSummaries) {
+                entryBody = "No entry metadata available";
+            } else { // if "show summaries" is turned off
+                entryBody = entry.body.substring(0, 500) + (entry.body.length > 500 ? "..." : "");
+            }
+
+            entryContainer.append(
+                `<div class="mb-5">
+                        <div class="row">
+                            <div class="col-12 col-md-8">
+                                <p class="mb-0">${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}<i class="fa-solid fa-pen-to-square"></i></p>
+                                ${
+                                    entry.tags.map((tag) =>
+                                        `<span class="badge badge-secondary p-1 mr-1 my-0">${tag}</span>`
+                                    ).join('')
+                                }
+                            </div>
+                            <div class="col-12 col-md-4 text-right">
+                                <a href="/entries/${entry._id}/edit" class="" title="Edit"><i class="fa-solid fa-pen-to-square"></i></i>Edit</a>
+                            </div>
+                        </div>
+
+                    <a href="/entries/${entry._id}" class="no-anchor-styles">
+                        <p class="py-2 m-0 entry-body-preview">
+                            ${entryBody}
+                        </p>
+                    </a>
+                </div>`
+            );
+        });
+    }
+
     var entities = <%- JSON.stringify(allEntities) %>; // get list data from EJS
+    var entries = <%- JSON.stringify(entries) %>
 
     // performs a case-insensitive search on list names and populates the container element with the results
     function populateListMatches(searchTerm) {
         // get matching list names, case insensitive, excluding current search term, if any
         var filteredEntities = entities.filter(function(entity) {
             return entity._id.toLowerCase().includes(searchTerm.toLowerCase()) && entity._id.toLowerCase() !== "<%= entityKeyword %>".toLowerCase();
+
         }).slice(0, 6);
 
-        console.log(filteredEntities);
+        // console.log(filteredEntities);
 
         // clear the container element
         $("#entity-suggestions-container .dropdown-list-container").empty();
@@ -134,7 +189,31 @@
         }
     }
 
+    // axios.defaults.headers.post['Content-Type'] = 'application/json';
+
     $(document).ready(function() {
+
+        populateEntryPreviews(entries, <%= showEntrySummaries %>);
+
+        // populate the switch with the value received on page load
+        $('#entrySummarySwitch').prop('checked', <%= showEntrySummaries ?? false %>);
+        
+        $('#entrySummarySwitch').change(function() {
+            console.log("Toggle value was changed");
+
+            // request to change the user's setting based on the value of the checkbox
+            axios.post("/api/userSettings/showSummaries", {
+                "showEntrySummaries": this.checked,
+            })
+            .then(function (response) {
+                console.log(response);
+                populateEntryPreviews(entries, response.data.showEntrySummaries);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        }); 
+
         $("#filter-box").val(""); // clear the box
 
         $("#filter-box").on('input focus', function(e) {
@@ -151,11 +230,6 @@
                 })
             }
         });
-
-        // $("#filter-box").on('blur', function(e) {
-        //     $('#entity-suggestions-container').hide();
-        // });
-
     });
 </script>
 

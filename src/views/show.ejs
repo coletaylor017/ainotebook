@@ -1,27 +1,21 @@
 <% include partials/header %>
 
 <div class="container my-5">
+    <a href="/entries" class="d-block py-2 my-2"><i class="fas fa-angle-left pr-2"></i>Back to All Entries</a>
     <div class="mb-5">
-        <h4 class=""><%= moment(entry.dateCreated).format("D MMM YYYY, h:mm a") %></h4>
+        <h4 class="mb-3"><%= moment(entry.dateCreated).format("D MMM YYYY, h:mm a") %></h4>
         <% entry.tags.forEach(function(tag) { %>
             <a class="badge badge-secondary p-1 mb-2" href="<%= "/entries?tags=" + encodeURIComponent(tag) %>">
                 <%= tag %>
             </a>
         <% }); %>
-        <p class="entry-body" id="entry-body">
-            <%= entry.body.substring(0, 2000) + (entry.body.length > 2000 ? "..." : "") %>
-        </p>
+        <p class="entry-body" id="entry-body"><%= entry.body %></p>
         <div class="mt-2">
-            <% if (entry.body.length > 2000) { %>
-                <a class="toggle-entry btn btn-secondary" role="button" onclick=expandEntry()>Show more</a>
-                <a class="toggle-entry btn btn-secondary d-none" role="button" onclick=collapseEntry()>Show less</a>
-            <% } %>
-            <a href="/entries/<%= entry._id %>/edit" class="btn btn-outline-secondary" title="Edit">Edit Entry</a>
+            <a href="/entries/<%= entry._id %>/edit" class="btn btn-outline-secondary" title="Edit">Edit</a>
             <form action="/entries/<%= entry._id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this entry?');">
                 <button action="submit" class="btn btn-outline-danger" title="Delete">Delete</button>
             </form>
         </div>
-        <a href="/entries" class="d-block py-2 mt-2 px-1"><i class="fas fa-angle-left pr-2"></i>Back to All Entries</a>
     </div>
 
 
@@ -35,8 +29,8 @@
                     <h4 class="card-title">Sentiment & Emotion</h4>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item px-0"><strong>Overall Sentiment Score:</strong> 
-                            <%= entry.metadata.nluData.sentiment.score.toFixed(decimals) %>
-                            (Label: "<%= entry.metadata.nluData.sentiment.label %>")
+                            <%= entry.metadata.nluData?.sentiment?.score?.toFixed(decimals) %>
+                            (Label: "<%= entry.metadata?.nluData?.sentiment?.label %>")
                         </li>
                         <li class="list-group-item px-0"><strong>Emotions:</strong></li>
                         <ul class="list-group list-group-flush pl-5">
@@ -113,6 +107,7 @@
                                             <li class="list-group-item px-0"><strong>Confidence index:</strong> <%= entryEntities[index].confidence %></li>
                                             <li class="list-group-item px-0"><strong>Relevance index:</strong> <%= entryEntities[index].relevance %></li>
                                             <li class="list-group-item px-0"><strong>Text locations:</strong> <%= JSON.stringify(entryEntities[index].locations) %></li>
+                                            <li class="list-group-item px-0"><strong>Location 1 context:</strong><%= entry.body.substring(entryEntities[index]?.locations[0].location[0] - 10, entryEntities[index]?.locations[0].location[1] + 10) %></li>
                                         </ul>
                                     </div>
                                 </li>
@@ -180,6 +175,8 @@
                                     <div class="collapse mt-2" id="keyword-<%= index %>">
                                         <ul class="list-group list-group-flush px-5">
                                             <li class="list-group-item px-0"><strong>Count:</strong><%= keyword.count %></li>
+                                            <li class="list-group-item px-0"><strong>Locations:</strong><%= keyword.locations %></li>
+                                            <li class="list-group-item px-0"><strong>Location 1 context:</strong><%= entry.body.substring(keyword.locations[0] - 10, keyword.locations[0] + keyword.text.length + 10) %></li>
                                             <li class="list-group-item px-0"><strong>Relevance index:</strong> <%= keyword.relevance %></li>
                                         </ul>
                                     </div>

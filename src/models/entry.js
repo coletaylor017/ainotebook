@@ -37,10 +37,11 @@ var entrySchema = new mongoose.Schema({
             anger: Number,
           },
           count: Number,
-          locations: [
+          locations: [ // should have called this "mentions". This sounds like a geographic location
             {
               confidence: String,
-              location: [Number],
+              location: [Number], // indicates beginning and end of the mention in the text. 
+              // necessary because the exact text may vary in length
               text: String
             }
           ]
@@ -58,6 +59,7 @@ var entrySchema = new mongoose.Schema({
           text: String,
           relevance: Number,
           count: Number,
+          locations: [Number] // all the indices of each time the keyword appears in the text. Calculated on entry submission
         },
       ],
       sentiment: {
